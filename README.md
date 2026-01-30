@@ -1,0 +1,1 @@
+Use the GitHub 'Use this template' button to create new projects
