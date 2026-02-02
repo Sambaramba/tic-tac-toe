@@ -7,17 +7,20 @@ console.log(useGameBoard);
 
 
 function createPlayer(name) {
-    // const name = name;
+    
     let playerScore = 0;
+    const playerNumber = name.charAt(name.length - 1);
+
     const getPlayerScore = () => playerScore;
     const increasePlayerScore = () => { playerScore++; };
-    return { name, getPlayerScore, increasePlayerScore};
+    return { name, playerNumber, getPlayerScore, increasePlayerScore};
 }
 
 const player1 = createPlayer("Player1");
 const player2 = createPlayer("player2");
-console.log(player1);
+console.log(player1.playerNumber);
 console.log(player2.name);
+console.log(player2.playerNumber);
 player1.increasePlayerScore();
 console.log(player1.getPlayerScore());
 
