@@ -1,9 +1,9 @@
-const gameBoard =(function () {
-    let tiles = new Array(9).fill("");
-    return {tiles};
+const useGameBoard = (function () {
+    let grid = new Array(9).fill("");
+    return {grid};
 })();
 
-console.log(gameBoard);
+console.log(useGameBoard);
 
 
 function createPlayer(name) {
@@ -21,6 +21,12 @@ console.log(player2.name);
 player1.increasePlayerScore();
 console.log(player1.getPlayerScore());
 
-function playRound() {
+function controlGameFlow() {
+    const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
+    return {randomPlayerChoice};
+}
+function playGame() {
 
 }
+
+console.log(controlGameFlow().randomPlayerChoice());
