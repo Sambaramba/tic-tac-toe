@@ -1,9 +1,9 @@
-const useGameBoard = (function () {
+const getGameBoard = (function () {
     let grid = new Array(9).fill("");
     return {grid};
 })();
 
-console.log(useGameBoard);
+console.log(getGameBoard);
 
 
 function createPlayer(name) {
@@ -52,9 +52,20 @@ const player2 = createPlayer("player2");
 //if empty add players symbol(x or o);
 //change from while loop to some other iteration?
 //regEx
+
+//want to retreive player symbol from the player argument
+//use the squareSelection value to loop through the gameboard.grid
+//if its empty add player symbol
+//if not select another square
+//is there a way to loop through and find all available squares before while loop?
+//maybe Array.every for first turn
+//then if false get all indexs that are empty
+//add numbers to new array? or string of numbers? then change pattern and prompt to only allow those numbers?
 function playerTurn(player) {
-     const selectGameboardSquare = () => {
-        let squareSelection;
+
+    let squareSelection;
+
+    const selectGameboardSquare = () => {
         const numberInRangeCheck = /^[0-8]$/;
         do {
            squareSelection = prompt("Enter a number between 0-8 to place piece");
@@ -62,12 +73,16 @@ function playerTurn(player) {
         
        return squareSelection;
     }
+
+
+    
+
     return {selectGameboardSquare}
 }
 
 playerTurn(player1).selectGameboardSquare();
 
-if(playe)
+// if(playe)
 
 //1st player has odd turns
 //other player has even turns;
