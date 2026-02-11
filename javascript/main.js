@@ -74,7 +74,7 @@ function playerTurn(player) {
     
     let squareSelection;
     
-    
+    const getSquareSelection = () => squareSelection;
     
     //-------DOESN'T ADD 0 INDEX TO EMPTY CELLS----------------
 
@@ -84,38 +84,34 @@ function playerTurn(player) {
         let arrayOfEmptyCells = [];
         let emptyValue = "";
         getGameBoard.grid.forEach((element, index) => {
-            if(element === emptyValue) arrayOfEmptyCells.push(index);
-                console.log(index);
+            if(element === emptyValue) {
+                let square = ++index;
+                arrayOfEmptyCells.push(square);
+            }
         })
-        // console.log(arrayOfEmptyCells);
-        let emptyCells = Number(arrayOfEmptyCells.join(""));
-        console.log(typeof emptyCells);
-        console.log(emptyCells);
-        // let numberInRangeCheck = /^[0-8]$/;
-        // console.log(emptyCells);
+
+        let emptyCells = parseInt(arrayOfEmptyCells.join(""));
         let numberInRangeCheck = new RegExp (`^[${emptyCells}]$`);
-        console.log(numberInRangeCheck);
-        // const containsNothing = (currentValue) => currentValue === "";
-        // if (getGameBoard.grid.every(containsNothing)) {
-        // console.log("all contain nothing");
-        // }
-        // getGameBoard.grid
+
         do {
             squareSelection = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
         } while (!numberInRangeCheck.test(squareSelection) || squareSelection === null);
-        //numberInRange - squareSelection value
-        //remove from prompt
-        
-       return squareSelection;
+
+        --squareSelection
+        console.log(squareSelection);
+       return  squareSelection;
     }
+    //below console.logs gets called twice and return undefined
     console.log(squareSelection);
+    console.log(getGameBoard.grid);
+    
     //so loop through gameboard grid
     //do i put that method/function in gameboard or turn func?
     //use square selection as index to search array
     //check if empty and add if so
     //else ask for new square selection
     // getGameBoard.getGridCell(squareSelection);
-    console.log(getGameBoard.grid);
+    
     
     // for (let cell of getGameBoard.grid) {
     //     if (containsNothing(cell))
@@ -124,11 +120,13 @@ function playerTurn(player) {
     
     
 
-    return {selectGameboardSquare}
+    return {getSquareSelection,selectGameboardSquare}
 }
 
 playerTurn(player1).selectGameboardSquare();
-playerTurn(player1)
+//below returns undefined
+//do i need to instance playerTurn? or add squareSelection as property for players then access it in playerTurn?
+console.log(playerTurn(player1).getSquareSelection());
 
 // if(playe)
 
@@ -136,8 +134,8 @@ playerTurn(player1)
 //other player has even turns;
 // 2 seperate counts for turns;
 function playRound(number) {
-    // const player1 = createPlayer("Player1");
-    // const player2 = createPlayer("player2");
+    const player1 = createPlayer("Player1");
+    const player2 = createPlayer("player2");
     
     player1.selectSymbol();
     console.log(player1.getPlayerSymbol());
