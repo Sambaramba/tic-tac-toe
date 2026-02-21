@@ -12,6 +12,7 @@ console.log(getGameBoard);
 function createPlayer(name) {
     
     let playerScore = 0;
+    //stores last character of player name which will be either 1 or 2
     const playerNumber = name.charAt(name.length - 1);
     let playerSymbol;
     const selectSymbol = () => {
@@ -64,23 +65,22 @@ const player2 = createPlayer("player2");
 //maybe Array.every for first turn
 //then if false get all indexs that are empty
 //add numbers to new array? or string of numbers? then change pattern and prompt to only allow those numbers?
+
+//make playerTurn an function factory so can do for player1 and 2?
+//turn is just a method in round which itself is in game?
+//so ive made into a function to turn into method later
 function playerTurn(player) {
     //if none free squares display game over with winner - call win condition func
     //loop through gameboard and find all empty indexes
     // get those numbers
     //add to prompt and pattern
 
+    let playersSelectedSquare;
     
+    // const getSelectedSquare = () => playerSelectedSquare;
     
-    let squareSelection;
-    
-    const getSquareSelection = () => squareSelection;
-    
-    //-------DOESN'T ADD 0 INDEX TO EMPTY CELLS----------------
-
-    //is it because zero is falsy value?
-
-    const selectGameboardSquare = () => {
+    function selectGameboardSquare() {
+        // let squareSelection;
         let arrayOfEmptyCells = [];
         let emptyValue = "";
         getGameBoard.grid.forEach((element, index) => {
@@ -94,17 +94,21 @@ function playerTurn(player) {
         let numberInRangeCheck = new RegExp (`^[${emptyCells}]$`);
 
         do {
-            squareSelection = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
-        } while (!numberInRangeCheck.test(squareSelection) || squareSelection === null);
-
-        --squareSelection
-        console.log(squareSelection);
-       return  squareSelection;
+            playersSelectedSquare = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
+        } while (!numberInRangeCheck.test(playersSelectedSquare) || playersSelectedSquare === null);
+        
+        --playersSelectedSquare
+        console.log(typeof playersSelectedSquare);
+        // playersSelectedSquare = squareSelection;
+        console.log(playersSelectedSquare);
+        console.log(typeof playersSelectedSquare);
+       return  playersSelectedSquare;
     }
     //below console.logs gets called twice and return undefined
-    console.log(squareSelection);
+    selectGameboardSquare()
+    console.log(playersSelectedSquare);
     console.log(getGameBoard.grid);
-    
+
     //so loop through gameboard grid
     //do i put that method/function in gameboard or turn func?
     //use square selection as index to search array
@@ -119,14 +123,16 @@ function playerTurn(player) {
     // }
     
     
-
-    return {getSquareSelection,selectGameboardSquare}
+    return;
+    // return {getSelectedSquare};
 }
 
-playerTurn(player1).selectGameboardSquare();
+// console.log(playerTurn().getSelectedSquare());
+playerTurn(player1);
+// tGameboardSquare();
 //below returns undefined
 //do i need to instance playerTurn? or add squareSelection as property for players then access it in playerTurn?
-console.log(playerTurn(player1).getSquareSelection());
+// console.log(playerTurn().getSelectedSquare());
 
 // if(playe)
 
@@ -170,3 +176,8 @@ function checkWinCondition() {
     // }
     
 }
+
+//------------------UNUSED CODE-------------------//
+
+//----for playerTurn/game logic-------------------//
+
