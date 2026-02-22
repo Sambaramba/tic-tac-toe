@@ -70,10 +70,13 @@ const player2 = createPlayer("player2");
 //turn is just a method in round which itself is in game?
 //so ive made into a function to turn into method later
 function playerTurn(player) {
-    //if none free squares display game over with winner - call win condition func
+    //if none free squares display game over with winner - call win condition func at end
     //loop through gameboard and find all empty indexes
     // get those numbers
     //add to prompt and pattern
+    
+    //need to do the add player bit with destructuring shit
+    let playerSymbol = player.getPlayerSymbol();
 
     let playersSelectedSquare;
     
@@ -98,15 +101,14 @@ function playerTurn(player) {
         } while (!numberInRangeCheck.test(playersSelectedSquare) || playersSelectedSquare === null);
         
         --playersSelectedSquare
-        console.log(typeof playersSelectedSquare);
-        // playersSelectedSquare = squareSelection;
-        console.log(playersSelectedSquare);
-        console.log(typeof playersSelectedSquare);
        return  playersSelectedSquare;
     }
-    //below console.logs gets called twice and return undefined
+    //below console.logs gets called twice and return undefined? think its sorted now.
     selectGameboardSquare()
     console.log(playersSelectedSquare);
+    //change below value to players selected symbol
+    getGameBoard.grid[playersSelectedSquare] = "X";
+    console.log(getGameBoard.grid[playersSelectedSquare]);
     console.log(getGameBoard.grid);
 
     //so loop through gameboard grid
@@ -139,6 +141,7 @@ playerTurn(player1);
 //1st player has odd turns
 //other player has even turns;
 // 2 seperate counts for turns;
+//reset symbols on round finish
 function playRound(number) {
     const player1 = createPlayer("Player1");
     const player2 = createPlayer("player2");
