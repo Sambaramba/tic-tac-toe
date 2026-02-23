@@ -28,7 +28,7 @@ function createPlayer(name) {
     const increasePlayerScore = () => { playerScore++; };
     const getPlayerSymbol = () =>  playerSymbol;
     const changePlayerSymbol = (newValue) => playerSymbol = newValue;
-    return { name, playerNumber, getPlayerSymbol, getPlayerScore, increasePlayerScore, selectSymbol, changePlayerSymbol};
+    return { name, playerNumber,getPlayerSymbol, getPlayerScore, increasePlayerScore, selectSymbol, changePlayerSymbol};
 }
 
 //create turn flag for alternating turns;
@@ -71,12 +71,9 @@ const player2 = createPlayer("player2");
 //so ive made into a function to turn into method later
 function playerTurn(player) {
     //if none free squares display game over with winner - call win condition func at end
-    //loop through gameboard and find all empty indexes
-    // get those numbers
-    //add to prompt and pattern
-    
-    //need to do the add player bit with destructuring shit
-    let playerSymbol = player.getPlayerSymbol();
+    //move this to round when turn code completed
+    player.selectSymbol();
+    const playerSymbol = player.getPlayerSymbol();
 
     let playersSelectedSquare;
     
@@ -106,17 +103,10 @@ function playerTurn(player) {
     //below console.logs gets called twice and return undefined? think its sorted now.
     selectGameboardSquare()
     console.log(playersSelectedSquare);
-    //change below value to players selected symbol
-    getGameBoard.grid[playersSelectedSquare] = "X";
+
+    getGameBoard.grid[playersSelectedSquare] = playerSymbol;
     console.log(getGameBoard.grid[playersSelectedSquare]);
     console.log(getGameBoard.grid);
-
-    //so loop through gameboard grid
-    //do i put that method/function in gameboard or turn func?
-    //use square selection as index to search array
-    //check if empty and add if so
-    //else ask for new square selection
-    // getGameBoard.getGridCell(squareSelection);
     
     
     // for (let cell of getGameBoard.grid) {
@@ -126,7 +116,6 @@ function playerTurn(player) {
     
     
     return;
-    // return {getSelectedSquare};
 }
 
 // console.log(playerTurn().getSelectedSquare());
