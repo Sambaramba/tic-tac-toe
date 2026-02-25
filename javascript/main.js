@@ -69,13 +69,14 @@ const player2 = createPlayer("player2");
 //make playerTurn an function factory so can do for player1 and 2?
 //turn is just a method in round which itself is in game?
 //so ive made into a function to turn into method later
+//or make turn into a function factory and create players instances?
 function playerTurn(player) {
     //if none free squares display game over with winner - call win condition func at end
     //move this to round when turn code completed
-    player.selectSymbol();
+    // player.selectSymbol();
     const playerSymbol = player.getPlayerSymbol();
 
-    let playersSelectedSquare;
+    // let playersSelectedSquare;
     
     // const getSelectedSquare = () => playerSelectedSquare;
     
@@ -88,39 +89,33 @@ function playerTurn(player) {
                 let square = ++index;
                 arrayOfEmptyCells.push(square);
             }
-        })
-
+        });
         let emptyCells = parseInt(arrayOfEmptyCells.join(""));
         let numberInRangeCheck = new RegExp (`^[${emptyCells}]$`);
-
+        
         do {
             playersSelectedSquare = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
         } while (!numberInRangeCheck.test(playersSelectedSquare) || playersSelectedSquare === null);
         
         --playersSelectedSquare
-       return  playersSelectedSquare;
+       return playersSelectedSquare;
     }
-    //below console.logs gets called twice and return undefined? think its sorted now.
-    selectGameboardSquare()
-    console.log(playersSelectedSquare);
 
-    getGameBoard.grid[playersSelectedSquare] = playerSymbol;
-    console.log(getGameBoard.grid[playersSelectedSquare]);
-    console.log(getGameBoard.grid);
-    
-    
-    // for (let cell of getGameBoard.grid) {
-    //     if (containsNothing(cell))
-    //     console.log(cell);
-    // }
-    
-    
-    return;
+    // selectGameboardSquare();
+    //can i just return this from selectGameboadSquare();
+    // getGameBoard.grid[playersSelectedSquare] = playerSymbol;
+    //so this needs to be number from 0-8
+    return function (squareSelection) {
+        getGameBoard.grid[squareSelection] = playerSymbol;
+        return;
+    };
 }
 
+
 // console.log(playerTurn().getSelectedSquare());
-playerTurn(player1);
-// tGameboardSquare();
+// playerTurn(player1);
+// playerTurn(player2);
+// GameboardSquare();
 //below returns undefined
 //do i need to instance playerTurn? or add squareSelection as property for players then access it in playerTurn?
 // console.log(playerTurn().getSelectedSquare());
@@ -131,7 +126,9 @@ playerTurn(player1);
 //other player has even turns;
 // 2 seperate counts for turns;
 //reset symbols on round finish
-function playRound(number) {
+//could change who chooses symbol on odd/even rounds?
+//have turns counter that stops at 9?
+function playRound() {
     const player1 = createPlayer("Player1");
     const player2 = createPlayer("player2");
     
@@ -139,6 +136,27 @@ function playRound(number) {
     console.log(player1.getPlayerSymbol());
     player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
     console.log(player2.getPlayerSymbol());
+
+    const player1Turn = playerTurn(player1);
+    const player2Turn = playerTurn(player2);
+    player1Turn(4);
+    console.log(getGameBoard.grid);
+    player2Turn(5);
+    console.log(getGameBoard.grid);
+    player1Turn(1);
+    console.log(getGameBoard.grid);
+    player2Turn(0);
+    console.log(getGameBoard.grid);
+    player1Turn(2);
+    console.log(getGameBoard.grid);
+    player2Turn(3);
+    console.log(getGameBoard.grid);
+    player1Turn(7);
+    console.log(getGameBoard.grid);
+    player2Turn(6);
+    console.log(getGameBoard.grid);
+    player1Turn(8);
+    console.log(getGameBoard.grid);
     
     // for (let turn = 1 ; turn <= 9 ; turn++) {
 
@@ -147,7 +165,9 @@ function playRound(number) {
 
 }
 
-function playGame() {
+playRound();
+
+function playGame(numberOfRounds) {
 
 }
 
@@ -173,3 +193,7 @@ function checkWinCondition() {
 
 //----for playerTurn/game logic-------------------//
 
+// for (let cell of getGameBoard.grid) {
+    //     if (containsNothing(cell))
+    //     console.log(cell);
+    // }
