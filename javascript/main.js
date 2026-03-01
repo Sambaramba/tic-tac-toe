@@ -23,16 +23,19 @@ function createPlayer(name) {
         
         return playerSymbol = symbol;
     }
-
+    
     const getPlayerScore = () => playerScore;
     const increasePlayerScore = () => { playerScore++; };
+    const getPlayerNumber = () => playerNumber;
     const getPlayerSymbol = () =>  playerSymbol;
     const changePlayerSymbol = (newValue) => playerSymbol = newValue;
-    return { name, playerNumber,getPlayerSymbol, getPlayerScore, increasePlayerScore, selectSymbol, changePlayerSymbol};
+    return { name, playerNumber,getPlayerNumber, getPlayerSymbol, selectSymbol, changePlayerSymbol};
 }
 
 //create turn flag for alternating turns;
 let player1Turn = true;
+let playersTurn = 1;
+let turn = 1;
 
 
 //add a .starts property for both
@@ -71,96 +74,81 @@ const player2 = createPlayer("player2");
 //so ive made into a function to turn into method later
 //or make turn into a function factory and create players instances?
 function playerTurn(player) {
-    //if none free squares display game over with winner - call win condition func at end
-    //move this to round when turn code completed
-    // player.selectSymbol();
-    const playerSymbol = player.getPlayerSymbol();
+    //increment turn count
+    turn++
 
-    // let playersSelectedSquare;
-    
-    // const getSelectedSquare = () => playerSelectedSquare;
+    const playerSymbol = player.getPlayerSymbol();
+    // console.log(`players turn before if is ${playersTurn}`);
+    //code to alternate turns?
+    if (playersTurn) {
+        playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+    } else (console.log(`players turn value = ${playersTurn}`))
+
+    let playersSelectedSquare;
     
     function selectGameboardSquare() {
-        // let squareSelection;
+        //create new array and add all empty gameboard cells to it
         let arrayOfEmptyCells = [];
         let emptyValue = "";
         getGameBoard.grid.forEach((element, index) => {
             if(element === emptyValue) {
-                let square = ++index;
-                arrayOfEmptyCells.push(square);
+                //if true add value of following index num to array
+                let cell = ++index;
+                arrayOfEmptyCells.push(cell);
             }
         });
         let emptyCells = parseInt(arrayOfEmptyCells.join(""));
         let numberInRangeCheck = new RegExp (`^[${emptyCells}]$`);
-        
+
         do {
             playersSelectedSquare = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
         } while (!numberInRangeCheck.test(playersSelectedSquare) || playersSelectedSquare === null);
         
-        --playersSelectedSquare
+        --playersSelectedSquare;
        return playersSelectedSquare;
     }
+    
+    selectGameboardSquare();
+    getGameBoard.grid[playersSelectedSquare] = playerSymbol;
+    return;
 
-    // selectGameboardSquare();
-    //can i just return this from selectGameboadSquare();
-    // getGameBoard.grid[playersSelectedSquare] = playerSymbol;
+
     //so this needs to be number from 0-8
-    return function (squareSelection) {
-        getGameBoard.grid[squareSelection] = playerSymbol;
+    //This is return func to input square directly when get from ui;
+    return function (selectedCell) {
+        if(getGameBoard.grid[selectedCell] !== ""){
+            console.log(`Cell ${selectedCell} contains ${getGameBoard.grid[selectedCell]}, choose another cell`);
+        }
+        getGameBoard.grid[selectedCell] = playerSymbol;
         return;
     };
 }
 
 
-// console.log(playerTurn().getSelectedSquare());
-// playerTurn(player1);
-// playerTurn(player2);
-// GameboardSquare();
-//below returns undefined
-//do i need to instance playerTurn? or add squareSelection as property for players then access it in playerTurn?
-// console.log(playerTurn().getSelectedSquare());
-
-// if(playe)
-
 //1st player has odd turns
 //other player has even turns;
-// 2 seperate counts for turns;
-//reset symbols on round finish
 //could change who chooses symbol on odd/even rounds?
-//have turns counter that stops at 9?
+//reset symbols and turn on round finish
+
 function playRound() {
     const player1 = createPlayer("Player1");
     const player2 = createPlayer("player2");
     
     player1.selectSymbol();
-    console.log(player1.getPlayerSymbol());
     player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
-    console.log(player2.getPlayerSymbol());
 
-    const player1Turn = playerTurn(player1);
-    const player2Turn = playerTurn(player2);
-    player1Turn(4);
-    console.log(getGameBoard.grid);
-    player2Turn(5);
-    console.log(getGameBoard.grid);
-    player1Turn(1);
-    console.log(getGameBoard.grid);
-    player2Turn(0);
-    console.log(getGameBoard.grid);
-    player1Turn(2);
-    console.log(getGameBoard.grid);
-    player2Turn(3);
-    console.log(getGameBoard.grid);
-    player1Turn(7);
-    console.log(getGameBoard.grid);
-    player2Turn(6);
-    console.log(getGameBoard.grid);
-    player1Turn(8);
+    //where to change playersTurn value?
+    //does it go in win condition? or round/game?
+    
+    while (turn < 10) {
+        console.log(`turn no is ${turn}`);
+        playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+    }
+    
+    const checkForEmptyValue = (currentValue) => currentValue === "";
+    
     console.log(getGameBoard.grid);
     
-    // for (let turn = 1 ; turn <= 9 ; turn++) {
-
-    // }
    
 
 }
@@ -182,8 +170,8 @@ function playGame(numberOfRounds) {
 //then from turn 5 onwards start checking grid for 3 in row;
 function checkWinCondition() {
     //swap this to containsSomething and value !==
-    // const containsSomething = (currentValue) => currentValue !== "";
-    // if (getGameBoard.grid.every(containsSomething)) {
+    // const hasValue = (currentValue) => currentValue !== "";
+    // if (getGameBoard.grid.every(hasValue)) {
     //     console.log("all contain something");
     // }
     
@@ -196,4 +184,43 @@ function checkWinCondition() {
 // for (let cell of getGameBoard.grid) {
     //     if (containsNothing(cell))
     //     console.log(cell);
+    // }
+
+
+//-----play round func----------//
+
+
+
+    // let selectedCell = prompt("choose number between 0 and 8");
+    // const player1Turn = playerTurn(player1);
+    // const player2Turn = playerTurn(player2);
+    // player1Turn ? playerTurn(player1, playersTurn) : playerTurn(player2, playersTurn);
+
+//get syntax error with every in the while condition
+    // if(!getGameBoard.grid.every(checkForEmptyValue)) {
+    //     console.log("grid is full")
+    // }
+    //    playersTurn === 1 ?  playersTurn = 2 : playersTurn === 1;
+
+    // let chooseGameboardCell = prompt("choose number between 0 and 8");
+    
+    // player2Turn(5);
+    // console.log(getGameBoard.grid);
+    // player1Turn(1);
+    // console.log(getGameBoard.grid);
+    // player2Turn(0);
+    // console.log(getGameBoard.grid);
+    // player1Turn(2);
+    // console.log(getGameBoard.grid);
+    // player2Turn(3);
+    // console.log(getGameBoard.grid);
+    // player1Turn(6);
+    // console.log(getGameBoard.grid);
+    // player2Turn(6);
+    // console.log(getGameBoard.grid);
+    // player1Turn(8);
+    // console.log(getGameBoard.grid);
+    
+    // for (let turn = 1 ; turn <= 9 ; turn++) {
+
     // }
