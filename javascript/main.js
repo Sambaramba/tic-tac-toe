@@ -17,7 +17,8 @@ function createPlayer(name) {
     
     }
     const getUserName = () => userName;
-    //stores last character of player name which will be either 1 or 2
+
+    //stores last character of player name which will be either 1 or 2;
     const playerNumber = name.charAt(name.length - 1);
     const getPlayerNumber = () => playerNumber;
 
@@ -33,12 +34,11 @@ function createPlayer(name) {
     const getPlayerSymbol = () =>  playerSymbol;
     const changePlayerSymbol = (newValue) => playerSymbol = newValue;
      
-    let playerScore = 0;
-    const getPlayerScore = () => playerScore;
-    const increasePlayerScore = () => { playerScore++; };
-
-    
-    return { name, selectUserName, getUserName, playerNumber, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
+    // let playerScore = 0;
+    // const getPlayerScore = () => playerScore;
+    // const increasePlayerScore = () => { playerScore++; };
+ 
+    return { name, selectUserName, getUserName, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
 }
 
 //create turn flag for alternating turns;
@@ -60,8 +60,6 @@ let turn = 1;
 // }
 //or to swap turns could destructure and swap e.g. [a,b] = [b.a];
 
-const player1 = createPlayer("Player1");
-const player2 = createPlayer("player2");
 
 //prompt grid cell selection
 //then check if empty
@@ -142,6 +140,8 @@ function playerTurn(player) {
 function playRound() {
     const player1 = createPlayer("Player1");
     const player2 = createPlayer("player2");
+    player1.selectUserName();
+    player2.selectUserName();
     
     player1.selectSymbol();
     player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
