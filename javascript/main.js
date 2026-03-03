@@ -11,9 +11,16 @@ console.log(getGameBoard);
 
 function createPlayer(name) {
     
-    let playerScore = 0;
+    let userName;
+    const selectUserName = () => {
+        return userName =  prompt(`${name} input your name`);
+    
+    }
+    const getUserName = () => userName;
     //stores last character of player name which will be either 1 or 2
     const playerNumber = name.charAt(name.length - 1);
+    const getPlayerNumber = () => playerNumber;
+
     let playerSymbol;
     const selectSymbol = () => {
         let symbol;
@@ -23,13 +30,15 @@ function createPlayer(name) {
         
         return playerSymbol = symbol;
     }
-    
-    const getPlayerScore = () => playerScore;
-    const increasePlayerScore = () => { playerScore++; };
-    const getPlayerNumber = () => playerNumber;
     const getPlayerSymbol = () =>  playerSymbol;
     const changePlayerSymbol = (newValue) => playerSymbol = newValue;
-    return { name, playerNumber,getPlayerNumber, getPlayerSymbol, selectSymbol, changePlayerSymbol};
+     
+    let playerScore = 0;
+    const getPlayerScore = () => playerScore;
+    const increasePlayerScore = () => { playerScore++; };
+
+    
+    return { name, selectUserName, getUserName, playerNumber, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
 }
 
 //create turn flag for alternating turns;
@@ -168,7 +177,19 @@ function playGame(numberOfRounds) {
 
 //so could only allow 9x playerTurns
 //then from turn 5 onwards start checking grid for 3 in row;
+
+/*
+    0,1,2  0,3,6  0,4,8
+    3,4,5  1,4,7  2,4,6
+    6,7,8  2,5,8
+*/
 function checkWinCondition() {
+    //switch statement?
+    //loop through gameboard.grid
+    //filter/map/forEach/some?
+    //or do you check for all cells that contain x and o and test against patterns?
+    //or do you do every with each switch statement? is that a thing?
+    //or regEx with all the groups? then link to array indexs values x/o?
     //swap this to containsSomething and value !==
     // const hasValue = (currentValue) => currentValue !== "";
     // if (getGameBoard.grid.every(hasValue)) {
