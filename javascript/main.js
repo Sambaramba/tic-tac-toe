@@ -13,7 +13,7 @@ function createPlayer(name) {
     
     let userName;
     const selectUserName = () => {
-        return userName =  prompt(`${name} input your name`);
+        return userName =  prompt(`Player ${playerNumber} please choose your name`);
     
     }
     const getUserName = () => userName;
@@ -56,6 +56,7 @@ let turn = 1;
     
     
 //     const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
+
 //     return {player1, player2, randomPlayerChoice};
 // }
 //or to swap turns could destructure and swap e.g. [a,b] = [b.a];
@@ -138,12 +139,22 @@ function playerTurn(player) {
 //reset symbols and turn on round finish
 
 function playRound() {
+
+    //want this in game logic func if doing multi rounds.
     const player1 = createPlayer("Player1");
     const player2 = createPlayer("player2");
     player1.selectUserName();
     player2.selectUserName();
+
+    //choose random player code
+    // const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
+    // randomPlayerChoice() === 1 ? player1.selectSymbol() : player2.selectSymbol();
+    
     
     player1.selectSymbol();
+    //could i change ternary to be `player${randomPlayerChoice()}`.getPlayerSymbol() in condition?
+    //or store in var and add to above expression?
+    //maybe then store opposite in another var for rest of expression?
     player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
 
     //where to change playersTurn value?
@@ -195,6 +206,31 @@ function checkWinCondition() {
     // if (getGameBoard.grid.every(hasValue)) {
     //     console.log("all contain something");
     // }
+
+    //regEx to match all 8 win conditions
+    const winConditionTest = /0[12|36|48]{2}|(345)|(147)|2[46|58]{2}|678/g
+
+    //for these need to make into string then check if regEx group is included for both
+    //if so return which player has
+    //if full and no winner display draw
+    //else what do you return?
+
+    //dunno if any of it works
+     let arrayOfCrosses = getGameBoard.grid.filter((value, index)) => {
+        if(value === "X") {
+            arrayOfCrosses.push(index);
+        }
+    }
+    //is it test? and make sure regEx is fine
+    winConditionTest.test(arrayOfCrosses);
+
+    let arrayOfNoughts = getGameBoard.grid.filter((value, index)) => {
+        if(value === "X") {
+            arrayOfNoughts.push(index);
+        }
+    }
+    //is it test? and make sure regEx is fine
+    winConditionTest.test(arrayOfNoughts);
     
 }
 
