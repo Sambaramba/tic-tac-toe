@@ -123,9 +123,9 @@ function playerTurn(player) {
     selectGameboardSquare();
     getGameBoard.grid[playersSelectedSquare] = playerSymbol;
 
-    if(checkWinCondition()) {
-        return;
-    };
+    // if(checkWinCondition()) {
+    //     return;
+    // };
     return;
 
 
@@ -167,10 +167,26 @@ function playRound() {
 
     //where to change playersTurn value?
     //does it go in win condition? or round/game?
-    
-    while (turn < 10) {
+    //is it && or || for condition?
+    while (turn < 10 && checkWinCondition() === false) {
         console.log(`turn no is ${turn}`);
         playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+    }
+    
+    //how to attach to players.symbol?
+    //add players to checkWinCondition?
+    //make win condition a function/object factory?
+    //else make it an iife
+    
+    if(checkWinCondition() === player1.getPlayerSymbol()) {
+       console.log("Player 1 has won");
+    }
+    if (checkWinCondition() === player2.getPlayerSymbol()) {
+       console.log("Player 2 has won");
+    }
+
+    if (checkWinCondition() === "draw") {
+        console.log("its a draw");
     }
     
     const checkForEmptyValue = (currentValue) => currentValue === "";
@@ -208,11 +224,6 @@ function playGame(numberOfRounds) {
 //where add func to check?
 function checkWinCondition() {
     
-    // const hasValue = (currentValue) => currentValue !== "";
-    // if (getGameBoard.grid.every(hasValue)) {
-    //     console.log("all contain something");
-    // }
-
     //regEx to match all 8 win conditions;
     const winConditions = /0[12|36|48]{2}|(345)|(147)|2[46|58]{2}|678/g
 
@@ -236,14 +247,19 @@ function checkWinCondition() {
     //return sumbol/player/player.number/boolean?
     if (winConditions.test(stringOfXIndexes)) {
         console.log("X is the winner");
-        return true;
+        return "X";
     }
     if (winConditions.test(stringOfOIndexes)) {
         console.log("O is the winner");
-        return true;
+        return "O";
+    }
+    
+    const hasValue = (currentValue) => currentValue !== "";
+    if (getGameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
+        console.log("Draw");
+        return "draw";
     }
     return false;
-    
     
 }
 
