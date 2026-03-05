@@ -83,7 +83,11 @@ let turn = 1;
 //or make turn into a function factory and create players instances?
 function playerTurn(player) {
     //increment turn count
-    turn++
+    // if ( turn > 4 && checkWinCondition()) {
+    //     return console.log("game over");
+    // };
+
+    turn++;
 
     const playerSymbol = player.getPlayerSymbol();
     // console.log(`players turn before if is ${playersTurn}`);
@@ -118,6 +122,10 @@ function playerTurn(player) {
     
     selectGameboardSquare();
     getGameBoard.grid[playersSelectedSquare] = playerSymbol;
+
+    if(checkWinCondition()) {
+        return;
+    };
     return;
 
 
@@ -194,43 +202,48 @@ function playGame(numberOfRounds) {
     3,4,5  1,4,7  2,4,6
     6,7,8  2,5,8
 */
+//take player?
+//could insert player symbol?
+//change func name for better desciption?
+//where add func to check?
 function checkWinCondition() {
-    //switch statement?
-    //loop through gameboard.grid
-    //filter/map/forEach/some?
-    //or do you check for all cells that contain x and o and test against patterns?
-    //or do you do every with each switch statement? is that a thing?
-    //or regEx with all the groups? then link to array indexs values x/o?
-    //swap this to containsSomething and value !==
+    
     // const hasValue = (currentValue) => currentValue !== "";
     // if (getGameBoard.grid.every(hasValue)) {
     //     console.log("all contain something");
     // }
 
-    //regEx to match all 8 win conditions
-    const winConditionTest = /0[12|36|48]{2}|(345)|(147)|2[46|58]{2}|678/g
+    //regEx to match all 8 win conditions;
+    const winConditions = /0[12|36|48]{2}|(345)|(147)|2[46|58]{2}|678/g
 
-    //for these need to make into string then check if regEx group is included for both
-    //if so return which player has
-    //if full and no winner display draw
-    //else what do you return?
-
-    //dunno if any of it works
-     let arrayOfCrosses = getGameBoard.grid.filter((value, index)) => {
+    let stringOfXIndexes = "";
+    let stringOfOIndexes = "";
+    console.log(getGameBoard.grid);
+    getGameBoard.grid.forEach((value, index) => {
+        
+        // console.log(index);
         if(value === "X") {
-            arrayOfCrosses.push(index);
+            stringOfXIndexes+=index;
+            console.log(`x index string is now ${stringOfXIndexes}`);
         }
-    }
-    //is it test? and make sure regEx is fine
-    winConditionTest.test(arrayOfCrosses);
+        if(value === "O") {
+            stringOfOIndexes+=index;
+            console.log(`O index string is now ${stringOfOIndexes}`)
+        }
 
-    let arrayOfNoughts = getGameBoard.grid.filter((value, index)) => {
-        if(value === "X") {
-            arrayOfNoughts.push(index);
-        }
+    })
+
+    //return sumbol/player/player.number/boolean?
+    if (winConditions.test(stringOfXIndexes)) {
+        console.log("X is the winner");
+        return true;
     }
-    //is it test? and make sure regEx is fine
-    winConditionTest.test(arrayOfNoughts);
+    if (winConditions.test(stringOfOIndexes)) {
+        console.log("O is the winner");
+        return true;
+    }
+    return false;
+    
     
 }
 
@@ -281,3 +294,42 @@ function checkWinCondition() {
     // for (let turn = 1 ; turn <= 9 ; turn++) {
 
     // }
+
+    //----------win condition func-----------//
+    //switch statement?
+    //loop through gameboard.grid
+    //filter/forEach/some?
+    //or do you check for all cells that contain x and o and test against patterns?
+    //or do you do every with each switch statement? is that a thing?
+    //or regEx with all the groups? then link to array indexs values x/o?
+    //swap this to containsSomething and value !==
+
+    //  let arrayOfCrosses = getGameBoard.grid.filter((value, index) => {
+    //     console.log(value);
+    //     console.log(index);
+    //     if(value === "X") {
+    //         console.log(index);
+    //         // arrayOfCrosses.push(index);
+    //         console.log(`type of crosses array = ${typeof arrayOfCrosses}`)
+    //     }
+    // })
+    // console.log(arrayOfCrosses);
+    // arrayOfCrosses.join();
+    //is it test? and make sure regEx is fine
+    
+    // let arrayOfNoughts = []
+    // arrayOfNoughts = getGameBoard.grid.filter((value, index) => {
+    //     if(value === "X") {
+    //         console.log(index);
+    //         // arrayOfNoughts.push(index);
+    //         console.log(`type of noughts array = ${typeof arrayOfNoughts}`);
+    //     }
+    // });
+    // arrayOfNoughts.join();
+    
+    // if (winConditions.test(arrayOfCrosses) ||
+    //     winConditions.test(arrayOfNoughts)) {
+
+    //     return true;
+    // }
+    // return false;
