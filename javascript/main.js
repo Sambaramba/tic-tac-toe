@@ -1,4 +1,4 @@
-const getGameBoard = (function () {
+const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
 
@@ -6,7 +6,7 @@ const getGameBoard = (function () {
     return {grid};
 })();
 
-console.log(getGameBoard);
+console.log(gameBoard);
 
 
 function createPlayer(name) {
@@ -102,7 +102,7 @@ function playerTurn(player) {
         //create new array and add all empty gameboard cells to it
         let arrayOfEmptyCells = [];
         let emptyValue = "";
-        getGameBoard.grid.forEach((element, index) => {
+        gameBoard.grid.forEach((element, index) => {
             if(element === emptyValue) {
                 //if true add value of following index num to array
                 let cell = ++index;
@@ -121,7 +121,7 @@ function playerTurn(player) {
     }
     
     selectGameboardSquare();
-    getGameBoard.grid[playersSelectedSquare] = playerSymbol;
+    gameBoard.grid[playersSelectedSquare] = playerSymbol;
 
     // if(checkWinCondition()) {
     //     return;
@@ -132,10 +132,10 @@ function playerTurn(player) {
     //so this needs to be number from 0-8
     //This is return func to input square directly when get from ui;
     return function (selectedCell) {
-        if(getGameBoard.grid[selectedCell] !== ""){
-            console.log(`Cell ${selectedCell} contains ${getGameBoard.grid[selectedCell]}, choose another cell`);
+        if(gameBoard.grid[selectedCell] !== ""){
+            console.log(`Cell ${selectedCell} contains ${gameBoard.grid[selectedCell]}, choose another cell`);
         }
-        getGameBoard.grid[selectedCell] = playerSymbol;
+        gameBoard.grid[selectedCell] = playerSymbol;
         return;
     };
 }
@@ -191,7 +191,7 @@ function playRound() {
     
     const checkForEmptyValue = (currentValue) => currentValue === "";
     
-    console.log(getGameBoard.grid);
+    console.log(gameBoard.grid);
     
    
 
@@ -229,8 +229,8 @@ function checkWinCondition() {
 
     let stringOfXIndexes = "";
     let stringOfOIndexes = "";
-    console.log(getGameBoard.grid);
-    getGameBoard.grid.forEach((value, index) => {
+    console.log(gameBoard.grid);
+    gameBoard.grid.forEach((value, index) => {
         
         // console.log(index);
         if(value === "X") {
@@ -255,7 +255,7 @@ function checkWinCondition() {
     }
     
     const hasValue = (currentValue) => currentValue !== "";
-    if (getGameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
+    if (gameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
         console.log("Draw");
         return "draw";
     }
