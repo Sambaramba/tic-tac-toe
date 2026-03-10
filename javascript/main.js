@@ -3,6 +3,7 @@ const gameBoard = (function () {
     let grid = new Array(9).fill("");
 
     const getGridCell = () => {}
+    const resetGrid = () => {}
     return {grid};
 })();
 
@@ -37,12 +38,13 @@ function createPlayer(name) {
     // let playerScore = 0;
     // const getPlayerScore = () => playerScore;
     // const increasePlayerScore = () => { playerScore++; };
- 
+    // const resetPlayerScore = () => { playerScore = 0;}
     return { name, selectUserName, getUserName, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
 }
 
 //create turn flag for alternating turns;
-let player1Turn = true;
+//put them in game logic?
+// let player1Turn = true;
 let playersTurn = 1;
 let turn = 1;
 
@@ -51,17 +53,24 @@ let turn = 1;
 //dependant on randomPlayerChoice value add true and false to .starts for each
 //e.g. if 1 check against player.playerNumber() and if 1 change player.Starts to true for player1 and vise versa for 2;
 
-// function controlGameFlow() {
+// const pickRandom = (() {
 
     
     
 //     const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
+//     //should put empty cell check in below method?
+//     const randomCellChoice = () => {
 
-//     return {player1, player2, randomPlayerChoice};
-// }
-//or to swap turns could destructure and swap e.g. [a,b] = [b.a];
+//         return  Math.floor(Math.random() * 9)
+//     };
+
+//     return {randomPlayerChoice, randomCellChoice};
+// });
+// //or to swap turns could destructure and swap e.g. [a,b] = [b.a];
 
 
+// console.log(pickRandom.randomPlayerChoice);
+// console.log(pickRandom.randomCellChoice);
 //prompt grid cell selection
 //then check if empty
 //if empty add players symbol(x or o);
@@ -81,60 +90,64 @@ let turn = 1;
 //turn is just a method in round which itself is in game?
 //so ive made into a function to turn into method later
 //or make turn into a function factory and create players instances?
+//think turn needs to be function factory to take player and turn number
+//turn is currently a function
+//change to function factory? or method?
 function playerTurn(player) {
     //increment turn count
     // if ( turn > 4 && checkWinCondition()) {
     //     return console.log("game over");
     // };
-
+    
+    console.log(`turn is ${turn}`);
     turn++;
+    // console.log(randomCellChoice());
 
     const playerSymbol = player.getPlayerSymbol();
-    // console.log(`players turn before if is ${playersTurn}`);
-    //code to alternate turns?
+    console.log(`players turn before if is ${playersTurn}`);
+    // //code to alternate turns?
     if (playersTurn) {
+        console.log(`players turn is ${playersTurn}`);
         playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
     } else (console.log(`players turn value = ${playersTurn}`))
 
-    let playersSelectedSquare;
+    // let playersSelectedSquare;
     
-    function selectGameboardSquare() {
-        //create new array and add all empty gameboard cells to it
-        let arrayOfEmptyCells = [];
-        let emptyValue = "";
-        gameBoard.grid.forEach((element, index) => {
-            if(element === emptyValue) {
-                //if true add value of following index num to array
-                let cell = ++index;
-                arrayOfEmptyCells.push(cell);
-            }
-        });
-        let emptyCells = parseInt(arrayOfEmptyCells.join(""));
-        let numberInRangeCheck = new RegExp (`^[${emptyCells}]$`);
+    // function selectGameboardSquare() {
+    //     //create new array and add all empty gameboard cells to it
+    //     let arrayOfEmptyCells = [];
+    //     let emptyValue = "";
+    //     gameBoard.grid.forEach((element, index) => {
+    //         if(element === emptyValue) {
+    //             //if true add value of following index num to array
+    //             let cell = ++index;
+    //             arrayOfEmptyCells.push(cell);
+    //         }
+    //     });
+    //     let emptyCells = parseInt(arrayOfEmptyCells.join(""));
+    //     let numberInRangeCheck = new RegExp (`^[${emptyCells}]$`);
 
-        do {
-            playersSelectedSquare = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
-        } while (!numberInRangeCheck.test(playersSelectedSquare) || playersSelectedSquare === null);
+    //     do {
+    //         playersSelectedSquare = prompt(`Please choose one of these numbers ${emptyCells} to select grid square`);
+    //     } while (!numberInRangeCheck.test(playersSelectedSquare) || playersSelectedSquare === null);
         
-        --playersSelectedSquare;
-       return playersSelectedSquare;
-    }
+    //     --playersSelectedSquare;
+    //    return playersSelectedSquare;
+    // }
     
-    selectGameboardSquare();
-    gameBoard.grid[playersSelectedSquare] = playerSymbol;
-
-    // if(checkWinCondition()) {
-    //     return;
-    // };
-    return;
+    // selectGameboardSquare();
+    // gameBoard.grid[playersSelectedSquare] = playerSymbol;
+    // return;
 
 
     //so this needs to be number from 0-8
     //This is return func to input square directly when get from ui;
     return function (selectedCell) {
-        if(gameBoard.grid[selectedCell] !== ""){
-            console.log(`Cell ${selectedCell} contains ${gameBoard.grid[selectedCell]}, choose another cell`);
-        }
+        console.log(selectedCell);
+        // if(gameBoard.grid[selectedCell] !== ""){
+        //     console.log(selectedCell);
+        //     console.log(`Cell ${selectedCell} contains ${gameBoard.grid[selectedCell]}, choose another cell`);
+        // }
         gameBoard.grid[selectedCell] = playerSymbol;
         return;
     };
@@ -168,16 +181,50 @@ function playRound() {
     //where to change playersTurn value?
     //does it go in win condition? or round/game?
     //is it && or || for condition?
+    
+
+
+    //
+    const randomCellChoice = () => { 
+        let cellChoice;
+
+        do {cellChoice = Math.floor(Math.random() * 9)}
+        while (gameBoard.grid[cellChoice] !== "") 
+         console.log(cellChoice);
+         console.log(typeof cellChoice);
+        return cellChoice;
+    };
+    console.log(randomCellChoice());
+    
+
     while (turn < 10 && checkWinCondition() === false) {
         console.log(`turn no is ${turn}`);
-        playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+        const player1Turn = playerTurn(player1);
+        const player2Turn = playerTurn(player2);
+        let player1Choice = randomCellChoice();
+        let player2Choice = randomCellChoice();
+        console.log(player1Choice);
+        console.log(player2Choice);
+        
+        playersTurn === 1 ? player1Turn(player1Choice) : player2Turn(player2Choice);
     }
+    
+    //make turn a func factory with players as instances
+    //then replace below with the instances
+    //and call random cell choice for the argument
+    //so randomly choooses a square each time
+    //hopefully zero as value is accepted
+    // while (turn < 10 && checkWinCondition() === false) {
+    //     console.log(`turn no is ${turn}`);
+    //     playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+    // }
+
     
     //how to attach to players.symbol?
     //add players to checkWinCondition?
     //make win condition a function/object factory?
     //else make it an iife
-    
+    //switch statement?
     if(checkWinCondition() === player1.getPlayerSymbol()) {
        console.log("Player 1 has won");
     }
@@ -189,11 +236,11 @@ function playRound() {
         console.log("its a draw");
     }
     
-    const checkForEmptyValue = (currentValue) => currentValue === "";
+    // const checkForEmptyValue = (currentValue) => currentValue === "";
     
     console.log(gameBoard.grid);
     
-   
+   return;
 
 }
 
@@ -222,10 +269,12 @@ function playGame(numberOfRounds) {
 //could insert player symbol?
 //change func name for better desciption?
 //where add func to check?
+//do i need an every check in here for empty grid?
+/*------WIN CONDITION IS BRoKEN--028 is not winning combo---*/
 function checkWinCondition() {
     
     //regEx to match all 8 win conditions;
-    const winConditions = /0[12|36|48]{2}|(345)|(147)|2[46|58]{2}|678/g
+    const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
 
     let stringOfXIndexes = "";
     let stringOfOIndexes = "";
