@@ -99,17 +99,13 @@ function playerTurn(player) {
     //     return console.log("game over");
     // };
     
-    console.log(`turn is ${turn}`);
-    turn++;
+    // console.log(`turn is ${turn}`);
     // console.log(randomCellChoice());
 
     const playerSymbol = player.getPlayerSymbol();
-    console.log(`players turn before if is ${playersTurn}`);
+    // console.log(`players turn before if is ${playersTurn}`);
     // //code to alternate turns?
-    if (playersTurn) {
-        console.log(`players turn is ${playersTurn}`);
-        playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-    } else (console.log(`players turn value = ${playersTurn}`))
+    
 
     // let playersSelectedSquare;
     
@@ -143,12 +139,19 @@ function playerTurn(player) {
     //so this needs to be number from 0-8
     //This is return func to input square directly when get from ui;
     return function (selectedCell) {
-        console.log(selectedCell);
+        // console.log(selectedCell);
         // if(gameBoard.grid[selectedCell] !== ""){
         //     console.log(selectedCell);
         //     console.log(`Cell ${selectedCell} contains ${gameBoard.grid[selectedCell]}, choose another cell`);
         // }
+        if (playersTurn) {
+        playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+        console.log(`players turn is ${playersTurn}`);
+        } else (console.log(`players turn value = ${playersTurn}`))
+
         gameBoard.grid[selectedCell] = playerSymbol;
+
+        turn++;
         return;
     };
 }
@@ -183,28 +186,26 @@ function playRound() {
     //is it && or || for condition?
     
 
-
-    //
     const randomCellChoice = () => { 
-        let cellChoice;
-
+        let cellChoice = Math.floor(Math.random() * 9);
+        
         do {cellChoice = Math.floor(Math.random() * 9)}
-        while (gameBoard.grid[cellChoice] !== "") 
-         console.log(cellChoice);
-         console.log(typeof cellChoice);
+        while (gameBoard.grid[cellChoice] !== "");
+        //  console.log(cellChoice);
+        //  console.log(typeof cellChoice);
         return cellChoice;
     };
-    console.log(randomCellChoice());
+    // console.log(randomCellChoice());
     
-
+    //so if i create win condition var to store win condition for check
+    //where would i create/update etc
     while (turn < 10 && checkWinCondition() === false) {
-        console.log(`turn no is ${turn}`);
+        console.log(gameBoard.grid);
         const player1Turn = playerTurn(player1);
         const player2Turn = playerTurn(player2);
+        console.log(`turn no is ${turn}`);
         let player1Choice = randomCellChoice();
         let player2Choice = randomCellChoice();
-        console.log(player1Choice);
-        console.log(player2Choice);
         
         playersTurn === 1 ? player1Turn(player1Choice) : player2Turn(player2Choice);
     }
@@ -225,20 +226,28 @@ function playRound() {
     //make win condition a function/object factory?
     //else make it an iife
     //switch statement?
-    if(checkWinCondition() === player1.getPlayerSymbol()) {
-       console.log("Player 1 has won");
-    }
-    if (checkWinCondition() === player2.getPlayerSymbol()) {
-       console.log("Player 2 has won");
-    }
+    function displayWinCondition() {
+        const winConditionResult = checkWinCondition();
 
-    if (checkWinCondition() === "draw") {
-        console.log("its a draw");
+        switch(winConditionResult) {
+            case player1.getPlayerSymbol():
+                console.log("Player 1 has won");
+                break;
+            case player2.getPlayerSymbol():
+                console.log("Player 2 has won");
+                break;
+            case "draw":
+                console.log("its a draw");
+                break;
+        }
+        
     }
+    displayWinCondition();
+    
     
     // const checkForEmptyValue = (currentValue) => currentValue === "";
     
-    console.log(gameBoard.grid);
+    // console.log(gameBoard.grid);
     
    return;
 
@@ -278,7 +287,7 @@ function checkWinCondition() {
 
     let stringOfXIndexes = "";
     let stringOfOIndexes = "";
-    console.log(gameBoard.grid);
+    // console.log(gameBoard.grid);
     gameBoard.grid.forEach((value, index) => {
         
         // console.log(index);
