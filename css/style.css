@@ -56,3 +56,51 @@ h1, h2, h3, h4, h5, h6 {
 #root, #__next {
   isolation: isolate;
 }
+
+
+/*---------App styles--------------*/
+
+/* * {
+  border: 1px solid red;
+} */
+
+body {
+  /* margin: auto; */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#container {
+  margin:  auto;
+  width: 80%;
+  height: 95%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  /* justify-content: space-between; */
+}
+
+#gameboard {
+  border: 1px solid red;
+  height: 36rem;
+  width: 36rem;
+  margin: auto;
+  display: grid;
+  grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr / 1fr 1fr 1fr;
+  grid-template-areas: 
+    "cell1 cell2 cell3"
+    "cell4 cell5 cell6"
+    "cell7 cell8 cell9";     
+  /* grid-template-columns: (3, 1fr);
+  grid-template-rows: (3, 1fr);
+  grid-template-columns: repeat( auto-fit, minmax(36rem, 1fr) ); */
+}
+
+.cell {
+  border: 1px solid red;
+  width: 12rem;
+  height: 12rem;
+}
