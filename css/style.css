@@ -6,9 +6,10 @@
 }
 
 /* 2. Remove default margin */
-/* * {
+* {
   margin: 0;
-} */
+  padding: 0;
+}
 
 /* 3. Enable keyword animations */
 @media (prefers-reduced-motion: no-preference) {
@@ -65,12 +66,12 @@ h1, h2, h3, h4, h5, h6 {
 } */
 
 body {
-  /* margin: auto; */
+  margin: auto;
   width: 100vw;
   height: 100vh;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 #container {
   margin:  auto;
@@ -78,26 +79,37 @@ body {
   height: 95%;
   display: flex;
   flex-direction: column;
-  text-align: center;
-
-  /* justify-content: space-between; */
+  align-items: center;
+  justify-content: space-around;
 }
 
-#gameboard {
-  border: 1px solid red;
-  /* height: 36rem;
-  width: 36rem; */
-  margin: auto;
-  display: inline-grid;
-  grid-template: 100px 100px 100px / 100px 100px 100px;
+
+#gameboard  {
+  background-color: black;
+  height: 400px;
+  width: 400px;
+  /* margin: auto; */
+  display: grid;
+  gap: 5px;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   grid-template-areas: 
     "cell1 cell2 cell3"
     "cell4 cell5 cell6"
     "cell7 cell8 cell9";
 }
 
-#cell1 {
+div.cell {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+}
+
+ /* #cell1 {
   grid-area: 1 / 1 / 2 / 2;
+  grid-area: 1 / 1 / span 1 / span 1;
+  grid-area: cell1;
 }
 
 #cell2 {
@@ -131,9 +143,5 @@ body {
 #cell9 {
   grid-area: 3 / 3 / 4 / 4;
 }
+*/
 
-/* .cell {
-  border: 1px solid red;
-  width: 12rem;
-  height: 12rem;
-} */
