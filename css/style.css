@@ -61,6 +61,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /*---------App styles--------------*/
 
+:root {
+  /*FONT SIZES*/
+  --title-font-size: 4rem;
+
+  /*Custom Colours*/
+  --title-colour: hsl(162, 54%, 33%);
+  --app-bg-colour: hsl(252, 79%, 81%);
+  --bluey-green: hsl(162, 54%, 33%);
+}
+
 /* * {
   border: 1px solid red;
 } */
@@ -72,6 +82,7 @@ body {
   /* display: flex;
   justify-content: center;
   align-items: center; */
+  background-color: var(--app-bg-colour);
 }
 #container {
   margin:  auto;
@@ -81,6 +92,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  
+}
+
+#title {
+  font-size: var(--title-font-size);
+  color: var(--title-colour);
+  /* text-decoration: underline; */
 }
 
 
