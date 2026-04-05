@@ -1,5 +1,11 @@
-//make grid into array of objects with properties e.g. cellNo,value
+//add to dom content loaded event
+document.addEventListener("DOMContentLoaded", (event) => {
+    displayUiGameLogic.displayUi();
+    displayUiGameLogic.displayGameboard();
+    console.log("DOM fully loaded and parsed");
+});
 
+//make grid into array of objects with properties e.g. cellNo,value
 const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
@@ -266,7 +272,7 @@ function createDomElement(element, text, elementId, elementClass, attribute, att
        return domElement;
 }
 
-// createDomElement("div", "suck my choad", "container", "griddle");
+
 
 const displayUiGameLogic = (function() {
      
@@ -287,32 +293,24 @@ const displayUiGameLogic = (function() {
 
         containerDiv.append(title, display,gameboard,gameButtons);
     }
+    
     //want to delete gameboard if exists before this so dont make multiple
-    const displayGameboardOnPage = () => {
-        const gameboardDiv = document.createElement("div");
-        // const display = document.querySelector("#display");
-        gameboardDiv.id = "gameboard";
-        //loop through gameboard grid and add cell for each element with id and value
-        //use below in loop
+    const displayGameboard = () => {
+        const gameboardDiv = document.querySelector("#gameboard");
+        
+        //loop through gameboard grid array and add cell for each element
         gameBoard.grid.forEach((value, index) => {
-            console.log(`cell value is ${value}`);
-            console.log(`cell index is ${index}`);
-            const cellDiv = document.createElement("div");
-            const nextIndex = index++;
-            cellDiv.classList.add("cell", `cell${nextIndex}`);
-            console.log(`nextIndex is ${nextIndex}`);
+            const nextIndex = ++index;
+            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", "","");
+            
             gameboardDiv.appendChild(cellDiv);
 
         })
-        
-        //add after display div in html
-        gameboardDiv.insertBefore(display);
       }
-    return {displayUi};
+
+    return {displayUi, displayGameboard};
 })()
 
-//add to dom content loaded event
-displayUiGameLogic.displayUi();
 
 //------------------UNUSED CODE-------------------//
 
