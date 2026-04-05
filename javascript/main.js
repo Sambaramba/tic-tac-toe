@@ -1,3 +1,5 @@
+//make grid into array of objects with properties e.g. cellNo,value
+
 const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
@@ -25,6 +27,7 @@ function createPlayer(name) {
 
     let playerSymbol;
     const selectSymbol = () => {
+        //do i need symbol or can i just update playerSymbol?
         let symbol;
 
         let randomChoice = Math.floor(Math.random() * 2) + 1;
@@ -49,6 +52,8 @@ function createPlayer(name) {
         return playerSymbol = symbol;
     }
     const getPlayerSymbol = () =>  playerSymbol;
+
+    //method takes argument and updates players symbol
     const changePlayerSymbol = (newValue) => playerSymbol = newValue;
      
     // let playerScore = 0;
@@ -114,6 +119,7 @@ function playRound() {
     
     player1.selectSymbol();
     
+    //player 2 gets alternative symbol
     player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
 
     
@@ -217,9 +223,96 @@ function checkWinCondition() {
 
 
 
-function renderGameLogic( ) {
 
+{/* <div id="container">
+    <div id="title">Tic-tac-toe</div>
+        <div id="display">"Please click start game button to begin"</div>
+    <div id="gameboard">
+        <div id="cell1" class="cell"></div>
+        <div id="cell2" class="cell"></div>
+        <div id="cell3" class="cell"></div>
+        <div id="cell4" class="cell"></div>
+        <div id="cell5" class="cell"></div>
+        <div id="cell6" class="cell"></div>
+        <div id="cell7" class="cell"></div>
+        <div id="cell8" class="cell"></div>
+        <div id="cell9" class="cell"></div>
+    </div>
+    <div id="game-buttons">
+        <button type="button">Start Game</button>
+        <button type="button">Restart Game</button>
+    </div>
+</div> */}
+
+//what do i need in this?
+//display Ui
+//display gameboard logic
+//display grid by adding div with gameboard then looping through array to add values
+//do need to make array of objects to link index to grid cell?
+//so for each array element add grid class to div for cell
+//then add value as text content?
+//made into IIFE
+//do create element object factory to save code
+//destructure arguments with {}?
+//what is this? should it be object factory?
+//think its just a function
+function createDomElement(element, text, elementId, elementClass, attribute, attributeValue) {
+       const domElement = document.createElement(element);
+       if(text) {domElement.textContent = text}
+       if(elementId) { domElement.id = elementId}
+       if(elementClass) { domElement.classList.add(elementClass)}
+       if(attribute) {domElement.setAttribute(attribute, attributeValue)}
+       console.log(domElement);
+       return domElement;
 }
+
+// createDomElement("div", "suck my choad", "container", "griddle");
+
+const displayUiGameLogic = (function() {
+     
+
+    const displayUi = () => {
+        const body = document.querySelector("body");
+        const containerDiv = createDomElement("div","","container","","","");
+        body.appendChild(containerDiv);
+
+        const title = createDomElement("div", "Tic-Tac-Toe","title", "","","");
+        const display = createDomElement("div","Please click start game button to begin","display","","","");
+        const gameboard = createDomElement("div","","gameboard","","","");
+
+        const gameButtons = createDomElement("div","","game-buttons","","","");
+        const startButton = createDomElement("button","Start Game","start","","type","button");
+        const restartButton = createDomElement("button","Restart Game","restart","","type","button");
+        gameButtons.append(startButton, restartButton);
+
+        containerDiv.append(title, display,gameboard,gameButtons);
+    }
+    //want to delete gameboard if exists before this so dont make multiple
+    const displayGameboardOnPage = () => {
+        const gameboardDiv = document.createElement("div");
+        // const display = document.querySelector("#display");
+        gameboardDiv.id = "gameboard";
+        //loop through gameboard grid and add cell for each element with id and value
+        //use below in loop
+        gameBoard.grid.forEach((value, index) => {
+            console.log(`cell value is ${value}`);
+            console.log(`cell index is ${index}`);
+            const cellDiv = document.createElement("div");
+            const nextIndex = index++;
+            cellDiv.classList.add("cell", `cell${nextIndex}`);
+            console.log(`nextIndex is ${nextIndex}`);
+            gameboardDiv.appendChild(cellDiv);
+
+        })
+        
+        //add after display div in html
+        gameboardDiv.insertBefore(display);
+      }
+    return {displayUi};
+})()
+
+//add to dom content loaded event
+displayUiGameLogic.displayUi();
 
 //------------------UNUSED CODE-------------------//
 
