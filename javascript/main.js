@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     displayUiGameLogic.displayUi();
     displayUiGameLogic.displayGameboard();
+    displayUiGameLogic.displayPlayerNameModal("asswipe");
     console.log("DOM fully loaded and parsed");
 });
 
@@ -276,12 +277,12 @@ function createDomElement(element, text, elementId, elementClass, attribute, att
 
 const displayUiGameLogic = (function() {
      
+    const body = document.querySelector("body");
 
     const displayUi = () => {
-        const body = document.querySelector("body");
+        // const body = document.querySelector("body");
         const containerDiv = createDomElement("div","","container","","","");
         body.appendChild(containerDiv);
-
         const title = createDomElement("div", "Tic-Tac-Toe","title", "","","");
         const display = createDomElement("div","Please click start game button to begin","display","","","");
         const gameboard = createDomElement("div","","gameboard","","","");
@@ -308,7 +309,20 @@ const displayUiGameLogic = (function() {
         })
       }
 
-    return {displayUi, displayGameboard};
+      const displayPlayerNameModal = (player) => {
+        const dialog = createDomElement("div", "", "dialog", "","","");
+        const form = createDomElement("form", "", "", "","","");
+        const label = createDomElement("label", `${player} please choose your name`, "","","for","playerName");
+        const input = createDomElement("input","","playerName","","type","text");
+        label.appendChild(input);
+
+        const submitButton = createDomElement("button","submit","","","","");
+        form.append(label,submitButton);
+        dialog.appendChild(form);
+        body.appendChild(dialog);
+      }
+
+    return {displayUi, displayGameboard, displayPlayerNameModal};
 })()
 
 
