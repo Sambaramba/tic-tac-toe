@@ -144,9 +144,19 @@ dialog {
   align-items: center;
 }
 
-dialog#select-name-dialog {
+/* dialog#select-name-dialog {
+  display: none;
+} */
+
+/* dialog#select-symbol-dialog {
+  display: none;
+} */
+
+dialog#select-name-dialog, 
+dialog#select-symbol-dialog {
   display: none;
 }
+
 
 dialog::backdrop {
   background-color: black;
