@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     displayUiGameLogic.displayUi();
     displayUiGameLogic.displayGameboard();
-    displayUiGameLogic.displayPlayerNameModal("asswipe");
+    // displayUiGameLogic.displayPlayerNameModal("asswipe");
     console.log("DOM fully loaded and parsed");
 });
 
@@ -23,7 +23,8 @@ function createPlayer(name) {
     
     let userName;
     const selectUserName = () => {
-        return userName =  prompt(`Player ${playerNumber} please choose your name`);
+        displayUiGameLogic.displayPlayerNameModal(name);
+        // return userName =  prompt(`Player ${playerNumber} please choose your name`);
     
     }
     const getUserName = () => userName;
@@ -115,7 +116,7 @@ function playerTurn(player) {
 function playRound() {
 
     //want this in game logic func if doing multi rounds.
-    const player1 = createPlayer("Player1");
+    const player1 = createPlayer("player1");
     const player2 = createPlayer("player2");
     // player1.selectUserName();
     // player2.selectUserName();
@@ -302,7 +303,7 @@ const displayUiGameLogic = (function() {
         //loop through gameboard grid array and add cell for each element
         gameBoard.grid.forEach((value, index) => {
             const nextIndex = ++index;
-            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", "","");
+            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", "data-cell-value",`${nextIndex}`);
             
             gameboardDiv.appendChild(cellDiv);
 
@@ -310,10 +311,10 @@ const displayUiGameLogic = (function() {
       }
 
       const displayPlayerNameModal = (player) => {
-        const dialog = createDomElement("div", "", "dialog", "","","");
+        const dialog = createDomElement("dialog", "", "", "dialog","","");
         const form = createDomElement("form", "", "", "","","");
-        const label = createDomElement("label", `${player} please choose your name`, "","","for","playerName");
-        const input = createDomElement("input","","playerName","","type","text");
+        const label = createDomElement("label", `${player.name} please choose your name`, "","","for","player-name");
+        const input = createDomElement("input","","player-name","","type","text");
         label.appendChild(input);
 
         const submitButton = createDomElement("button","submit","","","","");
@@ -324,6 +325,14 @@ const displayUiGameLogic = (function() {
 
     return {displayUi, displayGameboard, displayPlayerNameModal};
 })()
+
+
+
+//---------EVENTS-----------------------------------------//
+let startButton = document.querySelector("start");
+startButton.addEventListener("click",() => {
+    
+})
 
 
 //------------------UNUSED CODE-------------------//
