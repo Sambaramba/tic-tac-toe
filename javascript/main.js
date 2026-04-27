@@ -18,6 +18,58 @@ const gameBoard = (function () {
 
 console.log(gameBoard);
 
+const displayUiGameLogic = (function() {
+     
+    const body = document.querySelector("body");
+
+    const displayUi = () => {
+        // const body = document.querySelector("body");
+        const containerDiv = createDomElement("div","","container","","","");
+        body.appendChild(containerDiv);
+        const title = createDomElement("div", "Tic-Tac-Toe","title", "","","");
+        const display = createDomElement("div","Please click start game button to begin","display","","","");
+        const gameboard = createDomElement("div","","gameboard","","","");
+
+        const gameButtons = createDomElement("div","","game-buttons","","","");
+        const startButton = createDomElement("button","Start Game","start","","type","button");
+        const restartButton = createDomElement("button","Restart Game","restart","","type","button");
+        gameButtons.append(startButton, restartButton);
+
+        containerDiv.append(title, display,gameboard,gameButtons);
+    }
+    
+    //want to delete gameboard if exists before this so dont make multiple
+    const displayGameboard = () => {
+        const gameboardDiv = document.querySelector("#gameboard");
+        
+        //loop through gameboard grid array and add cell for each element
+        gameBoard.grid.forEach((value, index) => {
+            const nextIndex = ++index;
+            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", "data-cell-value",`${nextIndex}`);
+            
+            gameboardDiv.appendChild(cellDiv);
+
+        })
+      }
+
+      const displayPlayerNameModal = (player) => {
+        const dialog = createDomElement("dialog", "", "", "dialog","","");
+        const form = createDomElement("form", "", "", "","","");
+        const label = createDomElement("label", `${player.name} please choose your name`, "","","for","player-name");
+        const input = createDomElement("input","","player-name","","type","text");
+        label.appendChild(input);
+
+        const submitButton = createDomElement("button","submit","","","","");
+        form.append(label,submitButton);
+        dialog.appendChild(form);
+        body.appendChild(dialog);
+      }
+
+    return {displayUi, displayGameboard, displayPlayerNameModal};
+})()
+
+
+
 
 function createPlayer(name) {
     
@@ -36,6 +88,9 @@ function createPlayer(name) {
     let playerSymbol;
     const selectSymbol = () => {
         //do i need symbol or can i just update playerSymbol?
+        const selectSymbolDialog = document.querySelector("#select-symbol-dialog");
+        // selectSymbolDialog.style.display(")
+        // selectSymbolDialog.showModal();
         let symbol;
 
         let randomChoice = Math.floor(Math.random() * 2) + 1;
@@ -276,55 +331,7 @@ function createDomElement(element, text, elementId, elementClass, attribute, att
 
 
 
-const displayUiGameLogic = (function() {
-     
-    const body = document.querySelector("body");
 
-    const displayUi = () => {
-        // const body = document.querySelector("body");
-        const containerDiv = createDomElement("div","","container","","","");
-        body.appendChild(containerDiv);
-        const title = createDomElement("div", "Tic-Tac-Toe","title", "","","");
-        const display = createDomElement("div","Please click start game button to begin","display","","","");
-        const gameboard = createDomElement("div","","gameboard","","","");
-
-        const gameButtons = createDomElement("div","","game-buttons","","","");
-        const startButton = createDomElement("button","Start Game","start","","type","button");
-        const restartButton = createDomElement("button","Restart Game","restart","","type","button");
-        gameButtons.append(startButton, restartButton);
-
-        containerDiv.append(title, display,gameboard,gameButtons);
-    }
-    
-    //want to delete gameboard if exists before this so dont make multiple
-    const displayGameboard = () => {
-        const gameboardDiv = document.querySelector("#gameboard");
-        
-        //loop through gameboard grid array and add cell for each element
-        gameBoard.grid.forEach((value, index) => {
-            const nextIndex = ++index;
-            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", "data-cell-value",`${nextIndex}`);
-            
-            gameboardDiv.appendChild(cellDiv);
-
-        })
-      }
-
-      const displayPlayerNameModal = (player) => {
-        const dialog = createDomElement("dialog", "", "", "dialog","","");
-        const form = createDomElement("form", "", "", "","","");
-        const label = createDomElement("label", `${player.name} please choose your name`, "","","for","player-name");
-        const input = createDomElement("input","","player-name","","type","text");
-        label.appendChild(input);
-
-        const submitButton = createDomElement("button","submit","","","","");
-        form.append(label,submitButton);
-        dialog.appendChild(form);
-        body.appendChild(dialog);
-      }
-
-    return {displayUi, displayGameboard, displayPlayerNameModal};
-})()
 
 
 
