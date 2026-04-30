@@ -32,7 +32,7 @@
         <form action="javascript/main.js" method="dialog">
             <label for="username-choice">Player 1 please choose your name</label>
             <input id="username-choice" type="text">
-            <button>Submit</button>
+            <button type="button">Submit</button>
         </form>
     </dialog>
     <dialog id="select-symbol-dialog">
@@ -40,17 +40,14 @@
             <fieldset>
                 <legend>Please select a symbol</legend>
                 <div id="radio-container">
-                    <label class="radio-label">
-                        <input type="radio" name="choose-symbol" value="X">
-                        X
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="choose-symbol" value="O">
-                        O
-                    </label>
+                    <input type="radio" name="choose-symbol" value="X" required>
+                    <label class="radio-label">X</label>
+
+                    <input type="radio" name="choose-symbol" value="O" required>
+                    <label class="radio-label">O</label>
                 </div>
             </fieldset>
-            <button type="submit">Submit</button>
+            <button type="button">confirm</button>
         </form>
     </dialog>
 </body>
