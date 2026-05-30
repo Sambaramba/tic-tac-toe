@@ -1,10 +1,79 @@
+selectSymbolDialog = document.querySelector("#select-symbol-dialog");
+selectNameDialog = document.querySelector("#select-name-dialog");
+
+
 //add to dom content loaded event
 document.addEventListener("DOMContentLoaded", (event) => {
     displayUiGameLogic.displayUi();
     displayUiGameLogic.displayGameboard();
     // displayUiGameLogic.displayPlayerNameModal("asswipe");
+    // displayUiGameLogic.displayPlayerSymbolModal();
+    // selectSymbolDialog.closeModal();
+    // selectNameDialog.closeModal();
     console.log("DOM fully loaded and parsed");
 });
+
+//-----------------HELPERS-----------------------------
+
+//should this be IIFE?
+function createDomElement(element, text, elementId, elementClass, attributes = {}) {
+       const domElement = document.createElement(element);
+       if(text) {domElement.textContent = text}
+       if(elementId) { domElement.id = elementId}
+       if(elementClass) { domElement.classList.add(elementClass)}
+       if(attributes) {
+         console.log(attributes);
+         Object.entries(attributes).forEach(([key, value]) => {
+            console.log(key)
+            console.log(value)
+            //if no value use if statement to check?
+            domElement.setAttribute(key, value);
+         });
+       }   
+       return domElement;
+}
+
+
+function checkWinCondition() {
+    
+    //regEx to match all 8 win conditions;
+    const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
+
+    let stringOfXIndexes = "";
+    let stringOfOIndexes = "";
+    gameBoard.grid.forEach((value, index) => {
+        if(value === "X") {
+            stringOfXIndexes+=index;
+            console.log(`x index string is now ${stringOfXIndexes}`);
+        }
+        if(value === "O") {
+            stringOfOIndexes+=index;
+            console.log(`O index string is now ${stringOfOIndexes}`)
+        }
+
+    })
+
+    //return sumbol/player/player.number/boolean?
+    if (winConditions.test(stringOfXIndexes)) {
+        console.log("X is the winner");
+        return "X";
+    }
+    if (winConditions.test(stringOfOIndexes)) {
+        console.log("O is the winner");
+        return "O";
+    }
+    
+    const hasValue = (currentValue) => currentValue !== "";
+    if (gameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
+        console.log("Draw");
+        return "draw";
+    }
+    return false;
+    
+}
+
+
+//-------------------MAIN------------------------------------
 
 //make grid into array of objects with properties e.g. cellNo,value
 const gameBoard = (function () {
@@ -18,21 +87,24 @@ const gameBoard = (function () {
 
 console.log(gameBoard);
 
+
+
+//IIFE to display ui and game logic
 const displayUiGameLogic = (function() {
      
-    const body = document.querySelector("body");
+    // const body = document.querySelector("body");
 
     const displayUi = () => {
-        // const body = document.querySelector("body");
-        const containerDiv = createDomElement("div","","container","","","");
+        const body = document.querySelector("body");
+        const containerDiv = createDomElement("div","","container","","");
         body.appendChild(containerDiv);
-        const title = createDomElement("div", "Tic-Tac-Toe","title", "","","");
-        const display = createDomElement("div","Please click start game button to begin","display","","","");
+        const title = createDomElement("div", "Tic-Tac-Toe","title", "","");
+        const display = createDomElement("div","Please click start game button to begin","display","","");
         const gameboard = createDomElement("div","","gameboard","","","");
 
-        const gameButtons = createDomElement("div","","game-buttons","","","");
-        const startButton = createDomElement("button","Start Game","start","","type","button");
-        const restartButton = createDomElement("button","Restart Game","restart","","type","button");
+        const gameButtons = createDomElement("div","","game-buttons","","");
+        const startButton = createDomElement("button","Start Game","start","",{type: "button"});
+        const restartButton = createDomElement("button","Restart Game","restart","",{type: "button"});
         gameButtons.append(startButton, restartButton);
 
         containerDiv.append(title, display,gameboard,gameButtons);
@@ -45,29 +117,51 @@ const displayUiGameLogic = (function() {
         //loop through gameboard grid array and add cell for each element
         gameBoard.grid.forEach((value, index) => {
             const nextIndex = ++index;
-            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", "data-cell-value",`${nextIndex}`);
+            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", {"data-cell-value": `${nextIndex}`});
             
             gameboardDiv.appendChild(cellDiv);
 
         })
       }
 
-      const displayPlayerNameModal = (player) => {
-        const dialog = createDomElement("dialog", "", "", "dialog","","");
-        const form = createDomElement("form", "", "", "","","");
-        const label = createDomElement("label", `${player.name} please choose your name`, "","","for","player-name");
-        const input = createDomElement("input","","player-name","","type","text");
-        label.appendChild(input);
-
-        const submitButton = createDomElement("button","submit","","","","");
-        form.append(label,submitButton);
+    const displayPlayerNameModal = (player) => {
+        const body = document.querySelector("body");
+        const dialog = createDomElement("dialog", "", "select-name-dialog", "","");
+        const form = createDomElement("form", "", "", "",{action: "javascript/main.js", method: "dialog"});
+        //revert back to ${player.name} when fixed attributes issue
+        const label = createDomElement("label", `${player.name} please choose your name`, "","",{for: "username-choice"});
+        const input = createDomElement("input","","username-choice","",{type: "text"});
+        const submitButton = createDomElement("button","Submit","","",{type: "button"});
+        form.append(label,input,submitButton);
         dialog.appendChild(form);
         body.appendChild(dialog);
       }
 
-    return {displayUi, displayGameboard, displayPlayerNameModal};
-})()
+    const displayPlayerSymbolModal = (player) => {
+        const body = document.querySelector("body");
+        const dialog = createDomElement("dialog", "", "select-symbol-dialog", "","");
+        const form = createDomElement("form", "", "", "",{action: "javascript/main.js"});
+        const fieldset = createDomElement("fieldset","","","","");
 
+        const legend = createDomElement("legend","Please select a symbol","","","");
+        const radioContainerDiv = createDomElement("div","","radio-container","","");
+
+        const radioInputX = createDomElement("input","","x","",{type: "radio", name: "choose-symbol",value: "X", required: ""});
+        const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
+        const radioInputO = createDomElement("input","","o","",{type: "radio", name: "choose-symbol",value: "O", required: ""});
+        const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
+
+        const submitButton = createDomElement("button","Confirm","","",{type: "button"});
+
+        radioContainerDiv.append(radioInputX,radioLabelX,radioInputO,radioLabelO);
+        fieldset.append(legend, radioContainerDiv);
+        form.append(fieldset,submitButton);
+        dialog.appendChild(form);
+        body.appendChild(dialog);
+      }
+
+    return {displayUi, displayGameboard, displayPlayerNameModal, displayPlayerSymbolModal};
+})()
 
 
 
@@ -88,8 +182,11 @@ function createPlayer(name) {
     let playerSymbol;
     const selectSymbol = () => {
         //do i need symbol or can i just update playerSymbol?
+        //link radio buttons to var here?
+        //when confirm/submit button is clicked add value to that var
+        //add symbol to playerSymbol var
         const selectSymbolDialog = document.querySelector("#select-symbol-dialog");
-        // selectSymbolDialog.style.display(")
+        // selectSymbolDialog.style.display = "block";
         // selectSymbolDialog.showModal();
         let symbol;
 
@@ -246,88 +343,10 @@ function playGame(numberOfRounds) {
 
 //make win condition a function/object factory?
 //else make it an iife
-function checkWinCondition() {
-    
-    //regEx to match all 8 win conditions;
-    const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
 
-    let stringOfXIndexes = "";
-    let stringOfOIndexes = "";
-    gameBoard.grid.forEach((value, index) => {
-        if(value === "X") {
-            stringOfXIndexes+=index;
-            console.log(`x index string is now ${stringOfXIndexes}`);
-        }
-        if(value === "O") {
-            stringOfOIndexes+=index;
-            console.log(`O index string is now ${stringOfOIndexes}`)
-        }
-
-    })
-
-    //return sumbol/player/player.number/boolean?
-    if (winConditions.test(stringOfXIndexes)) {
-        console.log("X is the winner");
-        return "X";
-    }
-    if (winConditions.test(stringOfOIndexes)) {
-        console.log("O is the winner");
-        return "O";
-    }
-    
-    const hasValue = (currentValue) => currentValue !== "";
-    if (gameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
-        console.log("Draw");
-        return "draw";
-    }
-    return false;
-    
-}
+//----------------------HELPER------------------------------
 
 
-
-
-{/* <div id="container">
-    <div id="title">Tic-tac-toe</div>
-        <div id="display">"Please click start game button to begin"</div>
-    <div id="gameboard">
-        <div id="cell1" class="cell"></div>
-        <div id="cell2" class="cell"></div>
-        <div id="cell3" class="cell"></div>
-        <div id="cell4" class="cell"></div>
-        <div id="cell5" class="cell"></div>
-        <div id="cell6" class="cell"></div>
-        <div id="cell7" class="cell"></div>
-        <div id="cell8" class="cell"></div>
-        <div id="cell9" class="cell"></div>
-    </div>
-    <div id="game-buttons">
-        <button type="button">Start Game</button>
-        <button type="button">Restart Game</button>
-    </div>
-</div> */}
-
-//what do i need in this?
-//display Ui
-//display gameboard logic
-//display grid by adding div with gameboard then looping through array to add values
-//do need to make array of objects to link index to grid cell?
-//so for each array element add grid class to div for cell
-//then add value as text content?
-//made into IIFE
-//do create element object factory to save code
-//destructure arguments with {}?
-//what is this? should it be object factory?
-//think its just a function
-function createDomElement(element, text, elementId, elementClass, attribute, attributeValue) {
-       const domElement = document.createElement(element);
-       if(text) {domElement.textContent = text}
-       if(elementId) { domElement.id = elementId}
-       if(elementClass) { domElement.classList.add(elementClass)}
-       if(attribute) {domElement.setAttribute(attribute, attributeValue)}
-       console.log(domElement);
-       return domElement;
-}
 
 
 
@@ -336,10 +355,10 @@ function createDomElement(element, text, elementId, elementClass, attribute, att
 
 
 //---------EVENTS-----------------------------------------//
-let startButton = document.querySelector("start");
-startButton.addEventListener("click",() => {
+// let startButton = document.querySelector("start");
+// startButton.addEventListener("click",() => {
     
-})
+// })
 
 
 //------------------UNUSED CODE-------------------//
