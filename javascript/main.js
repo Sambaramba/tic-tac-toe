@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     displayUiGameLogic.displayUi();
     displayUiGameLogic.displayGameboard();
     // displayUiGameLogic.displayPlayerNameModal("asswipe");
-    // displayUiGameLogic.displayPlayerSymbolModal();
+    displayUiGameLogic.displayPlayerSymbolModal();
     // selectSymbolDialog.closeModal();
     // selectNameDialog.closeModal();
     console.log("DOM fully loaded and parsed");
@@ -126,19 +126,22 @@ const displayUiGameLogic = (function() {
 
     const displayPlayerNameModal = (player) => {
         const body = document.querySelector("body");
+        const dialogBackground = createDomElement("div","","","dialog-background","");
         const dialog = createDomElement("dialog", "", "select-name-dialog", "","");
         const form = createDomElement("form", "", "", "",{action: "javascript/main.js", method: "dialog"});
         //revert back to ${player.name} when fixed attributes issue
         const label = createDomElement("label", `${player.name} please choose your name`, "","",{for: "username-choice"});
         const input = createDomElement("input","","username-choice","",{type: "text"});
-        const submitButton = createDomElement("button","Submit","","",{type: "button"});
+        const submitButton = createDomElement("button","Confirm","","",{type: "button"});
         form.append(label,input,submitButton);
         dialog.appendChild(form);
-        body.appendChild(dialog);
+        dialogBackground.appendChild(dialog);
+        body.appendChild(dialogBackground);
       }
 
     const displayPlayerSymbolModal = (player) => {
         const body = document.querySelector("body");
+        const dialogBackground = createDomElement("div","","","dialog-background","");
         const dialog = createDomElement("dialog", "", "select-symbol-dialog", "","");
         const form = createDomElement("form", "", "", "",{action: "javascript/main.js"});
         const fieldset = createDomElement("fieldset","","","","");
@@ -146,7 +149,7 @@ const displayUiGameLogic = (function() {
         const legend = createDomElement("legend","Please select a symbol","","","");
         const radioContainerDiv = createDomElement("div","","radio-container","","");
 
-        const radioInputX = createDomElement("input","","x","",{type: "radio", name: "choose-symbol",value: "X", required: ""});
+        const radioInputX = createDomElement("input","","x","",{type: "radio", name: "choose-symbol",value: "X", required: "", checked: ""});
         const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
         const radioInputO = createDomElement("input","","o","",{type: "radio", name: "choose-symbol",value: "O", required: ""});
         const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
@@ -157,7 +160,8 @@ const displayUiGameLogic = (function() {
         fieldset.append(legend, radioContainerDiv);
         form.append(fieldset,submitButton);
         dialog.appendChild(form);
-        body.appendChild(dialog);
+        dialogBackground.appendChild(dialog);
+        body.appendChild(dialogBackground);
       }
 
     return {displayUi, displayGameboard, displayPlayerNameModal, displayPlayerSymbolModal};
@@ -181,7 +185,10 @@ function createPlayer(name) {
 
     let playerSymbol;
     const selectSymbol = () => {
-        //do i need symbol or can i just update playerSymbol?
+         //bring up modal
+         //confirm btn event gets radio btn input value
+         //dom selector for radio inputs?
+         //this is added to playerSymbol
         //link radio buttons to var here?
         //when confirm/submit button is clicked add value to that var
         //add symbol to playerSymbol var
