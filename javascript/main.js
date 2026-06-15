@@ -1,21 +1,22 @@
-selectSymbolDialog = document.querySelector("#select-symbol-dialog");
-selectNameDialog = document.querySelector("#select-name-dialog");
+
 
 
 //add to dom content loaded event
 document.addEventListener("DOMContentLoaded", (event) => {
-    displayUiGameLogic.displayUi();
-    displayUiGameLogic.displayGameboard();
-    // displayUiGameLogic.displayPlayerNameModal("asswipe");
-    displayUiGameLogic.displayPlayerSymbolModal();
-    // selectSymbolDialog.closeModal();
-    // selectNameDialog.closeModal();
+    // displayUiGameLogic.displayUi();
+    // displayUiGameLogic.displayGameboard();
+    // displayUiGameLogic.displayModal();
+        
+    // selectSymbolDialog.close();
+    // selectNameDialog.close();
     console.log("DOM fully loaded and parsed");
 });
 
+
+
 //-----------------HELPERS-----------------------------
 
-//should this be IIFE?
+//could just put in displayDom IIFE as private func factory
 function createDomElement(element, text, elementId, elementClass, attributes = {}) {
        const domElement = document.createElement(element);
        if(text) {domElement.textContent = text}
@@ -33,7 +34,8 @@ function createDomElement(element, text, elementId, elementClass, attributes = {
        return domElement;
 }
 
-
+//just a function
+//where to put? method/private func in round/game?
 function checkWinCondition() {
     
     //regEx to match all 8 win conditions;
@@ -80,7 +82,10 @@ const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
 
-    const getGridCell = () => {}
+    const getGridCell = (cellNum) => {}
+    //reset all textContents of cells to ""
+    //as array loop through array and for each change value to "";
+    //grid has not been called so is it accessible?
     const resetGrid = () => {}
     return {grid};
 })();
@@ -90,12 +95,13 @@ console.log(gameBoard);
 
 
 //IIFE to display ui and game logic
-const displayUiGameLogic = (function() {
+//add events in this too or too big?
+const displayUiGameLogic = (function(player) {
      
-    // const body = document.querySelector("body");
+    const body = document.querySelector("body");
 
     const displayUi = () => {
-        const body = document.querySelector("body");
+        // const body = document.querySelector("body");
         const containerDiv = createDomElement("div","","container","","");
         body.appendChild(containerDiv);
         const title = createDomElement("div", "Tic-Tac-Toe","title", "","");
@@ -103,14 +109,24 @@ const displayUiGameLogic = (function() {
         const gameboard = createDomElement("div","","gameboard","","","");
 
         const gameButtons = createDomElement("div","","game-buttons","","");
-        const startButton = createDomElement("button","Start Game","start","",{type: "button"});
+        const startButton = createDomElement("button","Start Game","start-button","",{type: "button"});
         const restartButton = createDomElement("button","Restart Game","restart","",{type: "button"});
         gameButtons.append(startButton, restartButton);
 
         containerDiv.append(title, display,gameboard,gameButtons);
     }
+    //call straight away so page has ui
+    displayUi();
     
     //want to delete gameboard if exists before this so dont make multiple
+    // have modal mode var that can be updated with method
+    //this can be used to change modal content for name/symbol
+    //method to create one of these modals can take player as parameter
+    //this then can make them unique
+    //need to reset modal after at somepoint
+    //check if gameboard exists and wipe if does
+    //or do reset gameboard method in gameboard that can be called first?
+    //do you delete gameboard and re-add on each turn after cells values updated?
     const displayGameboard = () => {
         const gameboardDiv = document.querySelector("#gameboard");
         
@@ -123,57 +139,63 @@ const displayUiGameLogic = (function() {
 
         })
       }
-
-    const displayPlayerNameModal = (player) => {
-        const body = document.querySelector("body");
-        const dialogBackground = createDomElement("div","","","dialog-background","");
-        const dialog = createDomElement("dialog", "", "select-name-dialog", "","");
-        const form = createDomElement("form", "", "", "",{action: "javascript/main.js", method: "dialog"});
-        //revert back to ${player.name} when fixed attributes issue
-        const label = createDomElement("label", `${player.name} please choose your name`, "","",{for: "username-choice"});
-        const input = createDomElement("input","","username-choice","",{type: "text"});
-        const submitButton = createDomElement("button","Confirm","","",{type: "button"});
-        form.append(label,input,submitButton);
+      //go back to creating and deleting modals
+      //if do that adding events might be tough
+      //as if create then add submit event does it give time to listen?
+      //or just go back to creating two modals?
+      //or keep as same
+    const displayModal = (modalType, player) => {
+        const dialogBackground = createDomElement("div","","dialog-background","","");
+        const dialog = createDomElement("dialog", "", "", "","");
+        const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
+        const confirmButton = createDomElement("button","Confirm","","",{type: "button"});
+        form.append(confirmButton);
         dialog.appendChild(form);
         dialogBackground.appendChild(dialog);
         body.appendChild(dialogBackground);
-      }
 
-    const displayPlayerSymbolModal = (player) => {
-        const body = document.querySelector("body");
-        const dialogBackground = createDomElement("div","","","dialog-background","");
-        const dialog = createDomElement("dialog", "", "select-symbol-dialog", "","");
-        const form = createDomElement("form", "", "", "",{action: "javascript/main.js"});
-        const fieldset = createDomElement("fieldset","","","","");
+        switch (modalType) {
+            case "name":
 
-        const legend = createDomElement("legend","Please select a symbol","","","");
-        const radioContainerDiv = createDomElement("div","","radio-container","","");
+                const label = createDomElement("label", `${player} please choose your name`, "","",{for: "username-choice"});
+                const input = createDomElement("input","","username-choice","",{type: "text"});
+                confirmButton.before(label,input);
+                break;
 
-        const radioInputX = createDomElement("input","","x","",{type: "radio", name: "choose-symbol",value: "X", required: "", checked: ""});
-        const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
-        const radioInputO = createDomElement("input","","o","",{type: "radio", name: "choose-symbol",value: "O", required: ""});
-        const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
+            case "symbol":
+                
+                const fieldset = createDomElement("fieldset","","","","");
+                const legend = createDomElement("legend",`${player} please select a symbol`,"","","");
 
-        const submitButton = createDomElement("button","Confirm","","",{type: "button"});
+                const radioContainerDiv = createDomElement("div","","radio-container","","");
+                const radioInputX = createDomElement("input","","x","",{type: "radio", name: "symbol-choice",value: "X", required: "", checked: ""});
+                const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
+                const radioInputO = createDomElement("input","","o","",{type: "radio", name: "symbol-choice",value: "O", required: ""});
+                const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
 
-        radioContainerDiv.append(radioInputX,radioLabelX,radioInputO,radioLabelO);
-        fieldset.append(legend, radioContainerDiv);
-        form.append(fieldset,submitButton);
-        dialog.appendChild(form);
-        dialogBackground.appendChild(dialog);
-        body.appendChild(dialogBackground);
-      }
+                radioContainerDiv.append(radioInputX,radioLabelX,radioInputO,radioLabelO);
+                fieldset.append(legend, radioContainerDiv);
+                form.insertBefore(fieldset, confirmButton);
+                break;
 
-    return {displayUi, displayGameboard, displayPlayerNameModal, displayPlayerSymbolModal};
+            default: ("sorry incorrect modal type was given");
+
+        }
+      
+        
+    }
+
+    //displayUi could be just private function that runs at start
+    //could do with gameboard at start too?
+    return {displayUi, displayGameboard,displayModal};
 })()
-
 
 
 function createPlayer(name) {
     
     let userName;
     const selectUserName = () => {
-        displayUiGameLogic.displayPlayerNameModal(name);
+        // displayUiGameLogic.displayPlayerNameModal(name);
         // return userName =  prompt(`Player ${playerNumber} please choose your name`);
     
     }
@@ -185,38 +207,74 @@ function createPlayer(name) {
 
     let playerSymbol;
     const selectSymbol = () => {
-         //bring up modal
-         //confirm btn event gets radio btn input value
-         //dom selector for radio inputs?
-         //this is added to playerSymbol
-        //link radio buttons to var here?
-        //when confirm/submit button is clicked add value to that var
-        //add symbol to playerSymbol var
-        const selectSymbolDialog = document.querySelector("#select-symbol-dialog");
-        // selectSymbolDialog.style.display = "block";
-        // selectSymbolDialog.showModal();
+         
         let symbol;
+        //brings up modal
+        const legend = document.querySelector("#select-symbol-dialog legend");
+        legend.textContent = `${name} please choose your name`
+        // const confirmBtn = document.querySelector("#select-symbol-dialog [type='button']");
+        // confirmBtn.addEventListener("click", (event)=> {
+        //      console.log(event);
+        // })
+        const form = document.querySelector("#select-symbol-dialog form");
+        form.addEventListener("submit", (event) => {
+            console.log(event.target)
+            const data = new FormData(form);
+            // const data = new FormData(event.target);
+            console.log(data);
+            // console.log(data.get("choose-symbol"));
+            let value = "";
+            for (const entry of data) {
+                // value = `${entry[1]}`;
+                playerSymbol = `${entry[1]}`;
+                // console.log(value);
+            }
+            // symbol = value;
+            // playerSymbol = value;
+            console.log(`playerSymbol value is ${playerSymbol}`);
+            // console.log(`symbol is ${symbol}`);
+            // console.log(symbol)
+            event.preventDefault();
+            //why doesnt returning playerSymbol allow below console.log to work?
+            // return
+        });
 
-        let randomChoice = Math.floor(Math.random() * 2) + 1;
-        console.log(randomChoice);
+        // //why the fuck doesnt this run?
+        //it does run
+        //because it runs before form is submitted
+        // console.log(playerSymbol);
+        // console.log(symbol);
+        //get rid of random choice
+        //confirm btn on modal has event
+        //when event triggered value from radio button is retrieved
+        //can event be added here?
+        //how can radio btn value be added to playerSymbol var?
 
-        switch(randomChoice) {
-            case 1:
-                symbol = "X";
-                console.log(`symbol in switch is ${symbol}`)
-                break
-            case 2:
-                symbol = "O";
-                console.log(`symbol in switch is ${symbol}`)
-                break
-            default:
-                console.log("default in select symbol method ran")
-        }
+        // let randomChoice = Math.floor(Math.random() * 2) + 1;
+        // console.log(randomChoice);
+
+        // switch(randomChoice) {
+        //     case 1:
+        //         symbol = "X";
+        //         console.log(`symbol in switch is ${symbol}`)
+        //         break
+        //     case 2:
+        //         symbol = "O";
+        //         console.log(`symbol in switch is ${symbol}`)
+        //         break
+        //     default:
+        //         console.log("default in select symbol method ran")
+        // }
         // do {
         //     symbol = prompt(`${name} please choose either X or O`).toUpperCase();
         // } while (symbol !== "X" && symbol !== "O");
-        
-        return playerSymbol = symbol;
+        if(playerSymbol) {
+        const symbolDialog = document.querySelector(`#${name}-symbol-bg`);
+        symbolDialog.remove();
+        }
+        // const symbolDialog = document.querySelector(`#${name}-symbol-bg`);
+        // symbolDialog.remove();
+        return
     }
     const getPlayerSymbol = () =>  playerSymbol;
 
@@ -238,7 +296,7 @@ let turn = 1;
 
 
 //playerTurn is func factory i think
-//do i add to round/game func? as method?
+//do i add to round/game func? as method/private function?
 function playerTurn(player) {
     
 
@@ -265,12 +323,14 @@ function playerTurn(player) {
 }
 
 
-//1st player has odd turns
-//other player has even turns;
-//could change who chooses symbol on odd/even rounds?
-//or randomly select who chooses first
-//then alternate with flag? or ternary?
-//reset symbols and turn on round finish
+//need to choose symbol and player names before rest runs
+//do i change all to methods?
+//or while loop with symbols and names?
+//make game into object
+//then have get player name with each player as argument?
+//then choose player symbol method
+//can have other player symbol be chosen in it
+//so make play round as play game method?
 
 function playRound() {
 
@@ -284,33 +344,42 @@ function playRound() {
     // const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
     // randomPlayerChoice() === 1 ? player1.selectSymbol() : player2.selectSymbol();
     
-    player1.selectSymbol();
+    //why does while loop break?
+    if (!player1.getPlayerSymbol()) {
+        player1.selectSymbol();
+    }
+    //this runs before you select above symbol
+    
     
     //player 2 gets alternative symbol
-    player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
+    if(player1.getPlayerSymbol()) {
+        console.log(player1.getPlayerSymbol());
 
-    
-    const randomCellChoice = () => { 
-        let cellChoice = Math.floor(Math.random() * 9);
+        player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
         
-        do {cellChoice = Math.floor(Math.random() * 9)}
-        while (gameBoard.grid[cellChoice] !== "");
 
-        return cellChoice;
-    };
+        
+        const randomCellChoice = () => { 
+            let cellChoice = Math.floor(Math.random() * 9);
+            
+            do {cellChoice = Math.floor(Math.random() * 9)}
+            while (gameBoard.grid[cellChoice] !== "");
 
-    while (turn < 10 && checkWinCondition() === false) {
-        console.log(gameBoard.grid);
-        const player1Turn = playerTurn(player1);
-        const player2Turn = playerTurn(player2);
-        console.log(`turn no is ${turn}`);
-        let player1Choice = randomCellChoice();
-        let player2Choice = randomCellChoice();
+            return cellChoice;
+        };
 
-        playersTurn === 1 ? player1Turn(player1Choice) : player2Turn(player2Choice);
+        while (turn < 10 && checkWinCondition() === false) {
+            console.log(gameBoard.grid);
+            const player1Turn = playerTurn(player1);
+            const player2Turn = playerTurn(player2);
+            console.log(`turn no is ${turn}`);
+            let player1Choice = randomCellChoice();
+            let player2Choice = randomCellChoice();
+
+            playersTurn === 1 ? player1Turn(player1Choice) : player2Turn(player2Choice);
+        }
+    
     }
-    
-    
 
     
     function displayWinCondition() {
@@ -330,15 +399,54 @@ function playRound() {
         
     }
     displayWinCondition();
+    console.log("This log has run at round func bottom");
     
    return;
 
 }
 
-playRound();
+// playRound();
 
 function playGame(numberOfRounds) {
 
+    //want this in game logic func if doing multi rounds.
+    //if only created players instances are they only available in this object?
+    const player1 = createPlayer("player1");
+    const player2 = createPlayer("player2");
+    
+    
+    // displayUiGameLogic.displayModal();
+    //inputs/outputs
+    //show modal
+    //give modal player1 content(call display object method)
+    //attach submit event to form
+    //on submit get name input value
+    //how to give value to player 1?
+    //player method to access stored input value
+    //private variable in game?
+    //link players name choice methods with variable?
+    // on submit/confirm btn click event reset modal to player 2
+    //do need to take dom/display object as input to game func? or if its iife its available globally?
+    function chooseNames() {
+        let playerUsernameValue;
+        while(!player1.getPlayerName()) {
+
+        }
+        displayUiGameLogic.displayModal("name", player1.name);
+
+  
+// displayUiGameLogic.nameModalContent();
+
+    }
+    //should this be in round func/method?
+    function chooseSymbol(player) {
+        let playerSymbolValue;
+// displayUiGameLogic.symbolModalContent(player);
+
+              // displayUiGameLogic.symbolModalContent();
+
+    }
+    return {chooseNames, chooseSymbol}
 }
 
 //list of win condition matches
@@ -362,10 +470,37 @@ function playGame(numberOfRounds) {
 
 
 //---------EVENTS-----------------------------------------//
-// let startButton = document.querySelector("start");
-// startButton.addEventListener("click",() => {
-    
-// })
+
+//start event runs before ui is displayed
+//add events to display/dom
+//or make events IIFE?
+
+const eventListenerLogic = (function() {
+
+    const startButton = () => {
+        const startButton = document.querySelector("#start-button");
+        startButton.addEventListener("click", (event) => {
+            console.log(event.target);
+            playGame().chooseNames()
+            // playRound();
+        }, { once: true });
+    }
+
+    return{startButton};
+})();
+
+eventListenerLogic.startButton();
+
+//want to be active only when selected start button but after chosen names and symbols
+//dunno if any of below listener works
+//want event to add selected cell to grid
+//and only select each cell once
+// const gameboard = document.querySelector("#gameboard");
+// gameboard.addEventListener("click", (event) => {
+//     const gameboardCell = event.target.closest(".cell");
+//     if (!gameboard) return;
+        // event.preventDefault()
+// }) 
 
 
 //------------------UNUSED CODE-------------------//
@@ -535,3 +670,53 @@ function playGame(numberOfRounds) {
 
 //     return {randomPlayerChoice, randomCellChoice};
 // });
+
+
+//-----------------displayDomobject--------------------
+
+//   const displayModal = (type, player) => {
+//         const dialogBackground = createDomElement("div","","dialog-background","","");
+//         const dialog = createDomElement("dialog", "", "", "","");
+//         const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
+//         const confirmButton = createDomElement("button","Confirm","","",{type: "button"});
+//         form.append(confirmButton);
+//         dialog.appendChild(form);
+//         dialogBackground.appendChild(dialog);
+//         body.appendChild(dialogBackground);
+//       }
+
+//       displayModal();
+    
+//     const nameModalContent = (player) => {
+//         const form = document.querySelector("form");
+//         const confirmButton = document.querySelector("form > [type=button]");
+//         while (form.firstChild !== confirmButton) {
+//                     form.removeChild(form.firstChild);
+//                 }
+//         const label = createDomElement("label", `please choose your name`, "","",{for: "username-choice"});
+//         const input = createDomElement("input","","username-choice","",{type: "text"});
+//         confirmButton.before(label,input);
+//         // form.insertBefore(fieldset, confirmButton);
+//       }
+
+//     const symbolModalContent = (player) => {
+//         const form = document.querySelector("form");
+//         const confirmButton = document.querySelector("form > [type=button]");
+
+//         while (form.firstChild !== confirmButton) {
+//                     form.removeChild(form.firstChild);
+//                 }
+        
+//         const fieldset = createDomElement("fieldset","","","","");
+//         const legend = createDomElement("legend",`please select a symbol`,"","","");
+
+//         const radioContainerDiv = createDomElement("div","","radio-container","","");
+//         const radioInputX = createDomElement("input","","x","",{type: "radio", name: "symbol-choice",value: "X", required: "", checked: ""});
+//         const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
+//         const radioInputO = createDomElement("input","","o","",{type: "radio", name: "symbol-choice",value: "O", required: ""});
+//         const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
+
+//         radioContainerDiv.append(radioInputX,radioLabelX,radioInputO,radioLabelO);
+//         fieldset.append(legend, radioContainerDiv);
+//         form.insertBefore(fieldset, confirmButton);
+//       }
