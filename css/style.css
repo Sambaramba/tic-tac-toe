@@ -211,6 +211,16 @@ input {
   width: inherit;
 }
 
+input[type=text] {
+  padding: 0.125rem;
+  border-radius: 0.25rem;
+  border: 0.125rem solid black;
+}
+
+input[type=text]:focus {
+  /* outline: none; */
+}
+
 form > button {
   /* width: 5rem; */
   align-self: center;
