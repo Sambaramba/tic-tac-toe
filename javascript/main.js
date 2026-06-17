@@ -86,7 +86,12 @@ const gameBoard = (function () {
     //reset all textContents of cells to ""
     //as array loop through array and for each change value to "";
     //grid has not been called so is it accessible?
-    const resetGrid = () => {}
+    const resetGrid = () => {
+        grid.forEach((cell)=> {
+            grid[cell] = "";
+        })
+        console.log(grid);
+    }
     return {grid};
 })();
 
@@ -139,6 +144,7 @@ const displayUiGameLogic = (function(player) {
 
         })
       }
+    displayGameboard();
       //go back to creating and deleting modals
       //if do that adding events might be tough
       //as if create then add submit event does it give time to listen?
