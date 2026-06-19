@@ -134,7 +134,13 @@ const displayUiGameLogic = (function(player) {
     //do you delete gameboard and re-add on each turn after cells values updated?
     const displayGameboard = () => {
         const gameboardDiv = document.querySelector("#gameboard");
-        
+        //clear grid first to reset
+        while(gameboardDiv.firstChild) {
+            console.log(gameboardDiv.firstChild);
+            gameboardDiv.removeChild(gameboardDiv.firstChild);
+            
+        }
+        console.log(gameboardDiv.firstChild)
         //loop through gameboard grid array and add cell for each element
         gameBoard.grid.forEach((value, index) => {
             const nextIndex = ++index;
@@ -143,6 +149,7 @@ const displayUiGameLogic = (function(player) {
             gameboardDiv.appendChild(cellDiv);
 
         })
+        console.log(gameboardDiv);
       }
     displayGameboard();
       //go back to creating and deleting modals
@@ -150,11 +157,16 @@ const displayUiGameLogic = (function(player) {
       //as if create then add submit event does it give time to listen?
       //or just go back to creating two modals?
       //or keep as same
+      //add submit event to form here?
+      //then can link player object to input?
     const displayModal = (modalType, player) => {
+        //destructure player name property to add value to modal
+        const {getPlayerName} = player;
+        
         const dialogBackground = createDomElement("div","","dialog-background","","");
         const dialog = createDomElement("dialog", "", "", "","");
         const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
-        const confirmButton = createDomElement("button","Confirm","","",{type: "button"});
+        const confirmButton = createDomElement("button","Confirm","","",{type: "submit"});
         form.append(confirmButton);
         dialog.appendChild(form);
         dialogBackground.appendChild(dialog);
@@ -163,15 +175,15 @@ const displayUiGameLogic = (function(player) {
         switch (modalType) {
             case "name":
 
-                const label = createDomElement("label", `${player} please choose your name`, "","",{for: "username-choice"});
-                const input = createDomElement("input","","username-choice","",{type: "text"});
+                const label = createDomElement("label", `${getPlayerName()} please choose your name`, "","",{for: "username-choice"});
+                const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice", required: ""});
                 confirmButton.before(label,input);
                 break;
 
             case "symbol":
                 
                 const fieldset = createDomElement("fieldset","","","","");
-                const legend = createDomElement("legend",`${player} please select a symbol`,"","","");
+                const legend = createDomElement("legend",`${getPlayerName()} please select a symbol`,"","","");
 
                 const radioContainerDiv = createDomElement("div","","radio-container","","");
                 const radioInputX = createDomElement("input","","x","",{type: "radio", name: "symbol-choice",value: "X", required: "", checked: ""});
@@ -187,33 +199,36 @@ const displayUiGameLogic = (function(player) {
             default: ("sorry incorrect modal type was given");
 
         }
-      
-        
+        //does this add event before modal is created?
+        //nope it is added after press start button
+        eventListenerLogic.formSubmit(player);
     }
 
     //displayUi could be just private function that runs at start
     //could do with gameboard at start too?
-    return {displayUi, displayGameboard,displayModal};
+    return {displayUi, displayGameboard, displayModal};
 })()
 
 
 function createPlayer(name) {
     
-    let userName;
-    const selectUserName = () => {
-        // displayUiGameLogic.displayPlayerNameModal(name);
-        // return userName =  prompt(`Player ${playerNumber} please choose your name`);
-    
+    let username;
+    const selectUsername = (usernameValue) => {
+        return username = usernameValue;
     }
-    const getUserName = () => userName;
+    const getUsername = () => username;
 
     //stores last character of player name which will be either 1 or 2;
     const playerNumber = name.charAt(name.length - 1);
     const getPlayerNumber = () => playerNumber;
 
+    const playerName = `player ${playerNumber}`;
+    const getPlayerName = () => playerName;
+
     let playerSymbol;
-    const selectSymbol = () => {
-         
+    const selectSymbol = (symbolValue) => {
+        return username = symbolValue;
+        //think can get rid of rest
         let symbol;
         //brings up modal
         const legend = document.querySelector("#select-symbol-dialog legend");
@@ -224,7 +239,7 @@ function createPlayer(name) {
         // })
         const form = document.querySelector("#select-symbol-dialog form");
         form.addEventListener("submit", (event) => {
-            console.log(event.target)
+            console.log(event.target);
             const data = new FormData(form);
             // const data = new FormData(event.target);
             console.log(data);
@@ -291,7 +306,7 @@ function createPlayer(name) {
     // const getPlayerScore = () => playerScore;
     // const increasePlayerScore = () => { playerScore++; };
     // const resetPlayerScore = () => { playerScore = 0;}
-    return { name, selectUserName, getUserName, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
+    return { getPlayerName, selectUsername, getUsername, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
 }
 
 //create turn flag for alternating turns;
@@ -299,7 +314,6 @@ function createPlayer(name) {
 // let player1Turn = true;
 let playersTurn = 1;
 let turn = 1;
-
 
 //playerTurn is func factory i think
 //do i add to round/game func? as method/private function?
@@ -421,6 +435,7 @@ function playGame(numberOfRounds) {
     const player2 = createPlayer("player2");
     
     
+
     // displayUiGameLogic.displayModal();
     //inputs/outputs
     //show modal
@@ -435,10 +450,16 @@ function playGame(numberOfRounds) {
     //do need to take dom/display object as input to game func? or if its iife its available globally?
     function chooseNames() {
         let playerUsernameValue;
-        while(!player1.getPlayerName()) {
+        //watch out for infinite while loop
+        //what conditions?
+        //also need to update playerUsernameValue each time so doesnt check same value(to stop infinite loop)
+        // while(player1.getUsername() = undefined) {
 
-        }
-        displayUiGameLogic.displayModal("name", player1.name);
+        // }
+        console.log(player1.getUsername());
+        //can you attach event to the modal?
+        //add whole player object?
+        displayUiGameLogic.displayModal("name", player1);
 
   
 // displayUiGameLogic.nameModalContent();
@@ -491,11 +512,36 @@ const eventListenerLogic = (function() {
             // playRound();
         }, { once: true });
     }
+    //can you take player 1 and 2 as inputs and destructure choose username/symbol to update each player?
+    //if called in game choose username/symbol methods?
+    //link player to form another way?
+    const formSubmit = (player) => {
+        console.log("form submit event has been added");
+        const {selectSymbol, selectUsername} = player;
+        const form = document.querySelector("form");
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            console.log(event.target);
+            console.log(event.submitter);
+            const formData = new FormData(event.target);
+            
+            // Extract a specific field by its 'name' attribute
+            if(form.id = "username") {}
+            const usernameChoice = formData.get('username-choice'); 
+            player.selectUsername(usernameChoice);
+            console.log(player.getUsername());
+            const symbolChoice = formData.get('symbol-choice');
+            
+            console.log(usernameChoice, symbolChoice);
 
-    return{startButton};
+        }, { once: true });
+    }
+
+    return{startButton, formSubmit};
 })();
 
 eventListenerLogic.startButton();
+// eventListenerLogic.formSubmit();
 
 //want to be active only when selected start button but after chosen names and symbols
 //dunno if any of below listener works
