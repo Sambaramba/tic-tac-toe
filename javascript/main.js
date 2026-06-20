@@ -176,7 +176,7 @@ const displayUiGameLogic = (function(player) {
             case "name":
 
                 const label = createDomElement("label", `${getPlayerName()} please choose your name`, "","",{for: "username-choice"});
-                const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice", maxlength: 35, required: ""});
+                const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});
                 confirmButton.before(label,input);
                 break;
 
@@ -227,75 +227,8 @@ function createPlayer(name) {
 
     let playerSymbol;
     const selectSymbol = (symbolValue) => {
-        return username = symbolValue;
-        //think can get rid of rest
-        let symbol;
-        //brings up modal
-        const legend = document.querySelector("#select-symbol-dialog legend");
-        legend.textContent = `${name} please choose your name`
-        // const confirmBtn = document.querySelector("#select-symbol-dialog [type='button']");
-        // confirmBtn.addEventListener("click", (event)=> {
-        //      console.log(event);
-        // })
-        const form = document.querySelector("#select-symbol-dialog form");
-        form.addEventListener("submit", (event) => {
-            console.log(event.target);
-            const data = new FormData(form);
-            // const data = new FormData(event.target);
-            console.log(data);
-            // console.log(data.get("choose-symbol"));
-            let value = "";
-            for (const entry of data) {
-                // value = `${entry[1]}`;
-                playerSymbol = `${entry[1]}`;
-                // console.log(value);
-            }
-            // symbol = value;
-            // playerSymbol = value;
-            console.log(`playerSymbol value is ${playerSymbol}`);
-            // console.log(`symbol is ${symbol}`);
-            // console.log(symbol)
-            event.preventDefault();
-            //why doesnt returning playerSymbol allow below console.log to work?
-            // return
-        });
-
-        // //why the fuck doesnt this run?
-        //it does run
-        //because it runs before form is submitted
-        // console.log(playerSymbol);
-        // console.log(symbol);
-        //get rid of random choice
-        //confirm btn on modal has event
-        //when event triggered value from radio button is retrieved
-        //can event be added here?
-        //how can radio btn value be added to playerSymbol var?
-
-        // let randomChoice = Math.floor(Math.random() * 2) + 1;
-        // console.log(randomChoice);
-
-        // switch(randomChoice) {
-        //     case 1:
-        //         symbol = "X";
-        //         console.log(`symbol in switch is ${symbol}`)
-        //         break
-        //     case 2:
-        //         symbol = "O";
-        //         console.log(`symbol in switch is ${symbol}`)
-        //         break
-        //     default:
-        //         console.log("default in select symbol method ran")
-        // }
-        // do {
-        //     symbol = prompt(`${name} please choose either X or O`).toUpperCase();
-        // } while (symbol !== "X" && symbol !== "O");
-        if(playerSymbol) {
-        const symbolDialog = document.querySelector(`#${name}-symbol-bg`);
-        symbolDialog.remove();
-        }
-        // const symbolDialog = document.querySelector(`#${name}-symbol-bg`);
-        // symbolDialog.remove();
-        return
+        return playerSymbol = symbolValue;
+    
     }
     const getPlayerSymbol = () =>  playerSymbol;
 
@@ -448,7 +381,8 @@ function playGame(numberOfRounds) {
     //link players name choice methods with variable?
     // on submit/confirm btn click event reset modal to player 2
     //do need to take dom/display object as input to game func? or if its iife its available globally?
-    function chooseNames() {
+    function chooseNames(player) {
+        console.log(player);
         let playerUsernameValue;
         //watch out for infinite while loop
         //what conditions?
@@ -458,11 +392,16 @@ function playGame(numberOfRounds) {
         // }
         console.log(player1.getUsername());
         if(player1.getUsername() === undefined) {
-
+            displayUiGameLogic.displayModal("name", player1);
         };
+        //how to get player 2 to pick name after?
+        //or can i do choose name with player as argument?
+        if(player1.getUsername()) {
+            console.log("player 1 has chosen username");
+            displayUiGameLogic.displayModal("name", player2);
+        }
         //can you attach event to the modal?
         //add whole player object?
-        displayUiGameLogic.displayModal("name", player1);
         // displayUiGameLogic.displayModal("name", player2);
 
   
@@ -472,6 +411,7 @@ function playGame(numberOfRounds) {
     //should this be in round func/method?
     function chooseSymbol(player) {
         let playerSymbolValue;
+        displayUiGameLogic.displayModal("symbol", player1);
 // displayUiGameLogic.symbolModalContent(player);
 
               // displayUiGameLogic.symbolModalContent();
@@ -511,8 +451,10 @@ const eventListenerLogic = (function() {
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
+            //do i move player instances to here for access in all methods?
             console.log(event.target);
-            playGame().chooseNames()
+            // playGame().chooseNames()
+            playGame().chooseSymbol();
             // playRound();
         }, { once: true });
     }
@@ -542,8 +484,9 @@ const eventListenerLogic = (function() {
                     break;
                 case "symbol":
                     const symbolChoice = formData.get('symbol-choice');
+                    console.log(symbolChoice);
                     player.selectSymbol(symbolChoice);
-                    console.log(player.getSymbol());
+                    console.log(player.getPlayerSymbol());
                     break;
                 default:
                     console.log("sorry modal has no name or symbol class name");
@@ -559,6 +502,7 @@ const eventListenerLogic = (function() {
     return{startButton, formSubmit};
 })();
 
+//do i just call this straight away in the IIFE?
 eventListenerLogic.startButton();
 // eventListenerLogic.formSubmit();
 
