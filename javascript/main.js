@@ -176,7 +176,7 @@ const displayUiGameLogic = (function(player) {
             case "name":
 
                 const label = createDomElement("label", `${getPlayerName()} please choose your name`, "","",{for: "username-choice"});
-                const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice", required: ""});
+                const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice", maxlength: 35, required: ""});
                 confirmButton.before(label,input);
                 break;
 
@@ -365,9 +365,9 @@ function playRound() {
     // randomPlayerChoice() === 1 ? player1.selectSymbol() : player2.selectSymbol();
     
     //why does while loop break?
-    if (!player1.getPlayerSymbol()) {
-        player1.selectSymbol();
-    }
+    // if (!player1.getPlayerSymbol()) {
+    //     player1.selectSymbol();
+    // }
     //this runs before you select above symbol
     
     
@@ -460,6 +460,7 @@ function playGame(numberOfRounds) {
         //can you attach event to the modal?
         //add whole player object?
         displayUiGameLogic.displayModal("name", player1);
+        displayUiGameLogic.displayModal("name", player2);
 
   
 // displayUiGameLogic.nameModalContent();
