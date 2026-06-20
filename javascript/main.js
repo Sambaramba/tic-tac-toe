@@ -165,7 +165,7 @@ const displayUiGameLogic = (function(player) {
         
         const dialogBackground = createDomElement("div","","dialog-background","","");
         const dialog = createDomElement("dialog", "", "", "","");
-        const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
+        const form = createDomElement("form", "", "", `${modalType}`,{action: "", method: "dialog"});
         const confirmButton = createDomElement("button","Confirm","","",{type: "submit"});
         form.append(confirmButton);
         dialog.appendChild(form);
@@ -457,10 +457,13 @@ function playGame(numberOfRounds) {
 
         // }
         console.log(player1.getUsername());
+        if(player1.getUsername() === undefined) {
+
+        };
         //can you attach event to the modal?
         //add whole player object?
         displayUiGameLogic.displayModal("name", player1);
-        displayUiGameLogic.displayModal("name", player2);
+        // displayUiGameLogic.displayModal("name", player2);
 
   
 // displayUiGameLogic.nameModalContent();
@@ -520,20 +523,35 @@ const eventListenerLogic = (function() {
         console.log("form submit event has been added");
         const {selectSymbol, selectUsername} = player;
         const form = document.querySelector("form");
+    
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             console.log(event.target);
             console.log(event.submitter);
             const formData = new FormData(event.target);
-            
+            console.log(formData);
             // Extract a specific field by its 'name' attribute
-            if(form.id = "username") {}
-            const usernameChoice = formData.get('username-choice'); 
-            player.selectUsername(usernameChoice);
-            console.log(player.getUsername());
-            const symbolChoice = formData.get('symbol-choice');
+            const className = form.getAttribute("class");
+
+            switch (className) {
+                case "name":
+                    const usernameChoice = formData.get('username-choice'); 
+                    player.selectUsername(usernameChoice);
+                    console.log(player.getUsername());
+                    // console.log("accessed form name class through dom");
+                    break;
+                case "symbol":
+                    const symbolChoice = formData.get('symbol-choice');
+                    player.selectSymbol(symbolChoice);
+                    console.log(player.getSymbol());
+                    break;
+                default:
+                    console.log("sorry modal has no name or symbol class name");
+            }
             
-            console.log(usernameChoice, symbolChoice);
+            
+            
+            // console.log(usernameChoice, symbolChoice);
 
         }, { once: true });
     }
