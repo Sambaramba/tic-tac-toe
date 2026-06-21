@@ -163,7 +163,7 @@ const displayUiGameLogic = (function(player) {
         //destructure player name property to add value to modal
         const {getName} = player;
         
-        const dialogBackground = createDomElement("div","","dialog-background","","");
+        const dialogBackground = createDomElement("div","","","dialog-background","");
         const dialog = createDomElement("dialog", "", "", "","");
         const form = createDomElement("form", "", "", `${modalType}`,{action: "", method: "dialog"});
         const confirmButton = createDomElement("button","Confirm","","",{type: "submit"});
@@ -472,7 +472,8 @@ const eventListenerLogic = (function() {
             console.log(event.submitter);
             const formData = new FormData(event.target);
             console.log(formData);
-            // Extract a specific field by its 'name' attribute
+
+            // Extract a specific input by its 'name' attribute
             const className = form.getAttribute("class");
 
             switch (className) {
@@ -492,7 +493,7 @@ const eventListenerLogic = (function() {
                     console.log("sorry modal has no name or symbol class name");
             }
             
-            
+            const dialogBackground = document.querySelector(".dialog-background");
             
             // console.log(usernameChoice, symbolChoice);
 
