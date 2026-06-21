@@ -161,7 +161,7 @@ const displayUiGameLogic = (function(player) {
       //then can link player object to input?
     const displayModal = (modalType, player) => {
         //destructure player name property to add value to modal
-        const {getPlayerName} = player;
+        const {getName} = player;
         
         const dialogBackground = createDomElement("div","","dialog-background","","");
         const dialog = createDomElement("dialog", "", "", "","");
@@ -175,7 +175,7 @@ const displayUiGameLogic = (function(player) {
         switch (modalType) {
             case "name":
 
-                const label = createDomElement("label", `${getPlayerName()} please choose your name`, "","",{for: "username-choice"});
+                const label = createDomElement("label", `${getName()} please choose your name`, "","",{for: "username-choice"});
                 const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});
                 confirmButton.before(label,input);
                 break;
@@ -183,7 +183,7 @@ const displayUiGameLogic = (function(player) {
             case "symbol":
                 
                 const fieldset = createDomElement("fieldset","","","","");
-                const legend = createDomElement("legend",`${getPlayerName()} please select a symbol`,"","","");
+                const legend = createDomElement("legend",`${getName()} please select a symbol`,"","","");
 
                 const radioContainerDiv = createDomElement("div","","radio-container","","");
                 const radioInputX = createDomElement("input","","x","",{type: "radio", name: "symbol-choice",value: "X", required: "", checked: ""});
@@ -220,26 +220,26 @@ function createPlayer(name) {
 
     //stores last character of player name which will be either 1 or 2;
     const playerNumber = name.charAt(name.length - 1);
-    const getPlayerNumber = () => playerNumber;
+    const getNumber = () => playerNumber;
 
     const playerName = `player ${playerNumber}`;
-    const getPlayerName = () => playerName;
+    const getName = () => playerName;
 
     let playerSymbol;
     const selectSymbol = (symbolValue) => {
         return playerSymbol = symbolValue;
     
     }
-    const getPlayerSymbol = () =>  playerSymbol;
+    const getSymbol = () =>  playerSymbol;
 
     //method takes argument and updates players symbol
-    const changePlayerSymbol = (newValue) => playerSymbol = newValue;
+    const changeSymbol = (newValue) => playerSymbol = newValue;
      
     // let playerScore = 0;
     // const getPlayerScore = () => playerScore;
     // const increasePlayerScore = () => { playerScore++; };
     // const resetPlayerScore = () => { playerScore = 0;}
-    return { getPlayerName, selectUsername, getUsername, selectSymbol, getPlayerNumber, getPlayerSymbol, changePlayerSymbol};
+    return { getName, selectUsername, getUsername, selectSymbol, getNumber, getSymbol, changeSymbol};
 }
 
 //create turn flag for alternating turns;
@@ -253,7 +253,7 @@ let turn = 1;
 function playerTurn(player) {
     
 
-    const playerSymbol = player.getPlayerSymbol();
+    const playerSymbol = player.getSymbol();
     // console.log(`players turn before if is ${playersTurn}`);
     
 
@@ -305,10 +305,10 @@ function playRound() {
     
     
     //player 2 gets alternative symbol
-    if(player1.getPlayerSymbol()) {
-        console.log(player1.getPlayerSymbol());
+    if(player1.getSymbol()) {
+        console.log(player1.getSymbol());
 
-        player1.getPlayerSymbol() === "X" ? player2.changePlayerSymbol("O") : player2.changePlayerSymbol("X");
+        player1.getSymbol() === "X" ? player2.changeSymbol("O") : player2.changeSymbol("X");
         
 
         
@@ -339,10 +339,10 @@ function playRound() {
         const winConditionResult = checkWinCondition();
 
         switch(winConditionResult) {
-            case player1.getPlayerSymbol():
+            case player1.getSymbol():
                 console.log("Player 1 has won");
                 break;
-            case player2.getPlayerSymbol():
+            case player2.getSymbol():
                 console.log("Player 2 has won");
                 break;
             case "draw":
@@ -486,7 +486,7 @@ const eventListenerLogic = (function() {
                     const symbolChoice = formData.get('symbol-choice');
                     console.log(symbolChoice);
                     player.selectSymbol(symbolChoice);
-                    console.log(player.getPlayerSymbol());
+                    console.log(player.getSymbol());
                     break;
                 default:
                     console.log("sorry modal has no name or symbol class name");
