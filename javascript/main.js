@@ -453,8 +453,8 @@ const eventListenerLogic = (function() {
         startButton.addEventListener("click", (event) => {
             //do i move player instances to here for access in all methods?
             console.log(event.target);
-            // playGame().chooseNames()
-            playGame().chooseSymbol();
+            playGame().chooseNames()
+            // playGame().chooseSymbol();
             // playRound();
         }, { once: true });
     }
@@ -494,6 +494,9 @@ const eventListenerLogic = (function() {
             }
             
             const dialogBackground = document.querySelector(".dialog-background");
+            dialogBackground.remove();
+            console.log(player.getUsername());
+            console.log(player.getSymbol());
             
             // console.log(usernameChoice, symbolChoice);
 
