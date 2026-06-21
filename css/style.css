@@ -177,7 +177,7 @@ dialog#select-symbol-dialog {
   opacity: 0;
 } */
 
-#dialog-background {
+.dialog-background {
   background-color: grey;
   z-index: 5;
   position: fixed;
