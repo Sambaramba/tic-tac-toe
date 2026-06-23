@@ -65,6 +65,8 @@ function checkWinCondition() {
         return "O";
     }
     
+    //think draw only tests for nought not having win conditions and not crosses
+    //is test needed as if either has won one of above ifs would have run
     const hasValue = (currentValue) => currentValue !== "";
     if (gameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
         console.log("Draw");
@@ -73,6 +75,26 @@ function checkWinCondition() {
     return false;
     
 }
+
+
+const pickRandom = (()=> {
+
+    const player = () => {
+        return  Math.floor(Math.random() * 2) + 1
+    };
+    //should put empty cell check in below method?
+    const cell = () => {
+            let cellChoice = Math.floor(Math.random() * 9);
+            
+            do {cellChoice = Math.floor(Math.random() * 9)}
+            while (gameBoard.grid[cellChoice] !== "");
+
+            return cellChoice;
+        };
+
+    return {player, cell};
+})();
+
 
 
 //-------------------MAIN------------------------------------
@@ -96,12 +118,12 @@ const gameBoard = (function () {
 })();
 
 console.log(gameBoard);
-
+// console.log(pickRandom.player());
 
 
 //IIFE to display ui and game logic
 //add events in this too or too big?
-const displayUiGameLogic = (function(player) {
+const displayUiGameLogic = (function() {
      
     const body = document.querySelector("body");
 
@@ -312,22 +334,24 @@ function playRound() {
         
 
         
-        const randomCellChoice = () => { 
-            let cellChoice = Math.floor(Math.random() * 9);
+        // const randomCellChoice = () => { 
+        //     let cellChoice = Math.floor(Math.random() * 9);
             
-            do {cellChoice = Math.floor(Math.random() * 9)}
-            while (gameBoard.grid[cellChoice] !== "");
+        //     do {cellChoice = Math.floor(Math.random() * 9)}
+        //     while (gameBoard.grid[cellChoice] !== "");
 
-            return cellChoice;
-        };
+        //     return cellChoice;
+        // };
 
         while (turn < 10 && checkWinCondition() === false) {
             console.log(gameBoard.grid);
             const player1Turn = playerTurn(player1);
             const player2Turn = playerTurn(player2);
             console.log(`turn no is ${turn}`);
-            let player1Choice = randomCellChoice();
-            let player2Choice = randomCellChoice();
+            // let player1Choice = randomCellChoice();
+            // let player2Choice = randomCellChoice();
+            let player1Choice = pickRandom.cell();
+            let player2Choice = pickRandom.cell();
 
             playersTurn === 1 ? player1Turn(player1Choice) : player2Turn(player2Choice);
         }
@@ -368,38 +392,54 @@ function playGame(numberOfRounds) {
     const player2 = createPlayer("player2");
     
     
-
-    // displayUiGameLogic.displayModal();
+    //getting data works once for either username/symbol selection
+    //if call chooseNames followed by chooseSymbol symbol modal shows but cannot interact
+    //reason being is two modals open at once - think because of shared submit event/code
+    //if i changed event to closest? or destinct querySelector for forms?
+    //how to bring up one modal after the other?
+    //if call chooseNames as it stands can only select player 1 username as player 2 modal doesn't show.
     //inputs/outputs
-    //show modal
-    //give modal player1 content(call display object method)
-    //attach submit event to form
-    //on submit get name input value
-    //how to give value to player 1?
-    //player method to access stored input value
-    //private variable in game?
-    //link players name choice methods with variable?
-    // on submit/confirm btn click event reset modal to player 2
-    //do need to take dom/display object as input to game func? or if its iife its available globally?
+    //move displayModal method call into player.getUsername() method?
+    
     function chooseNames(player) {
         console.log(player);
         let playerUsernameValue;
         //watch out for infinite while loop
         //what conditions?
         //also need to update playerUsernameValue each time so doesnt check same value(to stop infinite loop)
+        //if doing while loop make sure dont add more than one modal or event
+        //what conditions? any others than current one?
+        //check if dialog or form exists in while loop code block before creating modal
+        const dialog = document.querySelector(".dialog-background");
+        const form = document.querySelector("form");
+        if (!form) {
+            console.log("no form element exists currently")
+        }
+        if (!dialog) {
+            console.log("no dialog element exists currently")
+        }
         // while(player1.getUsername() = undefined) {
+        //     const dialog = document.querySelector(".dialog-background");
+        //     const form = document.querySelector("form");
+        //     if (!form || !dialog) {
+
+        //     }
 
         // }
         console.log(player1.getUsername());
         if(player1.getUsername() === undefined) {
             displayUiGameLogic.displayModal("name", player1);
-        };
-        //how to get player 2 to pick name after?
-        //or can i do choose name with player as argument?
-        if(player1.getUsername()) {
+            
+        }
+
+        if(player2.getUsername() === undefined) {
             console.log("player 1 has chosen username");
             displayUiGameLogic.displayModal("name", player2);
-        }
+        };
+        
+        //how to get player 2 to pick name after?
+        //or can i do choose name with player as argument?
+        
         //can you attach event to the modal?
         //add whole player object?
         // displayUiGameLogic.displayModal("name", player2);
@@ -502,13 +542,22 @@ const eventListenerLogic = (function() {
 
         }, { once: true });
     }
+    const gridCells = () => {
+        let cells = document.querySelectorAll(".cell");
+        cells.forEach((cell) => {
+            cell.addEventListener("click", (event) => {
+                console.log(event.target);
+            }, {once: true});
+        })
+    }
 
-    return{startButton, formSubmit};
+    return{startButton, formSubmit, gridCells};
 })();
 
 //do i just call this straight away in the IIFE?
 eventListenerLogic.startButton();
 // eventListenerLogic.formSubmit();
+// eventListenerLogic.gridCells();
 
 //want to be active only when selected start button but after chosen names and symbols
 //dunno if any of below listener works
@@ -631,6 +680,8 @@ eventListenerLogic.startButton();
     // console.log(gameBoard.grid);
 
     //----------win condition func-----------//
+
+
     //switch statement?
     //loop through gameboard.grid
     //filter/forEach/some?
@@ -739,3 +790,18 @@ eventListenerLogic.startButton();
 //         fieldset.append(legend, radioContainerDiv);
 //         form.insertBefore(fieldset, confirmButton);
 //       }
+
+
+//---------------play game func ---------------------------------
+
+
+//show modal
+    //give modal player1 content(call display object method)
+    //attach submit event to form
+    //on submit get name input value
+    //how to give value to player 1?
+    //player method to access stored input value
+    //private variable in game?
+    //link players name choice methods with variable?
+    // on submit/confirm btn click event reset modal to player 2
+    //do need to take dom/display object as input to game func? or if its iife its available globally?
