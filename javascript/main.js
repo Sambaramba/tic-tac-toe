@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-//-----------------HELPERS-----------------------------
+//--------HELPER/UTILS----------------------
 
 //could just put in displayDom IIFE as private func factory
 function createDomElement(element, text, elementId, elementClass, attributes = {}) {
@@ -34,47 +34,6 @@ function createDomElement(element, text, elementId, elementClass, attributes = {
        return domElement;
 }
 
-//just a function
-//where to put? method/private func in round/game?
-function checkWinCondition() {
-    
-    //regEx to match all 8 win conditions;
-    const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
-
-    let stringOfXIndexes = "";
-    let stringOfOIndexes = "";
-    gameBoard.grid.forEach((value, index) => {
-        if(value === "X") {
-            stringOfXIndexes+=index;
-            console.log(`x index string is now ${stringOfXIndexes}`);
-        }
-        if(value === "O") {
-            stringOfOIndexes+=index;
-            console.log(`O index string is now ${stringOfOIndexes}`)
-        }
-
-    })
-
-    //return sumbol/player/player.number/boolean?
-    if (winConditions.test(stringOfXIndexes)) {
-        console.log("X is the winner");
-        return "X";
-    }
-    if (winConditions.test(stringOfOIndexes)) {
-        console.log("O is the winner");
-        return "O";
-    }
-    
-    //think draw only tests for nought not having win conditions and not crosses
-    //is test needed as if either has won one of above ifs would have run
-    const hasValue = (currentValue) => currentValue !== "";
-    if (gameBoard.grid.every(hasValue) && !winConditions.test(stringOfOIndexes)) {
-        console.log("Draw");
-        return "draw";
-    }
-    return false;
-    
-}
 
 
 const pickRandom = (()=> {
@@ -82,19 +41,80 @@ const pickRandom = (()=> {
     const player = () => {
         return  Math.floor(Math.random() * 2) + 1
     };
+
+    const symbol = () => {
+        const number = Math.floor(Math.random() * 2) + 1;
+        console.log(`number is ${number}`)
+        if (number === 1) {
+            console.log(`number is ${number}`);
+            return "X";
+        } 
+        if (number === 2) {
+            console.log(`number is ${number}`);
+            return "0"
+        };
+        return undefined;
+    }
     //should put empty cell check in below method?
+    //while loop doesnt seem to work as intended
     const cell = () => {
             let cellChoice = Math.floor(Math.random() * 9);
             
-            do {cellChoice = Math.floor(Math.random() * 9)}
-            while (gameBoard.grid[cellChoice] !== "");
 
+            while(gameBoard.grid[cellChoice] !== "") {
+                console.log(gameBoard.grid[cellChoice]);
+                console.log(`cell choice in while loop is ${cellChoice}`);
+                cellChoice = Math.floor(Math.random() * 9);
+                console.log(`cell choice in while loop is now ${cellChoice}`);
+            }
             return cellChoice;
+            // do {cellChoice = Math.floor(Math.random() * 9)}
+            // while (gameBoard.grid[cellChoice] !== "");
+            // console.log(`gameboard cell value is ${gameBoard.grid[cellChoice]}`);
+            // console.log(`cell choice is ${cellChoice}`);
+            // return cellChoice;
         };
 
-    return {player, cell};
+    return {player, symbol, cell};
 })();
 
+function createPlayer(name) {
+    
+    let username;
+    const selectUsername = (usernameValue) => {
+        return username = usernameValue;
+    }
+    const getUsername = () => username;
+
+    //stores last character of player name which will be either 1 or 2;
+    const playerNumber = name.charAt(name.length - 1);
+    const getNumber = () => playerNumber;
+
+    const playerName = `player ${playerNumber}`;
+    const getName = () => playerName;
+
+    let playerSymbol;
+    // const selectSymbol = (symbolValue) => {
+    //     return playerSymbol = symbolValue;
+    
+    // }
+    const selectSymbol = () => {
+        playerSymbol = pickRandom.symbol();
+        // return playerSymbol;
+    
+    }
+
+    const getSymbol = () =>  playerSymbol;
+
+    //is this needed?
+    const changeSymbol = (newValue) => playerSymbol = newValue;
+     
+    // let playerScore = 0;
+    // const getPlayerScore = () => playerScore;
+    // const increasePlayerScore = () => { playerScore++; };
+    // const resetPlayerScore = () => { playerScore = 0;}
+    return { getName, selectUsername, getUsername, selectSymbol, getNumber, getSymbol, changeSymbol};
+}
 
 
 //-------------------MAIN------------------------------------
@@ -103,8 +123,12 @@ const pickRandom = (()=> {
 const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
+    const getGrid = () => grid;
 
-    const getGridCell = (cellNum) => {}
+    const getCellValue = (cellNum) => {
+        console.log(grid[cellNum]);
+        return grid[cellNum];
+    };
     //reset all textContents of cells to ""
     //as array loop through array and for each change value to "";
     //grid has not been called so is it accessible?
@@ -114,23 +138,17 @@ const gameBoard = (function () {
         })
         console.log(grid);
     }
-    return {grid};
+    return {grid, getGrid, getCellValue};
 })();
-
-console.log(gameBoard);
-// console.log(pickRandom.player());
-
 
 //IIFE to display ui and game logic
 //add events in this too or too big?
 const displayUiGameLogic = (function() {
      
-    const body = document.querySelector("body");
-
     const displayUi = () => {
-        // const body = document.querySelector("body");
+
         const containerDiv = createDomElement("div","","container","","");
-        body.appendChild(containerDiv);
+        document.body.appendChild(containerDiv);
         const title = createDomElement("div", "Tic-Tac-Toe","title", "","");
         const display = createDomElement("div","Please click start game button to begin","display","","");
         const gameboard = createDomElement("div","","gameboard","","","");
@@ -156,22 +174,24 @@ const displayUiGameLogic = (function() {
     //do you delete gameboard and re-add on each turn after cells values updated?
     const displayGameboard = () => {
         const gameboardDiv = document.querySelector("#gameboard");
-        //clear grid first to reset
+
+        //clear grid first to prevent duplicates
         while(gameboardDiv.firstChild) {
-            console.log(gameboardDiv.firstChild);
+            // console.log(gameboardDiv.firstChild);
             gameboardDiv.removeChild(gameboardDiv.firstChild);
             
         }
-        console.log(gameboardDiv.firstChild)
+
         //loop through gameboard grid array and add cell for each element
+        //change cells to match grid array indexes?
         gameBoard.grid.forEach((value, index) => {
             const nextIndex = ++index;
-            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", {"data-cell-value": `${nextIndex}`});
+            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", {"data-cell-value": `${nextIndex}`, tabindex: 0});
             
             gameboardDiv.appendChild(cellDiv);
 
         })
-        console.log(gameboardDiv);
+        // console.log(gameboardDiv);
       }
     displayGameboard();
       //go back to creating and deleting modals
@@ -192,7 +212,7 @@ const displayUiGameLogic = (function() {
         form.append(confirmButton);
         dialog.appendChild(form);
         dialogBackground.appendChild(dialog);
-        body.appendChild(dialogBackground);
+        document.body.appendChild(dialogBackground);
 
         switch (modalType) {
             case "name":
@@ -221,81 +241,12 @@ const displayUiGameLogic = (function() {
             default: ("sorry incorrect modal type was given");
 
         }
-        //does this add event before modal is created?
-        //nope it is added after press start button
+        
         eventListenerLogic.formSubmit(player);
     }
 
-    //displayUi could be just private function that runs at start
-    //could do with gameboard at start too?
     return {displayUi, displayGameboard, displayModal};
 })()
-
-
-function createPlayer(name) {
-    
-    let username;
-    const selectUsername = (usernameValue) => {
-        return username = usernameValue;
-    }
-    const getUsername = () => username;
-
-    //stores last character of player name which will be either 1 or 2;
-    const playerNumber = name.charAt(name.length - 1);
-    const getNumber = () => playerNumber;
-
-    const playerName = `player ${playerNumber}`;
-    const getName = () => playerName;
-
-    let playerSymbol;
-    const selectSymbol = (symbolValue) => {
-        return playerSymbol = symbolValue;
-    
-    }
-    const getSymbol = () =>  playerSymbol;
-
-    //method takes argument and updates players symbol
-    const changeSymbol = (newValue) => playerSymbol = newValue;
-     
-    // let playerScore = 0;
-    // const getPlayerScore = () => playerScore;
-    // const increasePlayerScore = () => { playerScore++; };
-    // const resetPlayerScore = () => { playerScore = 0;}
-    return { getName, selectUsername, getUsername, selectSymbol, getNumber, getSymbol, changeSymbol};
-}
-
-//create turn flag for alternating turns;
-//put them in game logic?
-// let player1Turn = true;
-let playersTurn = 1;
-let turn = 1;
-
-//playerTurn is func factory i think
-//do i add to round/game func? as method/private function?
-function playerTurn(player) {
-    
-
-    const playerSymbol = player.getSymbol();
-    // console.log(`players turn before if is ${playersTurn}`);
-    
-
-    //so this needs to be number from 0-8
-    //This is return func to input square directly when get from ui;
-    return function (selectedCell) {
-       
-        //alternate turns
-        if (playersTurn) {
-        playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-        console.log(`players turn is ${playersTurn}`);
-        } else (console.log(`players turn value = ${playersTurn}`))
-        
-        //add players symbol to selected cell
-        gameBoard.grid[selectedCell] = playerSymbol;
-        
-        turn++;
-        return;
-    };
-}
 
 
 //need to choose symbol and player names before rest runs
@@ -308,6 +259,11 @@ function playerTurn(player) {
 //so make play round as play game method?
 
 function playRound() {
+    //flag for alternating turns
+    let playersTurn = 1;
+
+    //turn counter;
+    let turn = 1;
 
     //want this in game logic func if doing multi rounds.
     const player1 = createPlayer("player1");
@@ -318,45 +274,98 @@ function playRound() {
     //choose random player code
     // const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
     // randomPlayerChoice() === 1 ? player1.selectSymbol() : player2.selectSymbol();
+    player1.selectSymbol();
     
-    //why does while loop break?
-    // if (!player1.getPlayerSymbol()) {
-    //     player1.selectSymbol();
-    // }
-    //this runs before you select above symbol
-    
-    
-    //player 2 gets alternative symbol
+
     if(player1.getSymbol()) {
-        console.log(player1.getSymbol());
-
         player1.getSymbol() === "X" ? player2.changeSymbol("O") : player2.changeSymbol("X");
-        
-
-        
-        // const randomCellChoice = () => { 
-        //     let cellChoice = Math.floor(Math.random() * 9);
-            
-        //     do {cellChoice = Math.floor(Math.random() * 9)}
-        //     while (gameBoard.grid[cellChoice] !== "");
-
-        //     return cellChoice;
-        // };
-
-        while (turn < 10 && checkWinCondition() === false) {
-            console.log(gameBoard.grid);
-            const player1Turn = playerTurn(player1);
-            const player2Turn = playerTurn(player2);
-            console.log(`turn no is ${turn}`);
-            // let player1Choice = randomCellChoice();
-            // let player2Choice = randomCellChoice();
-            let player1Choice = pickRandom.cell();
-            let player2Choice = pickRandom.cell();
-
-            playersTurn === 1 ? player1Turn(player1Choice) : player2Turn(player2Choice);
-        }
-    
     }
+
+
+    function playerTurn(player) {
+    
+        const playerSymbol = player.getSymbol();
+        console.log(playerSymbol)
+        // console.log(`players turn before if is ${playersTurn}`);
+        let selectedCell = pickRandom.cell();
+        gameBoard.grid[selectedCell] = playerSymbol;
+
+
+        if (playersTurn) {
+            playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+            console.log(`players turn is ${playersTurn}`);
+            } else (console.log(`players turn value = ${playersTurn}`))
+        turn++;
+        return;
+        //so this needs to be number from 0-8
+        //This is return func to input square directly when get from ui;
+        // return function (selectedCell) {
+        
+        //     //alternate turns
+        //     if (playersTurn) {
+        //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+        //     console.log(`players turn is ${playersTurn}`);
+        //     } else (console.log(`players turn value = ${playersTurn}`))
+            
+        //     //add players symbol to selected cell
+        //     gameBoard.grid[selectedCell] = playerSymbol;
+            
+        //     turn++;
+        //     return;
+        // };
+    }
+    
+
+    function checkWinCondition() {
+        
+        //regEx to match all 8 win conditions;
+        const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
+
+        let stringOfXIndexes = "";
+        let stringOfOIndexes = "";
+
+        gameBoard.grid.forEach((value, index) => {
+            if(value === "X") {
+                stringOfXIndexes+=index;
+                console.log(`x index string is now ${stringOfXIndexes}`);
+            }
+            if(value === "O") {
+                stringOfOIndexes+=index;
+                console.log(`O index string is now ${stringOfOIndexes}`)
+            }
+        })
+
+        //return sumbol/player/player.number/boolean?
+        if (winConditions.test(stringOfXIndexes)) {
+            console.log("X is the winner");
+            return "X";
+        }
+
+        if (winConditions.test(stringOfOIndexes)) {
+            console.log("O is the winner");
+            return "O";
+        }
+        
+        //is test needed as if either has won one of above ifs would have run
+        const hasValue = (currentValue) => currentValue !== "";
+        if (gameBoard.grid.every(hasValue) 
+            && !winConditions.test(stringOfOIndexes) 
+            && !winConditions.test(stringOfXIndexes)) 
+        {
+            console.log("Draw");
+            return "draw";
+        }
+        return false; 
+    }
+
+    while (turn < 10 && checkWinCondition() === false) {
+        
+        console.log(`turn no is ${turn}`);
+        playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+        console.log(gameBoard.grid);
+    }
+    
+    
 
     
     function displayWinCondition() {
@@ -382,7 +391,7 @@ function playRound() {
 
 }
 
-// playRound();
+playRound();
 
 function playGame(numberOfRounds) {
 
@@ -390,7 +399,7 @@ function playGame(numberOfRounds) {
     //if only created players instances are they only available in this object?
     const player1 = createPlayer("player1");
     const player2 = createPlayer("player2");
-    
+    // eventListenerLogic.gridCells();
     
     //getting data works once for either username/symbol selection
     //if call chooseNames followed by chooseSymbol symbol modal shows but cannot interact
@@ -493,8 +502,11 @@ const eventListenerLogic = (function() {
         startButton.addEventListener("click", (event) => {
             //do i move player instances to here for access in all methods?
             console.log(event.target);
-            playGame().chooseNames()
+            const player1 = createPlayer("player1");
+            const player2 = createPlayer("player2");
+            // playGame().chooseNames()
             // playGame().chooseSymbol();
+            eventListenerLogic.gridCells(player1, player2);
             // playRound();
         }, { once: true });
     }
@@ -535,18 +547,31 @@ const eventListenerLogic = (function() {
             
             const dialogBackground = document.querySelector(".dialog-background");
             dialogBackground.remove();
-            console.log(player.getUsername());
-            console.log(player.getSymbol());
+            // console.log(player.getUsername());
+            // console.log(player.getSymbol());
             
             // console.log(usernameChoice, symbolChoice);
 
         }, { once: true });
     }
-    const gridCells = () => {
+    const gridCells = (player1, player2) => {
+        // console.log(`players turn is ${playerTurn}`);
+        // console.log(player1.getName());
         let cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
             cell.addEventListener("click", (event) => {
-                console.log(event.target);
+        
+        
+        // if(playersTurn === 1) {
+
+        // } else if(playersTurn === 2) {
+
+        // } else console.log(`players turn is ${playersTurn}`);
+        
+                console.log(event.target.id);
+                console.log(event.target.dataset.cellValue);
+                
+                // const dataCellValue;
             }, {once: true});
         })
     }
@@ -556,6 +581,8 @@ const eventListenerLogic = (function() {
 
 //do i just call this straight away in the IIFE?
 eventListenerLogic.startButton();
+
+
 // eventListenerLogic.formSubmit();
 // eventListenerLogic.gridCells();
 
