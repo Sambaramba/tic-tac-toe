@@ -94,13 +94,12 @@ function createPlayer(name) {
     const getName = () => playerName;
 
     let playerSymbol;
-    
     const selectSymbol = (symbol) => playerSymbol = symbol;
-
     const getSymbol = () =>  playerSymbol;
 
-    //is this needed?
-    // const changeSymbol = (newValue) => playerSymbol = newValue;
+    let selectedSquare;
+    const selectSquare = (square) => selectedSquare = square;
+    const getSelectedSquare = () => selectedSquare;
      
     // let playerScore = 0;
     // const getPlayerScore = () => playerScore;
@@ -244,16 +243,8 @@ const gameLogic = (function() {
     const player2 = createPlayer("player2");
     player1.selectSymbol("X");
     player2.selectSymbol("O");
-    // eventListenerLogic.gridCells();
     
-    //getting data works once for either username/symbol selection
-    //if call chooseNames followed by chooseSymbol symbol modal shows but cannot interact
-    //reason being is two modals open at once - think because of shared submit event/code
-    //if i changed event to closest? or destinct querySelector for forms?
-    //how to bring up one modal after the other?
-    //if call chooseNames as it stands can only select player 1 username as player 2 modal doesn't show.
-    //inputs/outputs
-    //move displayModal method call into player.getUsername() method?
+    
     
     function chooseNames(player) {
         console.log(player);
@@ -299,7 +290,7 @@ const gameLogic = (function() {
         //reset both vars at round start;
         playersTurn = 1;
         turn = 1;
-
+        eventListenerLogic.gridCells(player1, player2);
         //want this in playGame() if doing multi rounds.
         // const player1 = createPlayer("player1");
         // const player2 = createPlayer("player2");
