@@ -94,26 +94,19 @@ function createPlayer(name) {
     const getName = () => playerName;
 
     let playerSymbol;
-    // const selectSymbol = (symbolValue) => {
-    //     return playerSymbol = symbolValue;
     
-    // }
-    const selectSymbol = () => {
-        playerSymbol = pickRandom.symbol();
-        // return playerSymbol;
-    
-    }
+    const selectSymbol = (symbol) => playerSymbol = symbol;
 
     const getSymbol = () =>  playerSymbol;
 
     //is this needed?
-    const changeSymbol = (newValue) => playerSymbol = newValue;
+    // const changeSymbol = (newValue) => playerSymbol = newValue;
      
     // let playerScore = 0;
     // const getPlayerScore = () => playerScore;
     // const increasePlayerScore = () => { playerScore++; };
     // const resetPlayerScore = () => { playerScore = 0;}
-    return { getName, selectUsername, getUsername, selectSymbol, getNumber, getSymbol, changeSymbol};
+    return { getName, selectUsername, getUsername, selectSymbol, getNumber, getSymbol};
 }
 
 
@@ -201,53 +194,28 @@ const displayUiGameLogic = (function() {
       //or keep as same
       //add submit event to form here?
       //then can link player object to input?
-    const displayModal = (modalType, player) => {
+    const displayModal = (player) => {
         //destructure player name property to add value to modal
         const {getName} = player;
         
         const dialogBackground = createDomElement("div","","","dialog-background","");
         const dialog = createDomElement("dialog", "", "", "","");
-        const form = createDomElement("form", "", "", `${modalType}`,{action: "", method: "dialog"});
+        const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
+        const label = createDomElement("label", `${getName()} please choose your name`, "","",{for: "username-choice"});
+        const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});     
         const confirmButton = createDomElement("button","Confirm","","",{type: "submit"});
-        form.append(confirmButton);
+        // confirmButton.before(label,input);
+        form.append(label,input,confirmButton);
         dialog.appendChild(form);
         dialogBackground.appendChild(dialog);
         document.body.appendChild(dialogBackground);
 
-        switch (modalType) {
-            case "name":
-
-                const label = createDomElement("label", `${getName()} please choose your name`, "","",{for: "username-choice"});
-                const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});
-                confirmButton.before(label,input);
-                break;
-
-            case "symbol":
-                
-                const fieldset = createDomElement("fieldset","","","","");
-                const legend = createDomElement("legend",`${getName()} please select a symbol`,"","","");
-
-                const radioContainerDiv = createDomElement("div","","radio-container","","");
-                const radioInputX = createDomElement("input","","x","",{type: "radio", name: "symbol-choice",value: "X", required: "", checked: ""});
-                const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
-                const radioInputO = createDomElement("input","","o","",{type: "radio", name: "symbol-choice",value: "O", required: ""});
-                const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
-
-                radioContainerDiv.append(radioInputX,radioLabelX,radioInputO,radioLabelO);
-                fieldset.append(legend, radioContainerDiv);
-                form.insertBefore(fieldset, confirmButton);
-                break;
-
-            default: ("sorry incorrect modal type was given");
-
-        }
         
         eventListenerLogic.formSubmit(player);
     }
 
     return {displayUi, displayGameboard, displayModal};
 })()
-
 
 //need to choose symbol and player names before rest runs
 //do i change all to methods?
@@ -265,21 +233,16 @@ function playRound() {
     //turn counter;
     let turn = 1;
 
-    //want this in game logic func if doing multi rounds.
+    //want this in playGame() if doing multi rounds.
     const player1 = createPlayer("player1");
     const player2 = createPlayer("player2");
+    player1.selectSymbol("X");
+    player2.selectSymbol("O");
     // player1.selectUserName();
     // player2.selectUserName();
+    displayUiGameLogic.displayModal(player1);
 
-    //choose random player code
-    // const randomPlayerChoice = () => {return  Math.floor(Math.random() * 2) + 1};
-    // randomPlayerChoice() === 1 ? player1.selectSymbol() : player2.selectSymbol();
-    player1.selectSymbol();
-    
 
-    if(player1.getSymbol()) {
-        player1.getSymbol() === "X" ? player2.changeSymbol("O") : player2.changeSymbol("X");
-    }
 
 
     function playerTurn(player) {
@@ -391,7 +354,7 @@ function playRound() {
 
 }
 
-playRound();
+
 
 function playGame(numberOfRounds) {
 
@@ -502,11 +465,12 @@ const eventListenerLogic = (function() {
         startButton.addEventListener("click", (event) => {
             //do i move player instances to here for access in all methods?
             console.log(event.target);
-            const player1 = createPlayer("player1");
-            const player2 = createPlayer("player2");
+            // const player1 = createPlayer("player1");
+            // const player2 = createPlayer("player2");
             // playGame().chooseNames()
             // playGame().chooseSymbol();
-            eventListenerLogic.gridCells(player1, player2);
+            playRound();
+            // eventListenerLogic.gridCells(player1, player2);
             // playRound();
         }, { once: true });
     }
@@ -818,6 +782,32 @@ eventListenerLogic.startButton();
 //         form.insertBefore(fieldset, confirmButton);
 //       }
 
+// switch (modalType) {
+//             case "name":
+
+//                 const label = createDomElement("label", `${getName()} please choose your name`, "","",{for: "username-choice"});
+//                 const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});
+//                 confirmButton.before(label,input);
+//                 break;
+
+//             case "symbol":
+                
+//                 const fieldset = createDomElement("fieldset","","","","");
+//                 const legend = createDomElement("legend",`${getName()} please select a symbol`,"","","");
+
+//                 const radioContainerDiv = createDomElement("div","","radio-container","","");
+//                 const radioInputX = createDomElement("input","","x","",{type: "radio", name: "symbol-choice",value: "X", required: "", checked: ""});
+//                 const radioLabelX = createDomElement("label", "X","","radio-label",{for: "x"});
+//                 const radioInputO = createDomElement("input","","o","",{type: "radio", name: "symbol-choice",value: "O", required: ""});
+//                 const radioLabelO = createDomElement("label", "O","","radio-label",{for: "o"});
+
+//                 radioContainerDiv.append(radioInputX,radioLabelX,radioInputO,radioLabelO);
+//                 fieldset.append(legend, radioContainerDiv);
+//                 form.insertBefore(fieldset, confirmButton);
+//                 break;
+
+//             default: ("sorry incorrect modal type was given");
+// }
 
 //---------------play game func ---------------------------------
 
