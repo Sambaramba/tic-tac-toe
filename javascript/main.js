@@ -234,6 +234,9 @@ const gameLogic = (function() {
     //flag for alternating turns
     let playersTurn = 1;
 
+    //method to find players turn
+    //updated at round start so will it only give this value?
+    const getPlayersTurn = () => playersTurn;
     //turn counter;
     let turn = 1;
 
@@ -290,7 +293,7 @@ const gameLogic = (function() {
         //reset both vars at round start;
         playersTurn = 1;
         turn = 1;
-        eventListenerLogic.gridCells(player1, player2);
+        eventListenerLogic.gridCells(player1, player2, gameLogic);
         //want this in playGame() if doing multi rounds.
         // const player1 = createPlayer("player1");
         // const player2 = createPlayer("player2");
@@ -412,7 +415,7 @@ const gameLogic = (function() {
 
     }
     
-    return {chooseNames, playRound}
+    return {chooseNames, playRound, getPlayersTurn}
 })();
 
 //list of win condition matches
@@ -500,24 +503,31 @@ const eventListenerLogic = (function() {
 
         }, { once: true });
     }
-    const gridCells = (player1, player2) => {
+    const gridCells = (player1, player2, gameLogic) => {
         // console.log(`players turn is ${playerTurn}`);
         // console.log(player1.getName());
+        
         let cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
             cell.addEventListener("click", (event) => {
-        
-        
-        // if(playersTurn === 1) {
 
-        // } else if(playersTurn === 2) {
+                //destructure players turn method
+                const {getPlayersTurn} = gameLogic;
+                console.log(`players turn in cell event is ${gameLogic.getPlayersTurn()}`);
 
-        // } else console.log(`players turn is ${playersTurn}`);
-        
-                console.log(event.target.id);
-                console.log(event.target.dataset.cellValue);
+                //store cell event value
+                let dataCellValue = event.target.dataset.cellValue;
+                console.log(`dataCellValue is ${dataCellValue}`);
+
+                //add cell event value to whichever player's turn it is
+                if(gameLogic.getPlayersTurn() === 1) {
+                    player1.selectSquare(dataCellValue);
+                    console.log(player1.getSelectedSquare());
+                } else if(gameLogic.getPlayersTurn() === 2) {
+                    player2.selectSquare(dataCellValue);
+                    console.log(player2.getSelectedSquare());
+                } else console.log(`players turn if statement doesnt work`);
                 
-                // const dataCellValue;
             }, {once: true});
         })
     }
