@@ -105,7 +105,7 @@ function createPlayer(name) {
     // const getPlayerScore = () => playerScore;
     // const increasePlayerScore = () => { playerScore++; };
     // const resetPlayerScore = () => { playerScore = 0;}
-    return { getName, selectUsername, getUsername, selectSymbol, getNumber, getSymbol};
+    return { getName, selectUsername, getUsername, getNumber, selectSymbol, getSymbol, selectSquare, getSelectedSquare};
 }
 
 
