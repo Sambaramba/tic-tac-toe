@@ -130,7 +130,7 @@ const gameBoard = (function () {
         })
         console.log(grid);
     }
-    return {grid, getGrid, getCellValue};
+    return {getGrid, getCellValue};
 })();
 
 //IIFE to display ui and game logic
@@ -176,9 +176,13 @@ const displayUiGameLogic = (function() {
 
         //loop through gameboard grid array and add cell for each element
         //change cells to match grid array indexes?
-        gameBoard.grid.forEach((value, index) => {
+        //changed cells to match grid array indices but nothing has changed!!!!!!!!!!!!!!!!!!
+        console.log(gameBoard.getGrid().values());
+        gameBoard.getGrid().forEach((value, index) => {
             const nextIndex = ++index;
-            const cellDiv =  createDomElement("div", value, `cell${nextIndex}`, "cell", {"data-cell-value": `${nextIndex}`, tabindex: 0});
+            console.log(`cell index in add gameboard to dom is ${index}`);
+            console.log(`cell nextIndex in add gameboard to dom is ${nextIndex}`);
+            const cellDiv =  createDomElement("div", value, `cell${index}`, "cell", {"data-cell-value": `${index}`, tabindex: 0});
             
             gameboardDiv.appendChild(cellDiv);
 
@@ -348,7 +352,7 @@ const gameLogic = (function() {
             let stringOfXIndexes = "";
             let stringOfOIndexes = "";
 
-            gameBoard.grid.forEach((value, index) => {
+            gameBoard.getGrid().forEach((value, index) => {
                 if(value === "X") {
                     stringOfXIndexes+=index;
                     console.log(`x index string is now ${stringOfXIndexes}`);
@@ -372,7 +376,7 @@ const gameLogic = (function() {
             
             //is test needed as if either has won one of above ifs would have run
             const hasValue = (currentValue) => currentValue !== "";
-            if (gameBoard.grid.every(hasValue) 
+            if (gameBoard.getGrid().every(hasValue) 
                 && !winConditions.test(stringOfOIndexes) 
                 && !winConditions.test(stringOfXIndexes)) 
             {
@@ -386,7 +390,7 @@ const gameLogic = (function() {
             
             console.log(`turn no is ${turn}`);
             playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
-            console.log(gameBoard.grid);
+            console.log(gameBoard.getGrid());
         }
         
         
