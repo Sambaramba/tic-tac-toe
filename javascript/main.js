@@ -61,8 +61,8 @@ const pickRandom = (()=> {
             let cellChoice = Math.floor(Math.random() * 9);
             
 
-            while(gameBoard.grid[cellChoice] !== "") {
-                console.log(gameBoard.grid[cellChoice]);
+            while(gameBoard.getCellValue(cellChoice) !== "") {
+                console.log(gameBoard.getCellValue(cellChoice));
                 console.log(`cell choice in while loop is ${cellChoice}`);
                 cellChoice = Math.floor(Math.random() * 9);
                 console.log(`cell choice in while loop is now ${cellChoice}`);
@@ -116,6 +116,8 @@ const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
     const getGrid = () => grid;
+
+    // const getGridSquare = (CellNum) => {}
 
     const getCellValue = (cellNum) => {
         console.log(grid[cellNum]);
@@ -316,7 +318,7 @@ const gameLogic = (function() {
             console.log(playerSymbol)
             // console.log(`players turn before if is ${playersTurn}`);
             let selectedCell = pickRandom.cell();
-            gameBoard.grid[selectedCell] = playerSymbol;
+            gameBoard.getCellValue(selectedCell) = playerSymbol;
 
 
             if (playersTurn) {
