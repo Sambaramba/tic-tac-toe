@@ -226,142 +226,18 @@ const displayUiGameLogic = (function() {
 //can have other player symbol be chosen in it
 //so make play round as play game method?
 
-function playRound() {
-    //flag for alternating turns
-    let playersTurn = 1;
-
-    //turn counter;
-    let turn = 1;
-
-    //want this in playGame() if doing multi rounds.
-    const player1 = createPlayer("player1");
-    const player2 = createPlayer("player2");
-    player1.selectSymbol("X");
-    player2.selectSymbol("O");
-    // player1.selectUserName();
-    // player2.selectUserName();
-    displayUiGameLogic.displayModal(player1);
 
 
 
 
-    function playerTurn(player) {
-    
-        const playerSymbol = player.getSymbol();
-        console.log(playerSymbol)
-        // console.log(`players turn before if is ${playersTurn}`);
-        let selectedCell = pickRandom.cell();
-        gameBoard.grid[selectedCell] = playerSymbol;
-
-
-        if (playersTurn) {
-            playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-            console.log(`players turn is ${playersTurn}`);
-            } else (console.log(`players turn value = ${playersTurn}`))
-        turn++;
-        return;
-        //so this needs to be number from 0-8
-        //This is return func to input square directly when get from ui;
-        // return function (selectedCell) {
-        
-        //     //alternate turns
-        //     if (playersTurn) {
-        //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-        //     console.log(`players turn is ${playersTurn}`);
-        //     } else (console.log(`players turn value = ${playersTurn}`))
-            
-        //     //add players symbol to selected cell
-        //     gameBoard.grid[selectedCell] = playerSymbol;
-            
-        //     turn++;
-        //     return;
-        // };
-    }
-    
-
-    function checkWinCondition() {
-        
-        //regEx to match all 8 win conditions;
-        const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
-
-        let stringOfXIndexes = "";
-        let stringOfOIndexes = "";
-
-        gameBoard.grid.forEach((value, index) => {
-            if(value === "X") {
-                stringOfXIndexes+=index;
-                console.log(`x index string is now ${stringOfXIndexes}`);
-            }
-            if(value === "O") {
-                stringOfOIndexes+=index;
-                console.log(`O index string is now ${stringOfOIndexes}`)
-            }
-        })
-
-        //return sumbol/player/player.number/boolean?
-        if (winConditions.test(stringOfXIndexes)) {
-            console.log("X is the winner");
-            return "X";
-        }
-
-        if (winConditions.test(stringOfOIndexes)) {
-            console.log("O is the winner");
-            return "O";
-        }
-        
-        //is test needed as if either has won one of above ifs would have run
-        const hasValue = (currentValue) => currentValue !== "";
-        if (gameBoard.grid.every(hasValue) 
-            && !winConditions.test(stringOfOIndexes) 
-            && !winConditions.test(stringOfXIndexes)) 
-        {
-            console.log("Draw");
-            return "draw";
-        }
-        return false; 
-    }
-
-    while (turn < 10 && checkWinCondition() === false) {
-        
-        console.log(`turn no is ${turn}`);
-        playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
-        console.log(gameBoard.grid);
-    }
-    
-    
-
-    
-    function displayWinCondition() {
-        const winConditionResult = checkWinCondition();
-
-        switch(winConditionResult) {
-            case player1.getSymbol():
-                console.log("Player 1 has won");
-                break;
-            case player2.getSymbol():
-                console.log("Player 2 has won");
-                break;
-            case "draw":
-                console.log("its a draw");
-                break;
-        }
-        
-    }
-    displayWinCondition();
-    console.log("This log has run at round func bottom");
-    
-   return;
-
-}
-
-
-
-function playGame(numberOfRounds) {
+const gameLogic = (function() {
 
     //want this in game logic func if doing multi rounds.
     //if only created players instances are they only available in this object?
     const player1 = createPlayer("player1");
     const player2 = createPlayer("player2");
+    player1.selectSymbol("X");
+    player2.selectSymbol("O");
     // eventListenerLogic.gridCells();
     
     //getting data works once for either username/symbol selection
@@ -376,20 +252,11 @@ function playGame(numberOfRounds) {
     function chooseNames(player) {
         console.log(player);
         let playerUsernameValue;
-        //watch out for infinite while loop
-        //what conditions?
-        //also need to update playerUsernameValue each time so doesnt check same value(to stop infinite loop)
-        //if doing while loop make sure dont add more than one modal or event
-        //what conditions? any others than current one?
-        //check if dialog or form exists in while loop code block before creating modal
-        const dialog = document.querySelector(".dialog-background");
-        const form = document.querySelector("form");
-        if (!form) {
-            console.log("no form element exists currently")
-        }
-        if (!dialog) {
-            console.log("no dialog element exists currently")
-        }
+        //make modals unique
+        //create player 1 modal
+        //confirm button deletes player 1 and adds player 2
+        //player 2 confirm only deletes the modal
+        
         // while(player1.getUsername() = undefined) {
         //     const dialog = document.querySelector(".dialog-background");
         //     const form = document.querySelector("form");
@@ -417,20 +284,141 @@ function playGame(numberOfRounds) {
         // displayUiGameLogic.displayModal("name", player2);
 
   
-// displayUiGameLogic.nameModalContent();
+
 
     }
-    //should this be in round func/method?
-    function chooseSymbol(player) {
-        let playerSymbolValue;
-        displayUiGameLogic.displayModal("symbol", player1);
-// displayUiGameLogic.symbolModalContent(player);
 
-              // displayUiGameLogic.symbolModalContent();
+    function playRound() {
+
+        //flag for alternating turns
+        let playersTurn = 1;
+
+        //turn counter;
+        let turn = 1;
+
+        //want this in playGame() if doing multi rounds.
+        // const player1 = createPlayer("player1");
+        // const player2 = createPlayer("player2");
+        // player1.selectSymbol("X");
+        // player2.selectSymbol("O");
+        // player1.selectUserName();
+        // player2.selectUserName();
+        // displayUiGameLogic.displayModal(player1);
+
+
+
+
+        function playerTurn(player) {
+        
+            const playerSymbol = player.getSymbol();
+            console.log(playerSymbol)
+            // console.log(`players turn before if is ${playersTurn}`);
+            let selectedCell = pickRandom.cell();
+            gameBoard.grid[selectedCell] = playerSymbol;
+
+
+            if (playersTurn) {
+                playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+                console.log(`players turn is ${playersTurn}`);
+                } else (console.log(`players turn value = ${playersTurn}`))
+            turn++;
+            return;
+            //so this needs to be number from 0-8
+            //This is return func to input square directly when get from ui;
+            // return function (selectedCell) {
+            
+            //     //alternate turns
+            //     if (playersTurn) {
+            //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+            //     console.log(`players turn is ${playersTurn}`);
+            //     } else (console.log(`players turn value = ${playersTurn}`))
+                
+            //     //add players symbol to selected cell
+            //     gameBoard.grid[selectedCell] = playerSymbol;
+                
+            //     turn++;
+            //     return;
+            // };
+        }
+        
+
+        function checkWinCondition() {
+            
+            //regEx to match all 8 win conditions;
+            const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
+
+            let stringOfXIndexes = "";
+            let stringOfOIndexes = "";
+
+            gameBoard.grid.forEach((value, index) => {
+                if(value === "X") {
+                    stringOfXIndexes+=index;
+                    console.log(`x index string is now ${stringOfXIndexes}`);
+                }
+                if(value === "O") {
+                    stringOfOIndexes+=index;
+                    console.log(`O index string is now ${stringOfOIndexes}`)
+                }
+            })
+
+            //return sumbol/player/player.number/boolean?
+            if (winConditions.test(stringOfXIndexes)) {
+                console.log("X is the winner");
+                return "X";
+            }
+
+            if (winConditions.test(stringOfOIndexes)) {
+                console.log("O is the winner");
+                return "O";
+            }
+            
+            //is test needed as if either has won one of above ifs would have run
+            const hasValue = (currentValue) => currentValue !== "";
+            if (gameBoard.grid.every(hasValue) 
+                && !winConditions.test(stringOfOIndexes) 
+                && !winConditions.test(stringOfXIndexes)) 
+            {
+                console.log("Draw");
+                return "draw";
+            }
+            return false; 
+        }
+
+        while (turn < 10 && checkWinCondition() === false) {
+            
+            console.log(`turn no is ${turn}`);
+            playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+            console.log(gameBoard.grid);
+        }
+        
+        
+
+        
+        function displayWinCondition() {
+            const winConditionResult = checkWinCondition();
+
+            switch(winConditionResult) {
+                case player1.getSymbol():
+                    console.log("Player 1 has won");
+                    break;
+                case player2.getSymbol():
+                    console.log("Player 2 has won");
+                    break;
+                case "draw":
+                    console.log("its a draw");
+                    break;
+            }
+            
+        }
+        displayWinCondition();
+        console.log("This log has run at round func bottom");
+        
+        return;
 
     }
-    return {chooseNames, chooseSymbol}
-}
+    
+    return {chooseNames, playRound}
+})();
 
 //list of win condition matches
 /*
@@ -467,9 +455,8 @@ const eventListenerLogic = (function() {
             console.log(event.target);
             // const player1 = createPlayer("player1");
             // const player2 = createPlayer("player2");
-            // playGame().chooseNames()
-            // playGame().chooseSymbol();
-            playRound();
+            // gameLogic.chooseNames()
+            gameLogic.playRound();
             // eventListenerLogic.gridCells(player1, player2);
             // playRound();
         }, { once: true });
