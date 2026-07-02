@@ -118,11 +118,17 @@ const gameBoard = (function () {
     const getGrid = () => grid;
 
     // const getGridSquare = (CellNum) => {}
-
     const getCellValue = (cellNum) => {
         console.log(grid[cellNum]);
         return grid[cellNum];
     };
+
+    const changeCellValue = (cellNum, playerSymbol) => {
+        // console.log(grid);
+        // const cellIndex = grid[cellNum]
+        // console.log(`player symbol is ${playerSymbol}`);
+        return grid[cellNum] = playerSymbol;
+    }
     //reset all textContents of cells to ""
     //as array loop through array and for each change value to "";
     //grid has not been called so is it accessible?
@@ -132,8 +138,10 @@ const gameBoard = (function () {
         })
         console.log(grid);
     }
-    return {getGrid, getCellValue};
+    return {getGrid, getCellValue, changeCellValue};
 })();
+
+// gameBoard.changeCellValue(pickRandom.cell(), pickRandom.symbol());
 
 //IIFE to display ui and game logic
 //add events in this too or too big?
@@ -318,7 +326,9 @@ const gameLogic = (function() {
             console.log(playerSymbol)
             // console.log(`players turn before if is ${playersTurn}`);
             let selectedCell = pickRandom.cell();
-            gameBoard.getCellValue(selectedCell) = playerSymbol;
+            // gameBoard.grid[selectedCell] = playerSymbol;
+            gameBoard.changeCellValue(selectedCell, playerSymbol);
+
 
 
             if (playersTurn) {
