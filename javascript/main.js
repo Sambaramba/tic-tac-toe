@@ -232,6 +232,12 @@ const displayUiGameLogic = (function() {
 
 const gameLogic = (function() {
 
+    //flag for alternating turns
+    let playersTurn = 1;
+
+    //turn counter;
+    let turn = 1;
+
     //want this in game logic func if doing multi rounds.
     //if only created players instances are they only available in this object?
     const player1 = createPlayer("player1");
@@ -290,11 +296,9 @@ const gameLogic = (function() {
 
     function playRound() {
 
-        //flag for alternating turns
-        let playersTurn = 1;
-
-        //turn counter;
-        let turn = 1;
+        //reset both vars at round start;
+        playersTurn = 1;
+        turn = 1;
 
         //want this in playGame() if doing multi rounds.
         // const player1 = createPlayer("player1");
