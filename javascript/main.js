@@ -194,9 +194,15 @@ const displayUiGameLogic = (function() {
             gameboardDiv.appendChild(cellDiv);
 
         })
-        // console.log(gameboardDiv);
       }
     displayGameboard();
+
+
+    const updateCellValue = (selectedCell, symbol) => {
+
+        let gameboardCell = document.querySelector(`#cell${selectedCell}`);
+        gameboardCell.textContent = symbol;
+    }
       //go back to creating and deleting modals
       //if do that adding events might be tough
       //as if create then add submit event does it give time to listen?
@@ -224,7 +230,7 @@ const displayUiGameLogic = (function() {
         eventListenerLogic.formSubmit(player);
     }
 
-    return {displayUi, displayGameboard, displayModal};
+    return {displayUi, displayGameboard, displayModal,updateCellValue};
 })()
 
 //need to choose symbol and player names before rest runs
@@ -335,11 +341,7 @@ const gameLogic = (function() {
             return "draw";
         }
         return false; 
-    }
-
-        
-        
-        
+    }    
 
         
     function displayWinCondition() {
@@ -367,18 +369,14 @@ const gameLogic = (function() {
         // if(playersTurn) {console.log(`players turn at turn start is ${playersTurn}`)};
 
         
-
         const playerSymbol = player.getSymbol();
-        console.log(playerSymbol)
-        // console.log(`players turn before if is ${playersTurn}`);
-        // let selectedCell = pickRandom.cell();
         let selectedCell = player.getSelectedSquare();
-        // gameBoard.grid[selectedCell] = playerSymbol;
         gameBoard.changeCellValue(selectedCell, playerSymbol);
-        console.log(gameBoard.getGrid());
 
-    
         //update gameboard UI cell value
+        displayUiGameLogic.updateCellValue(selectedCell, playerSymbol);
+        // console.log(gameBoard.getGrid());
+
 
         if (playersTurn) {
             playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
