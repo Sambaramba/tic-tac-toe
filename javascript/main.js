@@ -189,7 +189,7 @@ const displayUiGameLogic = (function() {
 
         //loop through gameboard grid array and add cell for each element
         gameBoard.getGrid().forEach((value, index) => {
-            
+
             const cellDiv =  createDomElement("div", value, `cell${index}`, "cell", {"data-cell-value": `${index}`, tabindex: 0});
             gameboardDiv.appendChild(cellDiv);
 
@@ -364,7 +364,17 @@ const gameLogic = (function() {
     //take playerTurn out of playRound?
     //make into method which can use as event handler for cells?
     function playerTurn(player) {
-        if(playersTurn) {console.log(`players turn at turn start is ${playersTurn}`)};
+        // if(playersTurn) {console.log(`players turn at turn start is ${playersTurn}`)};
+
+        if(turn >= 5) {
+            console.log(`${turn} is greater than 5`);
+            if(checkWinCondition()) {
+                //remove cell event listeners
+                displayWinCondition();
+                return;
+            };
+        }
+
         const playerSymbol = player.getSymbol();
         console.log(playerSymbol)
         // console.log(`players turn before if is ${playersTurn}`);
@@ -374,13 +384,15 @@ const gameLogic = (function() {
         gameBoard.changeCellValue(selectedCell, playerSymbol);
         console.log(gameBoard.getGrid());
 
-
+    
+        //update gameboard UI cell value
 
         if (playersTurn) {
             playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
             console.log(`players turn is now ${playersTurn}`);
             } else (console.log(`players turn value = ${playersTurn}`))
         turn++;
+
         return;
         //so this needs to be number from 0-8
         //This is return func to input square directly when get from ui;
