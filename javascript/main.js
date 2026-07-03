@@ -366,14 +366,7 @@ const gameLogic = (function() {
     function playerTurn(player) {
         // if(playersTurn) {console.log(`players turn at turn start is ${playersTurn}`)};
 
-        if(turn >= 5) {
-            console.log(`${turn} is greater than 5`);
-            if(checkWinCondition()) {
-                //remove cell event listeners
-                displayWinCondition();
-                return;
-            };
-        }
+        
 
         const playerSymbol = player.getSymbol();
         console.log(playerSymbol)
@@ -392,6 +385,16 @@ const gameLogic = (function() {
             console.log(`players turn is now ${playersTurn}`);
             } else (console.log(`players turn value = ${playersTurn}`))
         turn++;
+
+        if(turn >= 5) {
+            console.log(`${turn} is greater than 5`);
+            if(checkWinCondition()) {
+                console.log(`check win condition is true`);
+                //remove cell event listeners
+                displayWinCondition();
+                return;
+            };
+        }
 
         return;
         //so this needs to be number from 0-8
@@ -445,8 +448,10 @@ const gameLogic = (function() {
 
     }
     
-    return {chooseNames, playRound, getPlayersTurn, playerTurn}
+    return {chooseNames, playRound, getPlayersTurn, playerTurn, player1, player2}
 })();
+
+console.log(gameLogic.player1);
 
 //list of win condition matches
 /*
@@ -465,9 +470,6 @@ const gameLogic = (function() {
 
 
 
-
-
-
 //---------EVENTS-----------------------------------------//
 
 //start event runs before ui is displayed
@@ -475,6 +477,11 @@ const gameLogic = (function() {
 //or make events IIFE?
 
 const eventListenerLogic = (function() {
+
+    //try to destructure players and gameLogic for use throughout event func factory
+    // const {} = gameLogic.player1;
+    console.log(gameLogic);
+    console.log(`player 1 object deconstruction result is ${gameLogic.player1.getName()}`);
 
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
@@ -533,37 +540,49 @@ const eventListenerLogic = (function() {
 
         }, { once: true });
     }
+
+    //try to destructure players and gameLogic for use throughout event func factory
     const gridCells = (player1, player2, gameLogic) => {
         // console.log(`players turn is ${playerTurn}`);
         // console.log(player1.getName());
+        //add named event to cells so can remove listener too
         
         let cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
-            cell.addEventListener("click", (event) => {
-
-                //destructure players turn method
-                const {getPlayersTurn, playerTurn} = gameLogic;
-                console.log(`players turn in cell event is ${gameLogic.getPlayersTurn()}`);
-
-                //store cell event value
-                let dataCellValue = event.target.dataset.cellValue;
-                console.log(`dataCellValue is ${dataCellValue}`);
-                //temporary fix whilst figure out
-                // dataCellValue = --dataCellValue;
-
-                //add cell event value to whichever player's turn it is
-                if(gameLogic.getPlayersTurn() === 1) {
-                    player1.selectSquare(dataCellValue);
-                    console.log(player1.getSelectedSquare());
-                    gameLogic.playerTurn(player1);
-                } else if(gameLogic.getPlayersTurn() === 2) {
-                    player2.selectSquare(dataCellValue);
-                    console.log(player2.getSelectedSquare());
-                    gameLogic.playerTurn(player2);
-                } else console.log(`players turn if statement doesnt work`);
-                
-            }, {once: true});
+            cell.addEventListener("click", cellHandler, {once: true});
         })
+    }
+
+    // const removeGridCells = () => {
+    //     let cells = document.querySelectorAll(".cell");
+    //     cells.forEach((cell) => {
+    //         cell.removeEventListener("click", cellHandler, {once: true});
+    //     })
+    // }
+
+    //private function for add/remove cells events
+    function cellHandler(event) {
+
+        //destructure players turn method
+        //think this is uneccesary now
+        // const {getPlayersTurn, playerTurn} = gameLogic;
+        console.log(`players turn in cell event is ${gameLogic.getPlayersTurn()}`);
+
+        //store cell event value
+        let dataCellValue = event.target.dataset.cellValue;
+        console.log(`dataCellValue is ${dataCellValue}`);
+
+        //add cell event value to whichever player's turn it is
+        if(gameLogic.getPlayersTurn() === 1) {
+            gameLogic.player1.selectSquare(dataCellValue);
+            console.log(gameLogic.player1.getSelectedSquare());
+            gameLogic.playerTurn(gameLogic.player1);
+        } else if(gameLogic.getPlayersTurn() === 2) {
+            gameLogic.player2.selectSquare(dataCellValue);
+            console.log(gameLogic.player2.getSelectedSquare());
+            gameLogic.playerTurn(gameLogic.player2);
+        } else console.log(`players turn if statement doesnt work`);
+               
     }
 
     return{startButton, formSubmit, gridCells};
@@ -848,3 +867,32 @@ eventListenerLogic.startButton();
     //link players name choice methods with variable?
     // on submit/confirm btn click event reset modal to player 2
     //do need to take dom/display object as input to game func? or if its iife its available globally?
+
+    
+
+    //--------------------Event logic func fact-------------------------------------------
+
+    // cell.addEventListener("click", (event) => {
+
+            //     //destructure players turn method
+            //     const {getPlayersTurn, playerTurn} = gameLogic;
+            //     console.log(`players turn in cell event is ${gameLogic.getPlayersTurn()}`);
+
+            //     //store cell event value
+            //     let dataCellValue = event.target.dataset.cellValue;
+            //     console.log(`dataCellValue is ${dataCellValue}`);
+            //     //temporary fix whilst figure out
+            //     // dataCellValue = --dataCellValue;
+
+            //     //add cell event value to whichever player's turn it is
+            //     if(gameLogic.getPlayersTurn() === 1) {
+            //         player1.selectSquare(dataCellValue);
+            //         console.log(player1.getSelectedSquare());
+            //         gameLogic.playerTurn(player1);
+            //     } else if(gameLogic.getPlayersTurn() === 2) {
+            //         player2.selectSquare(dataCellValue);
+            //         console.log(player2.getSelectedSquare());
+            //         gameLogic.playerTurn(player2);
+            //     } else console.log(`players turn if statement doesnt work`);
+                
+            // }, {once: true});
