@@ -421,7 +421,7 @@ const gameLogic = (function() {
         console.log(gameBoard.getGrid());
         playersTurn = 1;
         turn = 1;
-        eventListenerLogic.gridCells(player1, player2, gameLogic);
+        eventListenerLogic.addGridCells();
         //want this in playGame() if doing multi rounds.
         // const player1 = createPlayer("player1");
         // const player2 = createPlayer("player2");
@@ -542,7 +542,7 @@ const eventListenerLogic = (function() {
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
-    const gridCells = (player1, player2, gameLogic) => {
+    const addGridCells = (player1, player2, gameLogic) => {
         // console.log(`players turn is ${playerTurn}`);
         // console.log(player1.getName());
         //add named event to cells so can remove listener too
@@ -585,7 +585,7 @@ const eventListenerLogic = (function() {
                
     }
 
-    return{startButton, formSubmit, gridCells};
+    return{startButton, formSubmit, addGridCells};
 })();
 
 //do i just call this straight away in the IIFE?
@@ -593,7 +593,7 @@ eventListenerLogic.startButton();
 
 
 // eventListenerLogic.formSubmit();
-// eventListenerLogic.gridCells();
+// eventListenerLogic.addGridCells();
 
 //want to be active only when selected start button but after chosen names and symbols
 //dunno if any of below listener works
@@ -868,7 +868,7 @@ eventListenerLogic.startButton();
     // on submit/confirm btn click event reset modal to player 2
     //do need to take dom/display object as input to game func? or if its iife its available globally?
 
-    
+
 
     //--------------------Event logic func fact-------------------------------------------
 
