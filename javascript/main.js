@@ -391,6 +391,7 @@ const gameLogic = (function() {
             if(checkWinCondition()) {
                 console.log(`check win condition is true`);
                 //remove cell event listeners
+                eventListenerLogic.removeGridCells();
                 displayWinCondition();
                 return;
             };
@@ -542,7 +543,7 @@ const eventListenerLogic = (function() {
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
-    const addGridCells = (player1, player2, gameLogic) => {
+    const addGridCells = () => {
         // console.log(`players turn is ${playerTurn}`);
         // console.log(player1.getName());
         //add named event to cells so can remove listener too
@@ -553,12 +554,13 @@ const eventListenerLogic = (function() {
         })
     }
 
-    // const removeGridCells = () => {
-    //     let cells = document.querySelectorAll(".cell");
-    //     cells.forEach((cell) => {
-    //         cell.removeEventListener("click", cellHandler, {once: true});
-    //     })
-    // }
+    const removeGridCells = () => {
+        let cells = document.querySelectorAll(".cell");
+        cells.forEach((cell) => {
+            cell.removeEventListener("click", cellHandler, {once: true});
+            console.log("removed cell click event");
+        })
+    }
 
     //private function for add/remove cells events
     function cellHandler(event) {
@@ -585,7 +587,7 @@ const eventListenerLogic = (function() {
                
     }
 
-    return{startButton, formSubmit, addGridCells};
+    return{startButton, formSubmit, addGridCells, removeGridCells};
 })();
 
 //do i just call this straight away in the IIFE?
