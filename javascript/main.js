@@ -115,6 +115,7 @@ function createPlayer(name) {
 const gameBoard = (function () {
     //change to empty array?
     let grid = new Array(9).fill("");
+    console.log(grid);
     const getGrid = () => grid;
 
     // const getGridSquare = (CellNum) => {}
@@ -140,6 +141,8 @@ const gameBoard = (function () {
     }
     return {getGrid, getCellValue, changeCellValue};
 })();
+
+// console.log(gameBoard.getGrid().length);
 
 // gameBoard.changeCellValue(pickRandom.cell(), pickRandom.symbol());
 
@@ -185,15 +188,9 @@ const displayUiGameLogic = (function() {
         }
 
         //loop through gameboard grid array and add cell for each element
-        //change cells to match grid array indexes?
-        //changed cells to match grid array indices but nothing has changed!!!!!!!!!!!!!!!!!!
-        console.log(gameBoard.getGrid().values());
         gameBoard.getGrid().forEach((value, index) => {
-            const nextIndex = ++index;
-            console.log(`cell index in add gameboard to dom is ${index}`);
-            console.log(`cell nextIndex in add gameboard to dom is ${nextIndex}`);
-            const cellDiv =  createDomElement("div", value, `cell${index}`, "cell", {"data-cell-value": `${index}`, tabindex: 0});
             
+            const cellDiv =  createDomElement("div", value, `cell${index}`, "cell", {"data-cell-value": `${index}`, tabindex: 0});
             gameboardDiv.appendChild(cellDiv);
 
         })
@@ -296,15 +293,117 @@ const gameLogic = (function() {
         //can you attach event to the modal?
         //add whole player object?
         // displayUiGameLogic.displayModal("name", player2);
+    }
 
-  
+    function checkWinCondition() {
+            
+        //regEx to match all 8 win conditions;
+        const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
+
+        let stringOfXIndexes = "";
+        let stringOfOIndexes = "";
+
+        gameBoard.getGrid().forEach((value, index) => {
+            if(value === "X") {
+                stringOfXIndexes+=index;
+                console.log(`x index string is now ${stringOfXIndexes}`);
+            }
+            if(value === "O") {
+                stringOfOIndexes+=index;
+                console.log(`O index string is now ${stringOfOIndexes}`)
+            }
+        })
+
+        //return sumbol/player/player.number/boolean?
+        if (winConditions.test(stringOfXIndexes)) {
+            console.log("X is the winner");
+            return "X";
+        }
+
+        if (winConditions.test(stringOfOIndexes)) {
+            console.log("O is the winner");
+            return "O";
+        }
+        
+        //is test needed as if either has won one of above ifs would have run
+        const hasValue = (currentValue) => currentValue !== "";
+        if (gameBoard.getGrid().every(hasValue) 
+            && !winConditions.test(stringOfOIndexes) 
+            && !winConditions.test(stringOfXIndexes)) 
+        {
+            console.log("Draw");
+            return "draw";
+        }
+        return false; 
+    }
+
+        
+        
+        
+
+        
+    function displayWinCondition() {
+        const winConditionResult = checkWinCondition();
+
+        switch(winConditionResult) {
+            case player1.getSymbol():
+                console.log("Player 1 has won");
+                break;
+            case player2.getSymbol():
+                console.log("Player 2 has won");
+                break;
+            case "draw":
+                console.log("its a draw");
+                break;
+        }
+        
+    }
+
+    //turn needs to be instigated by the cell event listener
+    //should turn be the cells event handler?
+    //take playerTurn out of playRound?
+    //make into method which can use as event handler for cells?
+    function playerTurn(player) {
+        if(playersTurn) {console.log(`players turn at turn start is ${playersTurn}`)};
+        const playerSymbol = player.getSymbol();
+        console.log(playerSymbol)
+        // console.log(`players turn before if is ${playersTurn}`);
+        // let selectedCell = pickRandom.cell();
+        let selectedCell = player.getSelectedSquare();
+        // gameBoard.grid[selectedCell] = playerSymbol;
+        gameBoard.changeCellValue(selectedCell, playerSymbol);
+        console.log(gameBoard.getGrid());
 
 
+
+        if (playersTurn) {
+            playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+            console.log(`players turn is now ${playersTurn}`);
+            } else (console.log(`players turn value = ${playersTurn}`))
+        turn++;
+        return;
+        //so this needs to be number from 0-8
+        //This is return func to input square directly when get from ui;
+        // return function (selectedCell) {
+        
+        //     //alternate turns
+        //     if (playersTurn) {
+        //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+        //     console.log(`players turn is ${playersTurn}`);
+        //     } else (console.log(`players turn value = ${playersTurn}`))
+            
+        //     //add players symbol to selected cell
+        //     gameBoard.grid[selectedCell] = playerSymbol;
+            
+        //     turn++;
+        //     return;
+        // };
     }
 
     function playRound() {
 
         //reset both vars at round start;
+        console.log(gameBoard.getGrid());
         playersTurn = 1;
         turn = 1;
         eventListenerLogic.gridCells(player1, player2, gameLogic);
@@ -319,119 +418,22 @@ const gameLogic = (function() {
 
 
 
-
-        function playerTurn(player) {
-        
-            const playerSymbol = player.getSymbol();
-            console.log(playerSymbol)
-            // console.log(`players turn before if is ${playersTurn}`);
-            let selectedCell = pickRandom.cell();
-            // gameBoard.grid[selectedCell] = playerSymbol;
-            gameBoard.changeCellValue(selectedCell, playerSymbol);
-
-
-
-            if (playersTurn) {
-                playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-                console.log(`players turn is ${playersTurn}`);
-                } else (console.log(`players turn value = ${playersTurn}`))
-            turn++;
-            return;
-            //so this needs to be number from 0-8
-            //This is return func to input square directly when get from ui;
-            // return function (selectedCell) {
+       // while (turn < 10 && checkWinCondition() === false) {
             
-            //     //alternate turns
-            //     if (playersTurn) {
-            //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-            //     console.log(`players turn is ${playersTurn}`);
-            //     } else (console.log(`players turn value = ${playersTurn}`))
-                
-            //     //add players symbol to selected cell
-            //     gameBoard.grid[selectedCell] = playerSymbol;
-                
-            //     turn++;
-            //     return;
-            // };
-        }
+        //     console.log(`turn no is ${turn}`);
+        //     playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
+        //     console.log(gameBoard.getGrid());
+        // }
         
 
-        function checkWinCondition() {
-            
-            //regEx to match all 8 win conditions;
-            const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
-
-            let stringOfXIndexes = "";
-            let stringOfOIndexes = "";
-
-            gameBoard.getGrid().forEach((value, index) => {
-                if(value === "X") {
-                    stringOfXIndexes+=index;
-                    console.log(`x index string is now ${stringOfXIndexes}`);
-                }
-                if(value === "O") {
-                    stringOfOIndexes+=index;
-                    console.log(`O index string is now ${stringOfOIndexes}`)
-                }
-            })
-
-            //return sumbol/player/player.number/boolean?
-            if (winConditions.test(stringOfXIndexes)) {
-                console.log("X is the winner");
-                return "X";
-            }
-
-            if (winConditions.test(stringOfOIndexes)) {
-                console.log("O is the winner");
-                return "O";
-            }
-            
-            //is test needed as if either has won one of above ifs would have run
-            const hasValue = (currentValue) => currentValue !== "";
-            if (gameBoard.getGrid().every(hasValue) 
-                && !winConditions.test(stringOfOIndexes) 
-                && !winConditions.test(stringOfXIndexes)) 
-            {
-                console.log("Draw");
-                return "draw";
-            }
-            return false; 
-        }
-
-        while (turn < 10 && checkWinCondition() === false) {
-            
-            console.log(`turn no is ${turn}`);
-            playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
-            console.log(gameBoard.getGrid());
-        }
-        
-        
-
-        
-        function displayWinCondition() {
-            const winConditionResult = checkWinCondition();
-
-            switch(winConditionResult) {
-                case player1.getSymbol():
-                    console.log("Player 1 has won");
-                    break;
-                case player2.getSymbol():
-                    console.log("Player 2 has won");
-                    break;
-                case "draw":
-                    console.log("its a draw");
-                    break;
-            }
-            
-        }
-        displayWinCondition();
+        // displayWinCondition();
         console.log("This log has run at round func bottom");
         
         return;
 
     }
     
-    return {chooseNames, playRound, getPlayersTurn}
+    return {chooseNames, playRound, getPlayersTurn, playerTurn}
 })();
 
 //list of win condition matches
@@ -471,7 +473,7 @@ const eventListenerLogic = (function() {
             // const player2 = createPlayer("player2");
             // gameLogic.chooseNames()
             gameLogic.playRound();
-            // eventListenerLogic.gridCells(player1, player2);
+            // eventListenerLogic.gridCells(player1, player2, gameLogic);
             // playRound();
         }, { once: true });
     }
@@ -528,20 +530,24 @@ const eventListenerLogic = (function() {
             cell.addEventListener("click", (event) => {
 
                 //destructure players turn method
-                const {getPlayersTurn} = gameLogic;
+                const {getPlayersTurn, playerTurn} = gameLogic;
                 console.log(`players turn in cell event is ${gameLogic.getPlayersTurn()}`);
 
                 //store cell event value
                 let dataCellValue = event.target.dataset.cellValue;
                 console.log(`dataCellValue is ${dataCellValue}`);
+                //temporary fix whilst figure out
+                // dataCellValue = --dataCellValue;
 
                 //add cell event value to whichever player's turn it is
                 if(gameLogic.getPlayersTurn() === 1) {
                     player1.selectSquare(dataCellValue);
                     console.log(player1.getSelectedSquare());
+                    gameLogic.playerTurn(player1);
                 } else if(gameLogic.getPlayersTurn() === 2) {
                     player2.selectSquare(dataCellValue);
                     console.log(player2.getSelectedSquare());
+                    gameLogic.playerTurn(player2);
                 } else console.log(`players turn if statement doesnt work`);
                 
             }, {once: true});
