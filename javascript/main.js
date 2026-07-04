@@ -456,22 +456,11 @@ console.log(gameLogic.player1);
 
 const eventListenerLogic = (function() {
 
-    //try to destructure players and gameLogic for use throughout event func factory
-    // const {} = gameLogic.player1;
-    console.log(gameLogic);
-    console.log(`player 1 object deconstruction result is ${gameLogic.player1.getName()}`);
-
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
-            //do i move player instances to here for access in all methods?
             console.log(event.target);
-            // const player1 = createPlayer("player1");
-            // const player2 = createPlayer("player2");
-            // gameLogic.chooseNames()
             gameLogic.playRound();
-            // eventListenerLogic.gridCells(player1, player2, gameLogic);
-            // playRound();
         }, { once: true });
     }
     //can you take player 1 and 2 as inputs and destructure choose username/symbol to update each player?
