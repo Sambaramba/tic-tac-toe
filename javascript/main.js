@@ -79,19 +79,21 @@ const pickRandom = (()=> {
 })();
 
 function createPlayer(name) {
+
+    const getName = () => name;
+    // const spacedName = `player ${playerNumber}`;
+    const getSpacedName = () => `player ${playerNumber}`;
     
     let username;
-    const selectUsername = (usernameValue) => {
-        return username = usernameValue;
-    }
+    //made below more succinct so might be broken
+    const selectUsername = (usernameValue) =>  username = usernameValue;
     const getUsername = () => username;
 
     //stores last character of player name which will be either 1 or 2;
     const playerNumber = name.charAt(name.length - 1);
     const getNumber = () => playerNumber;
 
-    const playerName = `player ${playerNumber}`;
-    const getName = () => playerName;
+    
 
     let playerSymbol;
     const selectSymbol = (symbol) => playerSymbol = symbol;
@@ -105,7 +107,7 @@ function createPlayer(name) {
     // const getPlayerScore = () => playerScore;
     // const increasePlayerScore = () => { playerScore++; };
     // const resetPlayerScore = () => { playerScore = 0;}
-    return { getName, selectUsername, getUsername, getNumber, selectSymbol, getSymbol, selectSquare, getSelectedSquare};
+    return { getName,getSpacedName, selectUsername, getUsername, getNumber, selectSymbol, getSymbol, selectSquare, getSelectedSquare};
 }
 
 
@@ -182,9 +184,7 @@ const displayUiGameLogic = (function() {
 
         //clear grid first to prevent duplicates
         while(gameboardDiv.firstChild) {
-            // console.log(gameboardDiv.firstChild);
-            gameboardDiv.removeChild(gameboardDiv.firstChild);
-            
+            gameboardDiv.removeChild(gameboardDiv.firstChild);  
         }
 
         //loop through gameboard grid array and add cell for each element
@@ -212,12 +212,12 @@ const displayUiGameLogic = (function() {
       //then can link player object to input?
     const displayModal = (player) => {
         //destructure player name property to add value to modal
-        const {getName} = player;
+        const {getSpacedName, getNumber} = player;
         
         const dialogBackground = createDomElement("div","","","dialog-background","");
         const dialog = createDomElement("dialog", "", "", "","");
         const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
-        const label = createDomElement("label", `${getName()} please choose your name`, "","",{for: "username-choice"});
+        const label = createDomElement("label", `${getSpacedName()} please choose your name`, "","",{for: "username-choice"});
         const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});     
         const confirmButton = createDomElement("button","Confirm","","",{type: "submit"});
         // confirmButton.before(label,input);
@@ -267,10 +267,12 @@ const gameLogic = (function() {
     player2.selectSymbol("O");
     
     
-    
+    //add player 1 modal
+    //add player 1 confirm event with submit event?
+    //adding round to player2 confirm would mess up multi-rounds(which don't matter now)
     function chooseNames(player) {
         console.log(player);
-        let playerUsernameValue;
+        // let playerUsernameValue;
         //make modals unique
         //create player 1 modal
         //confirm button deletes player 1 and adds player 2
@@ -284,16 +286,21 @@ const gameLogic = (function() {
         //     }
 
         // }
-        console.log(player1.getUsername());
-        if(player1.getUsername() === undefined) {
-            displayUiGameLogic.displayModal("name", player1);
-            
-        }
 
-        if(player2.getUsername() === undefined) {
-            console.log("player 1 has chosen username");
-            displayUiGameLogic.displayModal("name", player2);
-        };
+        displayUiGameLogic.displayModal(player1);
+        //add player 1 modal confirm event here with below code?
+        // displayUiGameLogic.displayModal(player2);
+
+        // console.log(player1.getUsername());
+        // if(player1.getUsername() === undefined) {
+        //     displayUiGameLogic.displayModal("name", player1);
+            
+        // }
+
+        // if(player2.getUsername() === undefined) {
+        //     console.log("player 1 has chosen username");
+        //     displayUiGameLogic.displayModal("name", player2);
+        // };
         
         //how to get player 2 to pick name after?
         //or can i do choose name with player as argument?
@@ -458,6 +465,7 @@ const eventListenerLogic = (function() {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
             console.log(event.target);
+            // gameLogic.chooseNames();
             gameLogic.playRound();
         }, { once: true });
     }
@@ -488,6 +496,15 @@ const eventListenerLogic = (function() {
             // console.log(usernameChoice, symbolChoice);
 
         }, { once: true });
+    }
+
+    const confirmButton = (player) => {
+        const confirmBtn = document.querySelector('[type="submit"]');
+        console.log(confirmBtn);
+        //closest use?
+        //does that negate need for player parameter?
+        //or as players instances are now global do switch?
+
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
