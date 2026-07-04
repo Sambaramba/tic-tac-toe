@@ -475,26 +475,10 @@ const eventListenerLogic = (function() {
             console.log(event.submitter);
             const formData = new FormData(event.target);
             console.log(formData);
-
-            // Extract a specific input by its 'name' attribute
-            const className = form.getAttribute("class");
-
-            switch (className) {
-                case "name":
-                    const usernameChoice = formData.get('username-choice'); 
-                    player.selectUsername(usernameChoice);
-                    console.log(player.getUsername());
-                    // console.log("accessed form name class through dom");
-                    break;
-                case "symbol":
-                    const symbolChoice = formData.get('symbol-choice');
-                    console.log(symbolChoice);
-                    player.selectSymbol(symbolChoice);
-                    console.log(player.getSymbol());
-                    break;
-                default:
-                    console.log("sorry modal has no name or symbol class name");
-            }
+            const usernameChoice = formData.get('username-choice'); 
+            player.selectUsername(usernameChoice);
+            console.log(player.getUsername());
+            
             
             const dialogBackground = document.querySelector(".dialog-background");
             dialogBackground.remove();
@@ -844,6 +828,29 @@ eventListenerLogic.startButton();
 
     //--------------------Event logic func fact-------------------------------------------
 
+
+    // Extract a specific input by its 'name' attribute
+            // const className = form.getAttribute("class");
+
+            // switch (className) {
+            //     case "name":
+            //         const usernameChoice = formData.get('username-choice'); 
+            //         player.selectUsername(usernameChoice);
+            //         console.log(player.getUsername());
+            //         // console.log("accessed form name class through dom");
+            //         break;
+            //     case "symbol":
+            //         const symbolChoice = formData.get('symbol-choice');
+            //         console.log(symbolChoice);
+            //         player.selectSymbol(symbolChoice);
+            //         console.log(player.getSymbol());
+            //         break;
+            //     default:
+            //         console.log("sorry modal has no name or symbol class name");
+            // }
+
+    
+
     // cell.addEventListener("click", (event) => {
 
             //     //destructure players turn method
@@ -868,3 +875,5 @@ eventListenerLogic.startButton();
             //     } else console.log(`players turn if statement doesnt work`);
                 
             // }, {once: true});
+
+
