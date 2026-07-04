@@ -306,6 +306,13 @@ const gameLogic = (function() {
         //regEx to match all 8 win conditions;
         const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
 
+        //list of win condition matches
+        /*
+            0,1,2  0,3,6  0,4,8
+            3,4,5  1,4,7  2,4,6
+            6,7,8  2,5,8
+        */
+
         let stringOfXIndexes = "";
         let stringOfOIndexes = "";
 
@@ -431,28 +438,12 @@ const gameLogic = (function() {
 
 console.log(gameLogic.player1);
 
-//list of win condition matches
-/*
-    0,1,2  0,3,6  0,4,8
-    3,4,5  1,4,7  2,4,6
-    6,7,8  2,5,8
-*/
-
-//make win condition a function/object factory?
-//else make it an iife
-
-//----------------------HELPER------------------------------
-
-
 
 
 
 
 //---------EVENTS-----------------------------------------//
 
-//start event runs before ui is displayed
-//add events to display/dom
-//or make events IIFE?
 
 const eventListenerLogic = (function() {
 
