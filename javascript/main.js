@@ -361,21 +361,15 @@ const gameLogic = (function() {
         
     }
 
-    //turn needs to be instigated by the cell event listener
-    //should turn be the cells event handler?
-    //take playerTurn out of playRound?
-    //make into method which can use as event handler for cells?
+    
     function playerTurn(player) {
-        // if(playersTurn) {console.log(`players turn at turn start is ${playersTurn}`)};
 
-        
         const playerSymbol = player.getSymbol();
         let selectedCell = player.getSelectedSquare();
         gameBoard.changeCellValue(selectedCell, playerSymbol);
 
         //update gameboard UI cell value
         displayUiGameLogic.updateCellValue(selectedCell, playerSymbol);
-        // console.log(gameBoard.getGrid());
 
 
         if (playersTurn) {
@@ -396,28 +390,13 @@ const gameLogic = (function() {
         }
 
         return;
-        //so this needs to be number from 0-8
-        //This is return func to input square directly when get from ui;
-        // return function (selectedCell) {
         
-        //     //alternate turns
-        //     if (playersTurn) {
-        //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-        //     console.log(`players turn is ${playersTurn}`);
-        //     } else (console.log(`players turn value = ${playersTurn}`))
-            
-        //     //add players symbol to selected cell
-        //     gameBoard.grid[selectedCell] = playerSymbol;
-            
-        //     turn++;
-        //     return;
-        // };
     }
 
     function playRound() {
 
         //reset both vars at round start;
-        console.log(gameBoard.getGrid());
+        // console.log(gameBoard.getGrid());
         playersTurn = 1;
         turn = 1;
         eventListenerLogic.addGridCells();
@@ -542,9 +521,6 @@ const eventListenerLogic = (function() {
 
     //try to destructure players and gameLogic for use throughout event func factory
     const addGridCells = () => {
-        // console.log(`players turn is ${playerTurn}`);
-        // console.log(player1.getName());
-        //add named event to cells so can remove listener too
         
         let cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
@@ -563,32 +539,24 @@ const eventListenerLogic = (function() {
     //private function for add/remove cells events
     function cellHandler(event) {
 
-        //destructure players turn method
-        //think this is uneccesary now
-        // const {getPlayersTurn, playerTurn} = gameLogic;
-        console.log(`players turn in cell event is ${gameLogic.getPlayersTurn()}`);
-
         //store cell event value
         let dataCellValue = event.target.dataset.cellValue;
-        console.log(`dataCellValue is ${dataCellValue}`);
 
         //add cell event value to whichever player's turn it is
         if(gameLogic.getPlayersTurn() === 1) {
             gameLogic.player1.selectSquare(dataCellValue);
-            console.log(gameLogic.player1.getSelectedSquare());
             gameLogic.playerTurn(gameLogic.player1);
         } else if(gameLogic.getPlayersTurn() === 2) {
             gameLogic.player2.selectSquare(dataCellValue);
-            console.log(gameLogic.player2.getSelectedSquare());
             gameLogic.playerTurn(gameLogic.player2);
-        } else console.log(`players turn if statement doesnt work`);
-               
+        } else console.log(`players turn if statement doesnt work`);         
     }
 
     return{startButton, formSubmit, addGridCells, removeGridCells};
 })();
 
 //do i just call this straight away in the IIFE?
+//or after add startButton?
 eventListenerLogic.startButton();
 
 
@@ -610,6 +578,23 @@ eventListenerLogic.startButton();
 //------------------UNUSED CODE-------------------//
 
 //----for playerTurn/game logic-------------------//
+
+//so this needs to be number from 0-8
+        //This is return func to input square directly when get from ui;
+        // return function (selectedCell) {
+        
+        //     //alternate turns
+        //     if (playersTurn) {
+        //     playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+        //     console.log(`players turn is ${playersTurn}`);
+        //     } else (console.log(`players turn value = ${playersTurn}`))
+            
+        //     //add players symbol to selected cell
+        //     gameBoard.grid[selectedCell] = playerSymbol;
+            
+        //     turn++;
+        //     return;
+        // };
 
 // if ( turn > 4 && checkWinCondition()) {
     //     return console.log("game over");
