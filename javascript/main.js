@@ -250,12 +250,14 @@ const gameLogic = (function() {
 
     //flag for alternating turns
     let playersTurn = 1;
-
     //method to find players turn
-    //updated at round start so will it only give this value?
     const getPlayersTurn = () => playersTurn;
+
     //turn counter;
     let turn = 1;
+
+    //to update display
+    const display = document.querySelector("#display");
 
     //want this in game logic func if doing multi rounds.
     //if only created players instances are they only available in this object?
@@ -356,13 +358,15 @@ const gameLogic = (function() {
 
         switch(winConditionResult) {
             case player1.getSymbol():
-                console.log("Player 1 has won");
+                display.textContent = "GAME OVER! Player 1 is the winner!";
                 break;
             case player2.getSymbol():
+                display.textContent = "GAME OVER! Player 2 is the winner!";
                 console.log("Player 2 has won");
                 break;
             case "draw":
                 console.log("its a draw");
+                display.textContent = "GAME OVER! its a draw!";
                 break;
         }
         
@@ -395,6 +399,7 @@ const gameLogic = (function() {
                 return;
             };
         }
+        display.textContent = `player ${playersTurn} please select a square`;
 
         return;
         
@@ -404,7 +409,9 @@ const gameLogic = (function() {
 
         //reset both vars at round start;
         // console.log(gameBoard.getGrid());
+        
         playersTurn = 1;
+        display.textContent = `player ${playersTurn} please select a square`;
         turn = 1;
         eventListenerLogic.addGridCells();
         //want this in playGame() if doing multi rounds.
