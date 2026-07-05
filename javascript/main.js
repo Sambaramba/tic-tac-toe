@@ -315,6 +315,7 @@ const gameLogic = (function() {
         // displayUiGameLogic.displayModal("name", player2);
     }
 
+    //broken displays a draw when won with last square selection
     function checkWinCondition() {
             
         //regEx to match all 8 win conditions;
@@ -479,7 +480,7 @@ const eventListenerLogic = (function() {
     //link player to form another way?
     const formSubmit = (player) => {
         console.log("form submit event has been added");
-        const {selectSymbol, selectUsername, getNumber} = player;
+        const {selectSymbol,getSpacedName, selectUsername, getNumber} = player;
         const form = document.querySelector("form");
     
         form.addEventListener("submit", (event) => {
@@ -491,7 +492,7 @@ const eventListenerLogic = (function() {
             console.log(formData);
             const usernameChoice = formData.get('username-choice'); 
             player.selectUsername(usernameChoice);
-            console.log(player.getUsername());
+            console.log(`${player.getSpacedName()}'s username is ${player.getUsername()}`);
             
             
             const dialogBackground = document.querySelector(".dialog-background");
@@ -505,10 +506,11 @@ const eventListenerLogic = (function() {
             //     console.log("submitter id if worked");
             //     displayUiGameLogic.displayModal(gameLogic.player2);
             // }
-            // if (player.getNumber() === 1) {
-            //     console.log("confirm event ran");
-            //     displayUiGameLogic.displayModal(gameLogic.player2);
-            // }
+            // code to add player 2 username modal
+            if (player.getNumber() === 1) {
+                console.log("confirm event ran");
+                displayUiGameLogic.displayModal(gameLogic.player2);
+            }
             
             // console.log(usernameChoice, symbolChoice);
 
