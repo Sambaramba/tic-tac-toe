@@ -90,7 +90,7 @@ function createPlayer(name) {
     const getUsername = () => username;
 
     //stores last character of player name which will be either 1 or 2;
-    const playerNumber = name.charAt(name.length - 1);
+    const playerNumber = parseInt(name.charAt(name.length - 1));
     const getNumber = () => playerNumber;
 
     
@@ -212,14 +212,14 @@ const displayUiGameLogic = (function() {
       //then can link player object to input?
     const displayModal = (player) => {
         //destructure player name property to add value to modal
-        const {getSpacedName, getNumber} = player;
+        const {getSpacedName, getName} = player;
         
         const dialogBackground = createDomElement("div","","","dialog-background","");
         const dialog = createDomElement("dialog", "", "", "","");
         const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
         const label = createDomElement("label", `${getSpacedName()} please choose your name`, "","",{for: "username-choice"});
         const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});     
-        const confirmButton = createDomElement("button","Confirm","","",{type: "submit"});
+        const confirmButton = createDomElement("button","Confirm",`${getName()}Confirm`,"",{type: "submit"});
         // confirmButton.before(label,input);
         form.append(label,input,confirmButton);
         dialog.appendChild(form);
@@ -288,6 +288,11 @@ const gameLogic = (function() {
         // }
 
         displayUiGameLogic.displayModal(player1);
+        //add to displayModal?
+        // eventListenerLogic.confirmButton(player1);
+        // const player1ConfirmBtn = document.querySelector("#player1Confirm");
+        // console.log(player1ConfirmBtn);
+        // player1ConfirmBtn
         //add player 1 modal confirm event here with below code?
         // displayUiGameLogic.displayModal(player2);
 
@@ -465,7 +470,7 @@ const eventListenerLogic = (function() {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
             console.log(event.target);
-            // gameLogic.chooseNames();
+            gameLogic.chooseNames();
             gameLogic.playRound();
         }, { once: true });
     }
@@ -474,13 +479,14 @@ const eventListenerLogic = (function() {
     //link player to form another way?
     const formSubmit = (player) => {
         console.log("form submit event has been added");
-        const {selectSymbol, selectUsername} = player;
+        const {selectSymbol, selectUsername, getNumber} = player;
         const form = document.querySelector("form");
     
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             console.log(event.target);
             console.log(event.submitter);
+            console.log(event.submitter.id);
             const formData = new FormData(event.target);
             console.log(formData);
             const usernameChoice = formData.get('username-choice'); 
@@ -492,15 +498,54 @@ const eventListenerLogic = (function() {
             dialogBackground.remove();
             // console.log(player.getUsername());
             // console.log(player.getSymbol());
+            // console.log(typeof player.getNumber());
+            //works but then how do you remove player 2 modal?
+            //think needs to be in confirm button
+            // if(event.submitter.id = "player1Confirm") {
+            //     console.log("submitter id if worked");
+            //     displayUiGameLogic.displayModal(gameLogic.player2);
+            // }
+            // if (player.getNumber() === 1) {
+            //     console.log("confirm event ran");
+            //     displayUiGameLogic.displayModal(gameLogic.player2);
+            // }
             
             // console.log(usernameChoice, symbolChoice);
 
         }, { once: true });
     }
-
+    //can add click event to type=submit?
+    //if not do i just add to submit event?
     const confirmButton = (player) => {
-        const confirmBtn = document.querySelector('[type="submit"]');
-        console.log(confirmBtn);
+        console.log("confirm event ran");
+        const{getName,getNumber} = player;
+        const playerName = player.getName();
+        const playerNumber = player.getNumber();
+        console.log(`player number is ${player.getNumber()}`)
+        console.log(`player name is ${player.getName()}`);
+        const playerConfirmBtn = document.querySelector(`#${player.getName()}Confirm`);
+        console.log(playerConfirmBtn);
+
+
+        playerConfirmBtn.addEventListener("click", (event) => {
+            console.log(event);
+        console.log(`player is ${player.getNumber()}`);
+            if (player.getNumber() === 1) {
+                console.log("confirm event ran");
+                displayUiGameLogic.displayModal(gameLogic.player2);
+            }
+            // switch(player.getNumber())  {
+            //     case 1:
+                    
+            //         break;
+            //     case 2:
+            //         console.log(`${player.getName()} triggered confirm button`);
+            //     break;
+            //     default console.log("confirm button default ran");
+
+            // }
+            
+        })
         //closest use?
         //does that negate need for player parameter?
         //or as players instances are now global do switch?
@@ -540,7 +585,7 @@ const eventListenerLogic = (function() {
         } else console.log(`players turn if statement doesnt work`);         
     }
 
-    return{startButton, formSubmit, addGridCells, removeGridCells};
+    return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton};
 })();
 
 //do i just call this straight away in the IIFE?
