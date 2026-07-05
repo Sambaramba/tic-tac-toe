@@ -78,6 +78,7 @@ const pickRandom = (()=> {
     return {player, symbol, cell};
 })();
 
+
 function createPlayer(name) {
 
     const getName = () => name;
@@ -126,22 +127,21 @@ const gameBoard = (function () {
         return grid[cellNum];
     };
 
-    const changeCellValue = (cellNum, playerSymbol) => {
+    const changeCellValue = (cellNum, value) => {
         // console.log(grid);
         // const cellIndex = grid[cellNum]
         // console.log(`player symbol is ${playerSymbol}`);
-        return grid[cellNum] = playerSymbol;
+        return grid[cellNum] = value;
     }
     //reset all textContents of cells to ""
     //as array loop through array and for each change value to "";
     //grid has not been called so is it accessible?
     const resetGrid = () => {
-        grid.forEach((cell)=> {
-            grid[cell] = "";
+        grid.forEach((cell, index) => {
+            grid[index] = "";
         })
-        console.log(grid);
     }
-    return {getGrid, getCellValue, changeCellValue};
+    return {getGrid, getCellValue, changeCellValue, resetGrid};
 })();
 
 // console.log(gameBoard.getGrid().length);
@@ -319,8 +319,8 @@ const gameLogic = (function() {
     function checkWinCondition() {
             
         //regEx to match all 8 win conditions;
-        const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/g
-
+        // const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/;
+        const winConditions = /(0.*1.*2)|(0.*3.*6)|(0.*4.*8)|(3.*4.*5)|(1.*4.*7)|(2.*4.*6)|(2.*5.*8)|(6.*7.*8)/;
         //list of win condition matches
         /*
             0,1,2  0,3,6  0,4,8
@@ -342,32 +342,34 @@ const gameLogic = (function() {
             }
         })
 
+        let sortedX = stringOfXIndexes.split('').sort().join('');
+        let sortedO = stringOfOIndexes.split('').sort().join('');
+
         //return sumbol/player/player.number/boolean?
-        if (winConditions.test(stringOfXIndexes)) {
+        if (winConditions.test(sortedX)) {
             console.log("X is the winner");
             return "X";
         }
 
-        if (winConditions.test(stringOfOIndexes)) {
+        if (winConditions.test(sortedO)) {
             console.log("O is the winner");
             return "O";
         }
         
-        //is test needed as if either has won one of above ifs would have run
+        
         const hasValue = (currentValue) => currentValue !== "";
-        if (gameBoard.getGrid().every(hasValue) 
-            && !winConditions.test(stringOfOIndexes) 
-            && !winConditions.test(stringOfXIndexes)) 
-        {
-            console.log("Draw");
+        // console.log("Current grid state during draw check:", gameBoard.getGrid())
+        if (gameBoard.getGrid().every(hasValue)) { 
             return "draw";
         }
-        return false; 
+        
+        return false;
     }    
 
         
     function displayWinCondition() {
         const winConditionResult = checkWinCondition();
+        console.log(`win condition result is ${winConditionResult}`);
 
         switch(winConditionResult) {
             case player1.getSymbol():
@@ -456,7 +458,7 @@ const gameLogic = (function() {
     return {chooseNames, playRound, getPlayersTurn, playerTurn, player1, player2}
 })();
 
-console.log(gameLogic.player1);
+// console.log(gameLogic.player1);
 
 
 
@@ -518,6 +520,7 @@ const eventListenerLogic = (function() {
     }
     //can add click event to type=submit?
     //if not do i just add to submit event?
+    //think this is obselete
     const confirmButton = (player) => {
         console.log("confirm event ran");
         const{getName,getNumber} = player;
@@ -554,6 +557,15 @@ const eventListenerLogic = (function() {
 
     }
 
+    const restartButton = () => {
+        const restartButton = document.querySelector("#restart");
+        restartButton.addEventListener("click", (event) => {
+            gameBoard.resetGrid();
+            console.log(gameBoard.getGrid());
+            console.log("restart event has fired");
+        })
+    }
+
     //try to destructure players and gameLogic for use throughout event func factory
     const addGridCells = () => {
         
@@ -587,12 +599,13 @@ const eventListenerLogic = (function() {
         } else console.log(`players turn if statement doesnt work`);         
     }
 
-    return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton};
+    return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton,restartButton};
 })();
 
 //do i just call this straight away in the IIFE?
 //or after add startButton?
 eventListenerLogic.startButton();
+eventListenerLogic.restartButton();
 
 
 // eventListenerLogic.formSubmit();
