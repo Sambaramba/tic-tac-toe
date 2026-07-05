@@ -564,8 +564,8 @@ const eventListenerLogic = (function() {
             displayUiGameLogic.displayGameboard();
             console.log(gameBoard.getGrid());
             console.log("restart event has fired");
-        })
-        // , { once: true }
+        }, { once: true });
+        
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
