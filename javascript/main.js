@@ -203,6 +203,12 @@ const displayUiGameLogic = (function() {
         let gameboardCell = document.querySelector(`#cell${selectedCell}`);
         gameboardCell.textContent = symbol;
     }
+
+
+    const resetDisplayElement = () => {
+        const displayElement = document.querySelector("#display");
+        displayElement.textContent = "Please click start game button to begin";
+    }
       //go back to creating and deleting modals
       //if do that adding events might be tough
       //as if create then add submit event does it give time to listen?
@@ -230,7 +236,7 @@ const displayUiGameLogic = (function() {
         eventListenerLogic.formSubmit(player);
     }
 
-    return {displayUi, displayGameboard, displayModal,updateCellValue};
+    return {displayUi, displayGameboard, displayModal,updateCellValue, resetDisplayElement};
 })()
 
 //need to choose symbol and player names before rest runs
@@ -562,6 +568,10 @@ const eventListenerLogic = (function() {
         restartButton.addEventListener("click", (event) => {
             gameBoard.resetGrid();
             displayUiGameLogic.displayGameboard();
+            displayUiGameLogic.resetDisplayElement();
+            //reset display element to Please click start game button to begin
+            //make method in display to reset gameboard and display?
+            // console.log(gameLogic.player1.getUsername();
             console.log(gameBoard.getGrid());
             console.log("restart event has fired");
         }, { once: true });
