@@ -561,9 +561,11 @@ const eventListenerLogic = (function() {
         const restartButton = document.querySelector("#restart");
         restartButton.addEventListener("click", (event) => {
             gameBoard.resetGrid();
+            displayUiGameLogic.displayGameboard();
             console.log(gameBoard.getGrid());
             console.log("restart event has fired");
         })
+        // , { once: true }
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
