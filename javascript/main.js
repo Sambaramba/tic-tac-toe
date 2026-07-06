@@ -423,25 +423,10 @@ const eventListenerLogic = (function() {
     return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton,addRestartButton, removeRestartButton};
 })();
 
-//do i just call this straight away in the IIFE?
-//or after add startButton?
+
+//add start event on page load
 eventListenerLogic.startButton();
-// eventListenerLogic.restartButton();
 
-
-// eventListenerLogic.formSubmit();
-// eventListenerLogic.addGridCells();
-
-//want to be active only when selected start button but after chosen names and symbols
-//dunno if any of below listener works
-//want event to add selected cell to grid
-//and only select each cell once
-// const gameboard = document.querySelector("#gameboard");
-// gameboard.addEventListener("click", (event) => {
-//     const gameboardCell = event.target.closest(".cell");
-//     if (!gameboard) return;
-        // event.preventDefault()
-// }) 
 
 
 //------------------UNUSED CODE-------------------//
