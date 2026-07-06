@@ -173,7 +173,7 @@ const gameLogic = (function() {
         displayUiGameLogic.displayModal(player1);
     }
 
-    
+
     function checkWinCondition() {
             
         //regEx to match all 8 win conditions;
@@ -300,10 +300,6 @@ const gameLogic = (function() {
     return {chooseNames,resetGame, playRound, getPlayersTurn, playerTurn, player1, player2}
 })();
 
-// console.log(gameLogic.player1);
-
-
-
 
 
 //---------EVENTS-----------------------------------------//
@@ -311,98 +307,66 @@ const gameLogic = (function() {
 
 const eventListenerLogic = (function() {
 
-    //create start method in gameLogic
-    //then handler could be gameLogic.startButton?
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
-            // reset()
+
+            //reset game and display for previous games
             gameLogic.resetGame();
             displayUiGameLogic.displayGameboard();
             displayUiGameLogic.resetDisplayElement();
-            console.log(event.target);
+
             eventListenerLogic.addRestartButton();
+
+            //start round
             gameLogic.chooseNames();
             gameLogic.playRound();
         }, { once: true });
     }
-    //can you take player 1 and 2 as inputs and destructure choose username/symbol to update each player?
-    //if called in game choose username/symbol methods?
-    //link player to form another way?
+    
+
     const formSubmit = (player) => {
-        console.log("form submit event has been added");
         const {selectSymbol,getSpacedName, selectUsername, getNumber} = player;
         const form = document.querySelector("form");
     
         form.addEventListener("submit", (event) => {
+
             event.preventDefault();
-            console.log(event.target);
-            console.log(event.submitter);
-            console.log(event.submitter.id);
+
+            //get data
             const formData = new FormData(event.target);
-            console.log(formData);
             const usernameChoice = formData.get('username-choice'); 
             player.selectUsername(usernameChoice);
-            console.log(`${player.getSpacedName()}'s username is ${player.getUsername()}`);
             
-            
+            //delete modal after got data
             const dialogBackground = document.querySelector(".dialog-background");
             dialogBackground.remove();
-            // console.log(player.getUsername());
-            // console.log(player.getSymbol());
-            // console.log(typeof player.getNumber());
-            //works but then how do you remove player 2 modal?
-            //think needs to be in confirm button
-            // if(event.submitter.id = "player1Confirm") {
-            //     console.log("submitter id if worked");
-            //     displayUiGameLogic.displayModal(gameLogic.player2);
-            // }
-            // code to add player 2 username modal
+            
+            //add player 2 username modal after player 1 username selection
             if (player.getNumber() === 1) {
-                console.log("confirm event ran");
                 displayUiGameLogic.displayModal(gameLogic.player2);
             }
-            
-            // console.log(usernameChoice, symbolChoice);
 
         }, { once: true });
     }
-    //can add click event to type=submit?
-    //if not do i just add to submit event?
-    //think this is obselete
+
+    //dont understand why i cannot delete confirm button
+    //start button event doesnt fire if i delete, why?
+    //this should be obselete
     const confirmButton = (player) => {
-        // console.log("confirm event ran");
         const{getName,getNumber} = player;
         const playerName = player.getName();
         const playerNumber = player.getNumber();
-        // console.log(`player number is ${player.getNumber()}`)
-        // console.log(`player name is ${player.getName()}`);
         const playerConfirmBtn = document.querySelector(`#${player.getName()}Confirm`);
 
 
         playerConfirmBtn.addEventListener("click", (event) => {
-            // console.log(event);
-        // console.log(`player is ${player.getNumber()}`);
+            console.log("confirm button ran");
+           
             if (player.getNumber() === 1) {
-                // console.log("confirm event ran");
                 displayUiGameLogic.displayModal(gameLogic.player2);
             }
-            // switch(player.getNumber())  {
-            //     case 1:
-                    
-            //         break;
-            //     case 2:
-            //         console.log(`${player.getName()} triggered confirm button`);
-            //     break;
-            //     default console.log("confirm button default ran");
-
-            // }
-            
         })
-        //closest use?
-        //does that negate need for player parameter?
-        //or as players instances are now global do switch?
-
     }
 
     const addRestartButton = () => {
@@ -417,29 +381,13 @@ const eventListenerLogic = (function() {
 
     function restartButtonHandler(event) {
         console.log("restart event has fired");
-            // gameBoard.resetGrid();
-            // reset();
             gameLogic.resetGame();
             displayUiGameLogic.displayGameboard();
             displayUiGameLogic.resetDisplayElement();
-            // gameLogic.player1.selectUsername(undefined);
-            // gameLogic.player2.selectUsername(undefined);
-            // gameLogic.player1.selectSquare(undefined);
-            // gameLogic.player2.selectSquare(undefined);
-            // console.log(`player 1 username is ${gameLogic.player1.selectUsername()}`);
-            // console.log(`player 1 sqaure selection is ${gameLogic.player1.getSelectedSquare()}`);
-            // console.log(`player 2 username is ${gameLogic.player2.getUsername()}`);
-            // console.log(`players turn is ${gameLogic.getPlayersTurn()}`);
-            // console.log(`player 2 square selection is ${gameLogic.player2.getSelectedSquare()}`);
-            //reset turn counter too?
-            eventListenerLogic.startButton();
-            //reset display element to Please click start game button to begin
-            //make method in display to reset gameboard and display?
-            // console.log(gameLogic.player1.getUsername();
-            // console.log(gameBoard.getGrid());
+            eventListenerLogic.startButton();    
     }
 
-    //try to destructure players and gameLogic for use throughout event func factory
+    
     const addGridCells = () => {
         
         let cells = document.querySelectorAll(".cell");
