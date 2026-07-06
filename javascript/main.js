@@ -26,19 +26,15 @@ function createDomElement(element, text, elementId, elementClass, attributes = {
 function createPlayer(name) {
 
     const getName = () => name;
-    // const spacedName = `player ${playerNumber}`;
     const getSpacedName = () => `player ${playerNumber}`;
     
     let username;
-    //made below more succinct so might be broken
     const selectUsername = (usernameValue) =>  username = usernameValue;
     const getUsername = () => username;
 
     //stores last character of player name which will be either 1 or 2;
     const playerNumber = parseInt(name.charAt(name.length - 1));
     const getNumber = () => playerNumber;
-
-    
 
     let playerSymbol;
     const selectSymbol = (symbol) => playerSymbol = symbol;
@@ -48,38 +44,22 @@ function createPlayer(name) {
     const selectSquare = (square) => selectedSquare = square;
     const getSelectedSquare = () => selectedSquare;
      
-    // let playerScore = 0;
-    // const getPlayerScore = () => playerScore;
-    // const increasePlayerScore = () => { playerScore++; };
-    // const resetPlayerScore = () => { playerScore = 0;}
     return { getName,getSpacedName, selectUsername, getUsername, getNumber, selectSymbol, getSymbol, selectSquare, getSelectedSquare};
 }
 
 
 //-------------------MAIN------------------------------------
 
-//make grid into array of objects with properties e.g. cellNo,value
+
 const gameBoard = (function () {
-    //change to empty array?
+    
     let grid = new Array(9).fill("");
-    console.log(grid);
     const getGrid = () => grid;
 
-    // const getGridSquare = (CellNum) => {}
-    const getCellValue = (cellNum) => {
-        console.log(grid[cellNum]);
-        return grid[cellNum];
-    };
+    const getCellValue = (cellNum) => {return grid[cellNum]};
 
-    const changeCellValue = (cellNum, value) => {
-        // console.log(grid);
-        // const cellIndex = grid[cellNum]
-        // console.log(`player symbol is ${playerSymbol}`);
-        return grid[cellNum] = value;
-    }
-    //reset all textContents of cells to ""
-    //as array loop through array and for each change value to "";
-    //grid has not been called so is it accessible?
+    const changeCellValue = (cellNum, value) => {return grid[cellNum] = value};
+    
     const resetGrid = () => {
         grid.forEach((cell, index) => {
             grid[index] = "";
