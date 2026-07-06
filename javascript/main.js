@@ -1,22 +1,10 @@
 
 
 
-//add to dom content loaded event
-document.addEventListener("DOMContentLoaded", (event) => {
-    // displayUiGameLogic.displayUi();
-    // displayUiGameLogic.displayGameboard();
-    // displayUiGameLogic.displayModal();
-        
-    // selectSymbolDialog.close();
-    // selectNameDialog.close();
-    console.log("DOM fully loaded and parsed");
-});
-
-
 
 //--------HELPER/UTILS----------------------
 
-//could just put in displayDom IIFE as private func factory
+//could just put in displayDom IIFE as private func factory?
 function createDomElement(element, text, elementId, elementClass, attributes = {}) {
        const domElement = document.createElement(element);
        if(text) {domElement.textContent = text}
@@ -33,50 +21,6 @@ function createDomElement(element, text, elementId, elementClass, attributes = {
        }   
        return domElement;
 }
-
-
-
-const pickRandom = (()=> {
-
-    const player = () => {
-        return  Math.floor(Math.random() * 2) + 1
-    };
-
-    const symbol = () => {
-        const number = Math.floor(Math.random() * 2) + 1;
-        console.log(`number is ${number}`)
-        if (number === 1) {
-            console.log(`number is ${number}`);
-            return "X";
-        } 
-        if (number === 2) {
-            console.log(`number is ${number}`);
-            return "0"
-        };
-        return undefined;
-    }
-    //should put empty cell check in below method?
-    //while loop doesnt seem to work as intended
-    const cell = () => {
-            let cellChoice = Math.floor(Math.random() * 9);
-            
-
-            while(gameBoard.getCellValue(cellChoice) !== "") {
-                console.log(gameBoard.getCellValue(cellChoice));
-                console.log(`cell choice in while loop is ${cellChoice}`);
-                cellChoice = Math.floor(Math.random() * 9);
-                console.log(`cell choice in while loop is now ${cellChoice}`);
-            }
-            return cellChoice;
-            // do {cellChoice = Math.floor(Math.random() * 9)}
-            // while (gameBoard.grid[cellChoice] !== "");
-            // console.log(`gameboard cell value is ${gameBoard.grid[cellChoice]}`);
-            // console.log(`cell choice is ${cellChoice}`);
-            // return cellChoice;
-        };
-
-    return {player, symbol, cell};
-})();
 
 
 function createPlayer(name) {
@@ -677,6 +621,50 @@ eventListenerLogic.startButton();
 
 
 //------------------UNUSED CODE-------------------//
+
+//------------pick random iife---------------------------------
+
+// const pickRandom = (()=> {
+
+//     const player = () => {
+//         return  Math.floor(Math.random() * 2) + 1
+//     };
+
+//     const symbol = () => {
+//         const number = Math.floor(Math.random() * 2) + 1;
+//         console.log(`number is ${number}`)
+//         if (number === 1) {
+//             console.log(`number is ${number}`);
+//             return "X";
+//         } 
+//         if (number === 2) {
+//             console.log(`number is ${number}`);
+//             return "0"
+//         };
+//         return undefined;
+//     }
+//     //should put empty cell check in below method?
+//     //while loop doesnt seem to work as intended
+//     const cell = () => {
+//             let cellChoice = Math.floor(Math.random() * 9);
+            
+
+//             while(gameBoard.getCellValue(cellChoice) !== "") {
+//                 console.log(gameBoard.getCellValue(cellChoice));
+//                 console.log(`cell choice in while loop is ${cellChoice}`);
+//                 cellChoice = Math.floor(Math.random() * 9);
+//                 console.log(`cell choice in while loop is now ${cellChoice}`);
+//             }
+//             return cellChoice;
+//             // do {cellChoice = Math.floor(Math.random() * 9)}
+//             // while (gameBoard.grid[cellChoice] !== "");
+//             // console.log(`gameboard cell value is ${gameBoard.grid[cellChoice]}`);
+//             // console.log(`cell choice is ${cellChoice}`);
+//             // return cellChoice;
+//         };
+
+//     return {player, symbol, cell};
+// })();
 
 //----for playerTurn/game logic-------------------//
 
