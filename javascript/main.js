@@ -587,6 +587,11 @@ const eventListenerLogic = (function() {
         restartButton.addEventListener("click", restartButtonHandler, { once: true });
     }
 
+    const removeRestartButton = () => {
+        const restartButton = document.querySelector("#restart");
+        restartButton.removeEventListener("click", restartButtonHandler, { once: true });
+    }
+
     function restartButtonHandler(event) {
         console.log("restart event has fired");
             // gameBoard.resetGrid();
@@ -644,7 +649,7 @@ const eventListenerLogic = (function() {
         } else console.log(`players turn if statement doesnt work`);         
     }
 
-    return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton,addRestartButton};
+    return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton,addRestartButton, removeRestartButton};
 })();
 
 //do i just call this straight away in the IIFE?
