@@ -277,7 +277,7 @@ const gameLogic = (function() {
     //add player 1 confirm event with submit event?
     //adding round to player2 confirm would mess up multi-rounds(which don't matter now)
     function chooseNames(player) {
-        console.log(player);
+        // console.log(`${player1.getSpacedName()}'s username before modal is ${player1.getUsername()}`);
         // let playerUsernameValue;
         //make modals unique
         //create player 1 modal
@@ -475,10 +475,13 @@ const gameLogic = (function() {
 
 const eventListenerLogic = (function() {
 
+    //create start method in gameLogic
+    //then handler could be gameLogic.startButton?
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
             console.log(event.target);
+            eventListenerLogic.restartButton();
             gameLogic.chooseNames();
             gameLogic.playRound();
         }, { once: true });
@@ -528,21 +531,20 @@ const eventListenerLogic = (function() {
     //if not do i just add to submit event?
     //think this is obselete
     const confirmButton = (player) => {
-        console.log("confirm event ran");
+        // console.log("confirm event ran");
         const{getName,getNumber} = player;
         const playerName = player.getName();
         const playerNumber = player.getNumber();
-        console.log(`player number is ${player.getNumber()}`)
-        console.log(`player name is ${player.getName()}`);
+        // console.log(`player number is ${player.getNumber()}`)
+        // console.log(`player name is ${player.getName()}`);
         const playerConfirmBtn = document.querySelector(`#${player.getName()}Confirm`);
-        console.log(playerConfirmBtn);
 
 
         playerConfirmBtn.addEventListener("click", (event) => {
-            console.log(event);
-        console.log(`player is ${player.getNumber()}`);
+            // console.log(event);
+        // console.log(`player is ${player.getNumber()}`);
             if (player.getNumber() === 1) {
-                console.log("confirm event ran");
+                // console.log("confirm event ran");
                 displayUiGameLogic.displayModal(gameLogic.player2);
             }
             // switch(player.getNumber())  {
@@ -566,16 +568,40 @@ const eventListenerLogic = (function() {
     const restartButton = () => {
         const restartButton = document.querySelector("#restart");
         restartButton.addEventListener("click", (event) => {
+            console.log("restart event has fired");
             gameBoard.resetGrid();
             displayUiGameLogic.displayGameboard();
             displayUiGameLogic.resetDisplayElement();
+            gameLogic.player1.selectUsername(undefined);
+            gameLogic.player2.selectUsername(undefined);
+            gameLogic.player1.selectSquare(undefined);
+            gameLogic.player2.selectSquare(undefined);
+            // console.log(`player 1 username is ${gameLogic.player1.selectUsername()}`);
+            // console.log(`player 1 sqaure selection is ${gameLogic.player1.getSelectedSquare()}`);
+            // console.log(`player 2 username is ${gameLogic.player2.getUsername()}`);
+            // console.log(`players turn is ${gameLogic.getPlayersTurn()}`);
+            // console.log(`player 2 square selection is ${gameLogic.player2.getSelectedSquare()}`);
+            //reset turn counter too?
+            eventListenerLogic.startButton();
             //reset display element to Please click start game button to begin
             //make method in display to reset gameboard and display?
             // console.log(gameLogic.player1.getUsername();
-            console.log(gameBoard.getGrid());
-            console.log("restart event has fired");
+            // console.log(gameBoard.getGrid());
+            
         }, { once: true });
         
+    }
+
+    function restartHandler (event) {
+        gameBoard.resetGrid();
+        displayUiGameLogic.displayGameboard();
+        displayUiGameLogic.resetDisplayElement();
+        // eventListenerLogic.startButton();
+        //reset display element to Please click start game button to begin
+        //make method in display to reset gameboard and display?
+        // console.log(gameLogic.player1.getUsername();
+        console.log(gameBoard.getGrid());
+        console.log("restart event has fired");
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
@@ -617,7 +643,7 @@ const eventListenerLogic = (function() {
 //do i just call this straight away in the IIFE?
 //or after add startButton?
 eventListenerLogic.startButton();
-eventListenerLogic.restartButton();
+// eventListenerLogic.restartButton();
 
 
 // eventListenerLogic.formSubmit();
