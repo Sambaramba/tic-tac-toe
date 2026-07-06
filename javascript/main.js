@@ -68,12 +68,7 @@ const gameBoard = (function () {
     return {getGrid, getCellValue, changeCellValue, resetGrid};
 })();
 
-// console.log(gameBoard.getGrid().length);
 
-// gameBoard.changeCellValue(pickRandom.cell(), pickRandom.symbol());
-
-//IIFE to display ui and game logic
-//add events in this too or too big?
 const displayUiGameLogic = (function() {
      
     const displayUi = () => {
@@ -91,18 +86,11 @@ const displayUiGameLogic = (function() {
 
         containerDiv.append(title, display,gameboard,gameButtons);
     }
+
     //call straight away so page has ui
     displayUi();
     
-    //want to delete gameboard if exists before this so dont make multiple
-    // have modal mode var that can be updated with method
-    //this can be used to change modal content for name/symbol
-    //method to create one of these modals can take player as parameter
-    //this then can make them unique
-    //need to reset modal after at somepoint
-    //check if gameboard exists and wipe if does
-    //or do reset gameboard method in gameboard that can be called first?
-    //do you delete gameboard and re-add on each turn after cells values updated?
+    
     const displayGameboard = () => {
         const gameboardDiv = document.querySelector("#gameboard");
 
@@ -119,11 +107,12 @@ const displayUiGameLogic = (function() {
 
         })
       }
+
+    //add board to ui straight away
     displayGameboard();
 
 
     const updateCellValue = (selectedCell, symbol) => {
-
         let gameboardCell = document.querySelector(`#cell${selectedCell}`);
         gameboardCell.textContent = symbol;
     }
@@ -133,13 +122,8 @@ const displayUiGameLogic = (function() {
         const displayElement = document.querySelector("#display");
         displayElement.textContent = "Please click start game button to begin";
     }
-      //go back to creating and deleting modals
-      //if do that adding events might be tough
-      //as if create then add submit event does it give time to listen?
-      //or just go back to creating two modals?
-      //or keep as same
-      //add submit event to form here?
-      //then can link player object to input?
+    
+
     const displayModal = (player) => {
         //destructure player name property to add value to modal
         const {getSpacedName, getName} = player;
@@ -150,13 +134,13 @@ const displayUiGameLogic = (function() {
         const label = createDomElement("label", `${getSpacedName()} please choose your name`, "","",{for: "username-choice"});
         const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});     
         const confirmButton = createDomElement("button","Confirm",`${getName()}Confirm`,"",{type: "submit"});
-        // confirmButton.before(label,input);
+        
         form.append(label,input,confirmButton);
         dialog.appendChild(form);
         dialogBackground.appendChild(dialog);
         document.body.appendChild(dialogBackground);
 
-        
+        //add form event to modals on creation
         eventListenerLogic.formSubmit(player);
     }
 
