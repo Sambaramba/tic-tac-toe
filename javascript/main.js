@@ -416,6 +416,7 @@ const gameLogic = (function() {
                 console.log(`check win condition is true`);
                 //remove cell event listeners
                 eventListenerLogic.removeGridCells();
+                eventListenerLogic.removeRestartButton();
                 displayWinCondition();
                 //re-add start event for another game
                 eventListenerLogic.startButton();
