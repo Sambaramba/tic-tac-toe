@@ -584,8 +584,11 @@ const eventListenerLogic = (function() {
 
     const restartButton = () => {
         const restartButton = document.querySelector("#restart");
-        restartButton.addEventListener("click", (event) => {
-            console.log("restart event has fired");
+        restartButton.addEventListener("click", restartButtonHandler, { once: true });
+    }
+
+    function restartButtonHandler(event) {
+        console.log("restart event has fired");
             // gameBoard.resetGrid();
             // reset();
             gameLogic.resetGame();
@@ -606,17 +609,6 @@ const eventListenerLogic = (function() {
             //make method in display to reset gameboard and display?
             // console.log(gameLogic.player1.getUsername();
             // console.log(gameBoard.getGrid());
-            
-        }, { once: true });
-        
-    }
-
-    function reset() {
-        gameLogic.resetGame();
-        displayUiGameLogic.displayGameboard();
-        displayUiGameLogic.resetDisplayElement();
-        console.log(gameBoard.getGrid());
-        console.log("reset func has fired");
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
