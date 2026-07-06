@@ -147,17 +147,6 @@ const displayUiGameLogic = (function() {
     return {displayUi, displayGameboard, displayModal,updateCellValue, resetDisplayElement};
 })()
 
-//need to choose symbol and player names before rest runs
-//do i change all to methods?
-//or while loop with symbols and names?
-//make game into object
-//then have get player name with each player as argument?
-//then choose player symbol method
-//can have other player symbol be chosen in it
-//so make play round as play game method?
-
-
-
 
 
 const gameLogic = (function() {
@@ -173,67 +162,21 @@ const gameLogic = (function() {
     //to update display
     const display = document.querySelector("#display");
 
-    //want this in game logic func if doing multi rounds.
-    //if only created players instances are they only available in this object?
+    
     const player1 = createPlayer("player1");
     const player2 = createPlayer("player2");
     player1.selectSymbol("X");
     player2.selectSymbol("O");
     
     
-    //add player 1 modal
-    //add player 1 confirm event with submit event?
-    //adding round to player2 confirm would mess up multi-rounds(which don't matter now)
     function chooseNames(player) {
-        // console.log(`${player1.getSpacedName()}'s username before modal is ${player1.getUsername()}`);
-        // let playerUsernameValue;
-        //make modals unique
-        //create player 1 modal
-        //confirm button deletes player 1 and adds player 2
-        //player 2 confirm only deletes the modal
-        
-        // while(player1.getUsername() = undefined) {
-        //     const dialog = document.querySelector(".dialog-background");
-        //     const form = document.querySelector("form");
-        //     if (!form || !dialog) {
-
-        //     }
-
-        // }
-
         displayUiGameLogic.displayModal(player1);
-        //add to displayModal?
-        // eventListenerLogic.confirmButton(player1);
-        // const player1ConfirmBtn = document.querySelector("#player1Confirm");
-        // console.log(player1ConfirmBtn);
-        // player1ConfirmBtn
-        //add player 1 modal confirm event here with below code?
-        // displayUiGameLogic.displayModal(player2);
-
-        // console.log(player1.getUsername());
-        // if(player1.getUsername() === undefined) {
-        //     displayUiGameLogic.displayModal("name", player1);
-            
-        // }
-
-        // if(player2.getUsername() === undefined) {
-        //     console.log("player 1 has chosen username");
-        //     displayUiGameLogic.displayModal("name", player2);
-        // };
-        
-        //how to get player 2 to pick name after?
-        //or can i do choose name with player as argument?
-        
-        //can you attach event to the modal?
-        //add whole player object?
-        // displayUiGameLogic.displayModal("name", player2);
     }
 
-    //broken displays a draw when won with last square selection
+    
     function checkWinCondition() {
             
         //regEx to match all 8 win conditions;
-        // const winConditions = /(0(12|36|48))|(345)|(147)|(2(46|58))|678/;
         const winConditions = /(0.*1.*2)|(0.*3.*6)|(0.*4.*8)|(3.*4.*5)|(1.*4.*7)|(2.*4.*6)|(2.*5.*8)|(6.*7.*8)/;
         //list of win condition matches
         /*
@@ -248,18 +191,16 @@ const gameLogic = (function() {
         gameBoard.getGrid().forEach((value, index) => {
             if(value === "X") {
                 stringOfXIndexes+=index;
-                console.log(`x index string is now ${stringOfXIndexes}`);
             }
             if(value === "O") {
                 stringOfOIndexes+=index;
-                console.log(`O index string is now ${stringOfOIndexes}`)
             }
         })
 
         let sortedX = stringOfXIndexes.split('').sort().join('');
         let sortedO = stringOfOIndexes.split('').sort().join('');
 
-        //return sumbol/player/player.number/boolean?
+        
         if (winConditions.test(sortedX)) {
             console.log("X is the winner");
             return "X";
@@ -272,31 +213,24 @@ const gameLogic = (function() {
         
         
         const hasValue = (currentValue) => currentValue !== "";
-        // console.log("Current grid state during draw check:", gameBoard.getGrid())
         if (gameBoard.getGrid().every(hasValue)) { 
             return "draw";
         }
-        
         return false;
     }    
 
         
     function displayWinCondition() {
         const winConditionResult = checkWinCondition();
-        console.log(`win condition result is ${winConditionResult}`);
 
         switch(winConditionResult) {
             case player1.getSymbol():
-                // display.textContent = "GAME OVER! Player 1 is the winner!";
                 display.textContent = `GAME OVER! ${player1.getUsername()} is the winner!`;
                 break;
             case player2.getSymbol():
-                // display.textContent = "GAME OVER! Player 2 is the winner!";
                 display.textContent = `GAME OVER! ${player2.getUsername()} is the winner!`;
-                console.log("Player 2 has won");
                 break;
             case "draw":
-                console.log("its a draw");
                 display.textContent = "GAME OVER! its a draw!";
                 break;
         }
@@ -313,30 +247,30 @@ const gameLogic = (function() {
         //update gameboard UI cell value
         displayUiGameLogic.updateCellValue(selectedCell, playerSymbol);
 
+        //alternate turns code
+        playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
+        
+        //display whos turn it is
+        display.textContent = `player ${playersTurn} please select a square`;
 
-        if (playersTurn) {
-            playersTurn === 1 ? playersTurn = 2 : playersTurn = 1;
-            console.log(`players turn is now ${playersTurn}`);
-            } else (console.log(`players turn value = ${playersTurn}`))
+        //increment turn counter
+        //should i do afte below if?
         turn++;
 
         if(turn >= 5) {
-            console.log(`${turn} is greater than 5`);
             if(checkWinCondition()) {
-                console.log(`check win condition is true`);
-                //remove cell event listeners
+
+                //display result
+                displayWinCondition();
+
+                //reset event listeners
                 eventListenerLogic.removeGridCells();
                 eventListenerLogic.removeRestartButton();
-                displayWinCondition();
-                //re-add start event for another game
                 eventListenerLogic.startButton();
                 return;
             };
         }
-        display.textContent = `player ${playersTurn} please select a square`;
-
-        return;
-        
+        return;   
     }
 
     function resetGame() {
@@ -352,37 +286,15 @@ const gameLogic = (function() {
 
     function playRound() {
 
-        //reset both vars at round start;
-        // console.log(gameBoard.getGrid());
-        
+        //reset player turn and display who goes first
         playersTurn = 1;
         display.textContent = `player ${playersTurn} please select a square`;
+
+        //reset turn counter;
         turn = 1;
+
         eventListenerLogic.addGridCells();
-        //want this in playGame() if doing multi rounds.
-        // const player1 = createPlayer("player1");
-        // const player2 = createPlayer("player2");
-        // player1.selectSymbol("X");
-        // player2.selectSymbol("O");
-        // player1.selectUserName();
-        // player2.selectUserName();
-        // displayUiGameLogic.displayModal(player1);
-
-
-
-       // while (turn < 10 && checkWinCondition() === false) {
-            
-        //     console.log(`turn no is ${turn}`);
-        //     playersTurn === 1 ? playerTurn(player1) : playerTurn(player2);
-        //     console.log(gameBoard.getGrid());
-        // }
-        
-
-        // displayWinCondition();
-        console.log("This log has run at round func bottom");
-        
         return;
-
     }
     
     return {chooseNames,resetGame, playRound, getPlayersTurn, playerTurn, player1, player2}
