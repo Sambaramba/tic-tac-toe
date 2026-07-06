@@ -379,10 +379,12 @@ const gameLogic = (function() {
 
         switch(winConditionResult) {
             case player1.getSymbol():
-                display.textContent = "GAME OVER! Player 1 is the winner!";
+                // display.textContent = "GAME OVER! Player 1 is the winner!";
+                display.textContent = `GAME OVER! ${player1.getUsername()} is the winner!`;
                 break;
             case player2.getSymbol():
-                display.textContent = "GAME OVER! Player 2 is the winner!";
+                // display.textContent = "GAME OVER! Player 2 is the winner!";
+                display.textContent = `GAME OVER! ${player2.getUsername()} is the winner!`;
                 console.log("Player 2 has won");
                 break;
             case "draw":
