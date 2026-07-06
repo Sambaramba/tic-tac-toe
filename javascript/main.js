@@ -417,6 +417,8 @@ const gameLogic = (function() {
                 //remove cell event listeners
                 eventListenerLogic.removeGridCells();
                 displayWinCondition();
+                //re-add start event for another game
+                eventListenerLogic.startButton();
                 return;
             };
         }
@@ -424,6 +426,17 @@ const gameLogic = (function() {
 
         return;
         
+    }
+
+    function resetGame() {
+        playersTurn = 1;
+        display.textContent = `player ${playersTurn} please select a square`;
+        turn = 1;
+        gameBoard.resetGrid();
+        player1.selectUsername(undefined);
+        player2.selectUsername(undefined);
+        player1.selectSquare(undefined);
+        player2.selectSquare(undefined);
     }
 
     function playRound() {
@@ -461,7 +474,7 @@ const gameLogic = (function() {
 
     }
     
-    return {chooseNames, playRound, getPlayersTurn, playerTurn, player1, player2}
+    return {chooseNames,resetGame, playRound, getPlayersTurn, playerTurn, player1, player2}
 })();
 
 // console.log(gameLogic.player1);
@@ -480,6 +493,10 @@ const eventListenerLogic = (function() {
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
         startButton.addEventListener("click", (event) => {
+            // reset()
+            gameLogic.resetGame();
+            displayUiGameLogic.displayGameboard();
+            displayUiGameLogic.resetDisplayElement();
             console.log(event.target);
             eventListenerLogic.restartButton();
             gameLogic.chooseNames();
@@ -569,13 +586,15 @@ const eventListenerLogic = (function() {
         const restartButton = document.querySelector("#restart");
         restartButton.addEventListener("click", (event) => {
             console.log("restart event has fired");
-            gameBoard.resetGrid();
+            // gameBoard.resetGrid();
+            // reset();
+            gameLogic.resetGame();
             displayUiGameLogic.displayGameboard();
             displayUiGameLogic.resetDisplayElement();
-            gameLogic.player1.selectUsername(undefined);
-            gameLogic.player2.selectUsername(undefined);
-            gameLogic.player1.selectSquare(undefined);
-            gameLogic.player2.selectSquare(undefined);
+            // gameLogic.player1.selectUsername(undefined);
+            // gameLogic.player2.selectUsername(undefined);
+            // gameLogic.player1.selectSquare(undefined);
+            // gameLogic.player2.selectSquare(undefined);
             // console.log(`player 1 username is ${gameLogic.player1.selectUsername()}`);
             // console.log(`player 1 sqaure selection is ${gameLogic.player1.getSelectedSquare()}`);
             // console.log(`player 2 username is ${gameLogic.player2.getUsername()}`);
@@ -592,16 +611,12 @@ const eventListenerLogic = (function() {
         
     }
 
-    function restartHandler (event) {
-        gameBoard.resetGrid();
+    function reset() {
+        gameLogic.resetGame();
         displayUiGameLogic.displayGameboard();
         displayUiGameLogic.resetDisplayElement();
-        // eventListenerLogic.startButton();
-        //reset display element to Please click start game button to begin
-        //make method in display to reset gameboard and display?
-        // console.log(gameLogic.player1.getUsername();
         console.log(gameBoard.getGrid());
-        console.log("restart event has fired");
+        console.log("reset func has fired");
     }
 
     //try to destructure players and gameLogic for use throughout event func factory
