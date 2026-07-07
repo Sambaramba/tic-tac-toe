@@ -1,4 +1,3 @@
-
 import { createDomElement } from "./utils.js";
 
 
@@ -27,8 +26,6 @@ function createPlayer(name) {
 }
 
 
-//-------------------MAIN------------------------------------
-
 
 const gameBoard = (function () {
     
@@ -46,6 +43,7 @@ const gameBoard = (function () {
     }
     return {getGrid, getCellValue, changeCellValue, resetGrid};
 })();
+
 
 
 const displayUiGameLogic = (function() {
@@ -126,6 +124,7 @@ const displayUiGameLogic = (function() {
 
     return {displayUi, displayGameboard, displayModal,updateCellValue, resetDisplayElement};
 })()
+
 
 
 
@@ -278,8 +277,6 @@ const gameLogic = (function() {
 })();
 
 
-
-//---------EVENTS-----------------------------------------//
 
 
 const eventListenerLogic = (function() {
