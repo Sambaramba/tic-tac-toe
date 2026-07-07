@@ -345,24 +345,7 @@ const eventListenerLogic = (function() {
         }, { once: true });
     }
 
-    //dont understand why i cannot delete confirm button
-    //start button event doesnt fire if i delete, why?
-    //this should be obselete
-    const confirmButton = (player) => {
-        const{getName,getNumber} = player;
-        const playerName = player.getName();
-        const playerNumber = player.getNumber();
-        const playerConfirmBtn = document.querySelector(`#${player.getName()}Confirm`);
-
-
-        playerConfirmBtn.addEventListener("click", (event) => {
-            console.log("confirm button ran");
-           
-            if (player.getNumber() === 1) {
-                displayUiGameLogic.displayModal(gameLogic.player2);
-            }
-        })
-    }
+    
 
     const addRestartButton = () => {
         const restartButton = document.querySelector("#restart");
@@ -415,12 +398,30 @@ const eventListenerLogic = (function() {
         } else console.log(`players turn if statement doesnt work`);         
     }
 
-    return{startButton, formSubmit, addGridCells, removeGridCells,confirmButton,addRestartButton, removeRestartButton};
+    return{startButton, formSubmit, addGridCells, removeGridCells,addRestartButton, removeRestartButton};
 })();
 
 
 //add start event on page load
 eventListenerLogic.startButton();
+
+// const confirmButton = (player) => {
+//         const{getName,getNumber} = player;
+//         const playerName = player.getName();
+//         const playerNumber = player.getNumber();
+//         const playerConfirmBtn = document.querySelector(`#${player.getName()}Confirm`);
+
+
+//         playerConfirmBtn.addEventListener("click", (event) => {
+//             console.log("confirm button ran");
+           
+//             if (player.getNumber() === 1) {
+//                 console.log("added player 2 modal");
+//                 displayUiGameLogic.displayModal(gameLogic.player2);
+//             }
+//         })
+//     }
+
 
 
 
