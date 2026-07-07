@@ -1,6 +1,4 @@
 
-//--------HELPER/UTILS----------------------
-
 import { createDomElement } from "./utils.js";
 
 
