@@ -62,6 +62,8 @@ const displayUiGameLogic = (function() {
         gameButtons.append(startButton, restartButton);
 
         containerDiv.append(title, display,gameboard,gameButtons);
+
+        startButton.focus();
     }
 
     //call straight away so page has ui
@@ -117,6 +119,8 @@ const displayUiGameLogic = (function() {
         dialog.appendChild(form);
         dialogBackground.appendChild(dialog);
         document.body.appendChild(dialogBackground);
+
+        input.focus();
 
         //add form event to modals on creation
         eventListenerLogic.formSubmit(player);
