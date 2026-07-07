@@ -68,7 +68,11 @@ h1, h2, h3, h4, h5, h6 {
   /*Custom Colours*/
   --title-colour: hsl(162, 54%, 33%);
   --app-bg-colour: hsl(252, 79%, 81%);
-  --bluey-green: hsl(162, 54%, 33%);
+  --modal-bg-color: hsla(255, 86%, 67%, 0.952);
+  --electric-blue: hsl(182, 90%, 51%);
+  --bright-yellow: hsl(63, 92%, 51%);
+  --bright-orange: hsl(33, 93%, 50%);
+  --grey: hsl(0, 0%, 41%);
 }
 
 body {
@@ -85,7 +89,7 @@ button:not(.cell) {
 
 button:focus {
   outline: none;
-  background-color: orange;
+  background-color: var(--bright-orange);
 }
 #container {
   margin:  auto;
@@ -106,6 +110,7 @@ button:focus {
 
 #gameboard  {
   background-color: black;
+  /* position: relative; */
   height: 400px;
   width: 400px;
   display: grid;
@@ -138,10 +143,17 @@ button.cell {
   align-items: center;
   font-size: 5rem;
   border: none;
+  transition: border-color 0.3s ease;
 }
 
 button.cell:focus {
-  background-color: yellow;
+  /* background-color: yellow; */
+  border: 2px solid var(--electric-blue);
+  /* border: 2px solid var(--brightOrange); */
+  /* position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  z-index: 1; */
 }
 
 dialog {
@@ -150,7 +162,7 @@ dialog {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  background-color: aqua;
+  background-color: var(--modal-bg-color);
   width: clamp(15rem, 20rem, 30rem);
   height: 12rem;
   max-height: 100%;
@@ -161,7 +173,7 @@ dialog {
 }
 
 .dialog-background {
-  background-color: grey;
+  background-color: var(--grey);
   z-index: 5;
   position: fixed;
   top: 0;
