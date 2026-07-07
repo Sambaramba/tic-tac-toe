@@ -218,7 +218,9 @@ const gameLogic = (function() {
 
     
     function playerTurn(player) {
-
+        const firstCell = document.querySelector("#cell0");
+        console.log(firstCell);
+        firstCell.focus();
         const playerSymbol = player.getSymbol();
         let selectedCell = player.getSelectedSquare();
         gameBoard.changeCellValue(selectedCell, playerSymbol);
@@ -287,9 +289,10 @@ const eventListenerLogic = (function() {
 
     const startButton = () => {
         const startButton = document.querySelector("#start-button");
+        startButton.focus();
         startButton.addEventListener("click", (event) => {
 
-            //reset game and display for previous games
+            //reset game and display from previous games
             gameLogic.resetGame();
             displayUiGameLogic.displayGameboard();
             displayUiGameLogic.resetDisplayElement();
@@ -323,6 +326,11 @@ const eventListenerLogic = (function() {
             //add player 2 username modal after player 1 username selection
             if (player.getNumber() === 1) {
                 displayUiGameLogic.displayModal(gameLogic.player2);
+            }
+            if (player.getNumber() === 2) {
+                const firstCell = document.querySelector("#cell0");
+                console.log(firstCell);
+                firstCell.focus();
             }
 
         }, { once: true });
