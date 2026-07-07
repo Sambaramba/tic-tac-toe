@@ -1,7 +1,4 @@
 
-
-
-
 //--------HELPER/UTILS----------------------
 
 //could just put in displayDom IIFE as private func factory?
@@ -11,11 +8,7 @@ function createDomElement(element, text, elementId, elementClass, attributes = {
        if(elementId) { domElement.id = elementId}
        if(elementClass) { domElement.classList.add(elementClass)}
        if(attributes) {
-         console.log(attributes);
          Object.entries(attributes).forEach(([key, value]) => {
-            console.log(key)
-            console.log(value)
-            //if no value use if statement to check?
             domElement.setAttribute(key, value);
          });
        }   
@@ -125,6 +118,7 @@ const displayUiGameLogic = (function() {
     
 
     const displayModal = (player) => {
+
         //destructure player name property to add value to modal
         const {getSpacedName, getName} = player;
         
@@ -253,11 +247,9 @@ const gameLogic = (function() {
         //display whos turn it is
         display.textContent = `player ${playersTurn} please select a square`;
 
-        //increment turn counter
-        //should i do afte below if?
-        turn++;
-
+        //check/execute game completion
         if(turn >= 5) {
+
             if(checkWinCondition()) {
 
                 //display result
@@ -270,6 +262,9 @@ const gameLogic = (function() {
                 return;
             };
         }
+
+        turn++;
+
         return;   
     }
 
@@ -387,7 +382,7 @@ const eventListenerLogic = (function() {
             eventListenerLogic.startButton();    
     }
 
-    
+
     const addGridCells = () => {
         
         let cells = document.querySelectorAll(".cell");
