@@ -1,19 +1,7 @@
 
 //--------HELPER/UTILS----------------------
 
-//could just put in displayDom IIFE as private func factory?
-function createDomElement(element, text, elementId, elementClass, attributes = {}) {
-       const domElement = document.createElement(element);
-       if(text) {domElement.textContent = text}
-       if(elementId) { domElement.id = elementId}
-       if(elementClass) { domElement.classList.add(elementClass)}
-       if(attributes) {
-         Object.entries(attributes).forEach(([key, value]) => {
-            domElement.setAttribute(key, value);
-         });
-       }   
-       return domElement;
-}
+import { createDomElement } from "./utils.js";
 
 
 function createPlayer(name) {
@@ -194,17 +182,13 @@ const gameLogic = (function() {
         let sortedX = stringOfXIndexes.split('').sort().join('');
         let sortedO = stringOfOIndexes.split('').sort().join('');
 
-        
         if (winConditions.test(sortedX)) {
-            console.log("X is the winner");
             return "X";
         }
 
         if (winConditions.test(sortedO)) {
-            console.log("O is the winner");
             return "O";
         }
-        
         
         const hasValue = (currentValue) => currentValue !== "";
         if (gameBoard.getGrid().every(hasValue)) { 
@@ -358,7 +342,6 @@ const eventListenerLogic = (function() {
     }
 
     function restartButtonHandler(event) {
-        console.log("restart event has fired");
             gameLogic.resetGame();
             displayUiGameLogic.displayGameboard();
             displayUiGameLogic.resetDisplayElement();
@@ -378,7 +361,6 @@ const eventListenerLogic = (function() {
         let cells = document.querySelectorAll(".cell");
         cells.forEach((cell) => {
             cell.removeEventListener("click", cellHandler, {once: true});
-            console.log("removed cell click event");
         })
     }
 
