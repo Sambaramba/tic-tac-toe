@@ -63,7 +63,10 @@ h1, h2, h3, h4, h5, h6 {
 
 :root {
   /*FONT SIZES*/
-  --title-font-size: 4rem;
+  /* --title-font-size: 4rem; */
+  --title-font-size: calc(3rem + 2vw);
+  --cell-font-size: 5rem;
+  --label-font-size: 2rem;
 
   /*Custom Colours*/
   --title-colour: hsl(162, 54%, 33%);
@@ -74,6 +77,17 @@ h1, h2, h3, h4, h5, h6 {
   --bright-orange: hsl(33, 93%, 50%);
   --grey: hsl(0, 0%, 41%);
 }
+
+/*
+responsive styles on elements
+
+text
+buttons
+inputs
+modal
+gameboard
+cells
+ */
 
 body {
   margin: auto;
@@ -112,7 +126,6 @@ button:focus {
 
 #gameboard  {
   background-color: black;
-  /* position: relative; */
   box-shadow: 4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38);
   height: 400px;
   width: 400px;
@@ -144,7 +157,7 @@ button.cell {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 5rem;
+  font-size: var(--cell-font-size);
   border: none;
   border-right: 0.5rem;
   transition: border-color 0.3s ease;
@@ -154,10 +167,7 @@ button.cell {
 }
 
 button.cell:focus {
-  /* background-color: yellow; */
-  /* border: 2px solid var(--electric-blue); */
   box-shadow: inset -2.0px -4.0px 4.0px hsl(0deg 0% 0% / 0.44);
-  /* border: 2px solid var(--brightOrange); */
 }
 
 dialog {
@@ -216,7 +226,7 @@ form > button {
   align-self: center;
 }
 
-fieldset {
+/* fieldset {
   border: none;
 }
 
@@ -231,7 +241,7 @@ fieldset {
   padding: 1rem 2rem;
   border: 0.125rem solid black;
   background-color: white;
-  font-size: 2rem;
+  font-size: var(--label-font-size);
   font-weight: bold;
   border-radius: 0.25rem;
 }
@@ -245,4 +255,4 @@ fieldset {
 #radio-container input[type=radio]:checked + label {
   background-color: hsl(23, 80%, 47%);
   border-color: rgb(138, 79, 6);
-}
+} */
