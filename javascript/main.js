@@ -328,7 +328,6 @@ const eventListenerLogic = (function() {
             }
             if (player.getNumber() === 2) {
                 const firstCell = document.querySelector("#cell0");
-                console.log(firstCell);
                 firstCell.focus();
             }
 
