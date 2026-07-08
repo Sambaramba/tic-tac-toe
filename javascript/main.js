@@ -81,8 +81,6 @@ const displayUiGameLogic = (function() {
         //loop through gameboard grid array and add cell for each element
         gameBoard.getGrid().forEach((value, index) => {
 
-            // const cellDiv =  createDomElement("div", value, `cell${index}`, "cell", {"data-cell-value": `${index}`, tabindex: 0});
-            // gameboardDiv.appendChild(cellDiv);
             const cellButton = createDomElement("button", value, `cell${index}`, "cell", {"data-cell-value": `${index}`, tabindex: 0});
             gameboardDiv.appendChild(cellButton);
 
@@ -221,7 +219,6 @@ const gameLogic = (function() {
     
     function playerTurn(player) {
         const firstCell = document.querySelector("#cell0");
-        console.log(firstCell);
         firstCell.focus();
         const playerSymbol = player.getSymbol();
         let selectedCell = player.getSelectedSquare();
