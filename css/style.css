@@ -85,6 +85,8 @@ body {
 button:not(.cell) {
   padding: 0.375rem 0.75rem;
   border-radius: 1rem;
+  /* box-shadow: 4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38); */
+  box-shadow: 2.6px 5.1px 5.1px hsl(0deg 0% 0% / 0.42);
 }
 
 button:focus {
@@ -111,6 +113,7 @@ button:focus {
 #gameboard  {
   background-color: black;
   /* position: relative; */
+  box-shadow: 4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38);
   height: 400px;
   width: 400px;
   display: grid;
@@ -143,17 +146,18 @@ button.cell {
   align-items: center;
   font-size: 5rem;
   border: none;
+  border-right: 0.5rem;
   transition: border-color 0.3s ease;
+  /* box-shadow: inset -1.2px -2.4px 2.4px hsl(0deg 0% 0% / 0.46); */
+
+
 }
 
 button.cell:focus {
   /* background-color: yellow; */
-  border: 2px solid var(--electric-blue);
+  /* border: 2px solid var(--electric-blue); */
+  box-shadow: inset -2.0px -4.0px 4.0px hsl(0deg 0% 0% / 0.44);
   /* border: 2px solid var(--brightOrange); */
-  /* position: absolute;
-  top: 0.125rem;
-  left: 0.125rem;
-  z-index: 1; */
 }
 
 dialog {
@@ -200,6 +204,7 @@ input[type=text] {
   padding: 0.125rem;
   border-radius: 0.25rem;
   border: 0.125rem solid black;
+  box-shadow: 2.6px 5.1px 5.1px hsl(0deg 0% 0% / 0.42);
 }
 
 form > button {
