@@ -112,7 +112,7 @@ const displayUiGameLogic = (function() {
         const dialog = createDomElement("dialog", "", "", "","");
         const form = createDomElement("form", "", "", "",{action: "", method: "dialog"});
         const label = createDomElement("label", `${getSpacedName()} please choose your name`, "","",{for: "username-choice"});
-        const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 35, required: ""});     
+        const input = createDomElement("input","","username-choice","",{type: "text", name:"username-choice",minlength: 1, maxlength: 25, required: ""});     
         const confirmButton = createDomElement("button","Confirm",`${getName()}Confirm`,"",{type: "submit"});
         
         form.append(label,input,confirmButton);
@@ -204,13 +204,13 @@ const gameLogic = (function() {
 
         switch(winConditionResult) {
             case player1.getSymbol():
-                display.textContent = `GAME OVER! ${player1.getUsername()} is the winner!`;
+                display.textContent = `GAME OVER!\n ${player1.getUsername()}\nis the winner!`;
                 break;
             case player2.getSymbol():
-                display.textContent = `GAME OVER! ${player2.getUsername()} is the winner!`;
+                display.textContent = `GAME OVER!\n${player2.getUsername()} is the winner!`;
                 break;
             case "draw":
-                display.textContent = "GAME OVER! its a draw!";
+                display.textContent = "GAME OVER!\nits a draw!";
                 break;
         }
         
