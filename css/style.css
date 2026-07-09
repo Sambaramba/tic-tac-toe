@@ -129,6 +129,9 @@ button:focus {
 
 #display {
   font-size: var(--display-text);
+  width: 90%;
+  white-space: pre-line;
+  text-align: center;
 }
 
 
