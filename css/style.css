@@ -65,6 +65,7 @@ h1, h2, h3, h4, h5, h6 {
   /*FONT SIZES*/
   /* --title-font-size: 4rem; */
   --title-font-size: calc(3rem + 2vw);
+  --display-text: calc(0.75rem + 1vw);
   --cell-font-size: 5rem;
   --label-font-size: 2rem;
 
@@ -107,6 +108,7 @@ button:focus {
   outline: none;
   background-color: var(--bright-orange);
 }
+
 #container {
   margin:  auto;
   width: 100%;
@@ -123,6 +125,10 @@ button:focus {
 #title {
   font-size: var(--title-font-size);
   color: var(--title-colour);
+}
+
+#display {
+  font-size: var(--display-text);
 }
 
 
