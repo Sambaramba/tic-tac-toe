@@ -210,7 +210,7 @@ const gameLogic = (function() {
                 display.textContent = `GAME OVER!\n${player2.getUsername()} is the winner!`;
                 break;
             case "draw":
-                display.textContent = "GAME OVER!\nits a draw!";
+                display.textContent = `GAME OVER!\nits a draw!`;
                 break;
         }
         
